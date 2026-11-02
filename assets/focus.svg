@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+  <title id="title">What I build</title>
+  <desc id="desc">What I build: retrieval (RAG, pgvector), LLMs (Vercel AI SDK), tools (tool calling, MCP) and conversational agents, drawn as connected nodes in the style of the profile banner.</desc>
+  <defs>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.45">
+      <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="flowfade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="260" y2="0">
+      <stop offset="0" stop-color="#3f3f46" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#3f3f46" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#52525b" stop-opacity="0.9"/>
+    </linearGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#fafafa" fill-opacity="0.07"/>
+    </pattern>
+    <clipPath id="card">
+      <rect width="1200" height="320" rx="24"/>
+    </clipPath>
+    <linearGradient id="flowfadeout" gradientUnits="userSpaceOnUse" x1="1200" y1="0" x2="940" y2="0">
+      <stop offset="0" stop-color="#3f3f46" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#3f3f46" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#52525b" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+  <style>
+    .title { font: 700 64px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing: -1.5px; }
+    .lead { font: 400 32px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #d4d4d8; }
+    .meta { font: 500 24px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+    .eq { font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; font-style: italic; fill: #71717a; fill-opacity: 0.75; }
+    .flow { fill: none; stroke: url(#flowfade); stroke-width: 1; }
+    .ring { fill: none; stroke: #27272a; stroke-width: 1; }
+    .edge { stroke: #3f3f46; stroke-width: 1; stroke-opacity: 0.8; }
+    .node { fill: #09090b; stroke: #71717a; stroke-width: 1.5; }
+    .signal { fill: none; stroke: #d4d4d8; stroke-width: 1.5; stroke-opacity: 0.8; }
+    .label { font: italic 400 15px "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; fill: #a1a1aa; }
+    .stage { font: 700 40px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing: -0.5px; }
+    .detail { font: 400 28px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+    .flow-out { stroke: url(#flowfadeout); }
+  </style>
+  <g clip-path="url(#card)">
+    <rect width="1200" height="320" fill="#09090b"/>
+    <rect width="1200" height="320" fill="url(#dots)"/>
+    <rect width="1200" height="320" fill="url(#glow)"/>
+    <path class="flow" d="M-10,72 C80,72 70,114 132,114"/>
+    <path class="flow flow-out" d="M1068,114 C1130,114 1120,72 1210,72"/>
+    <path class="flow" d="M-10,128 C80,128 70,128 132,128"/>
+    <path class="flow flow-out" d="M1068,128 C1130,128 1120,128 1210,128"/>
+    <path class="flow" d="M-10,184 C80,184 70,142 132,142"/>
+    <path class="flow flow-out" d="M1068,142 C1130,142 1120,184 1210,184"/>
+    <line class="edge" x1="210" y1="110" x2="430" y2="110" stroke-opacity="0.45"/>
+    <line class="edge" x1="210" y1="110" x2="430" y2="146" stroke-opacity="0.45"/>
+    <line class="edge" x1="210" y1="146" x2="430" y2="110" stroke-opacity="0.45"/>
+    <line class="edge" x1="210" y1="146" x2="430" y2="146" stroke-opacity="0.45"/>
+    <line class="edge" x1="490" y1="110" x2="710" y2="110" stroke-opacity="0.45"/>
+    <line class="edge" x1="490" y1="110" x2="710" y2="146" stroke-opacity="0.45"/>
+    <line class="edge" x1="490" y1="146" x2="710" y2="110" stroke-opacity="0.45"/>
+    <line class="edge" x1="490" y1="146" x2="710" y2="146" stroke-opacity="0.45"/>
+    <line class="edge" x1="770" y1="110" x2="990" y2="110" stroke-opacity="0.45"/>
+    <line class="edge" x1="770" y1="110" x2="990" y2="146" stroke-opacity="0.45"/>
+    <line class="edge" x1="770" y1="146" x2="990" y2="110" stroke-opacity="0.45"/>
+    <line class="edge" x1="770" y1="146" x2="990" y2="146" stroke-opacity="0.45"/>
+    <path class="signal" d="M180,128 H1020"/>
+    <text class="eq" x="180" y="64" font-size="22" text-anchor="middle">sim(q, d)</text>
+    <circle class="ring" cx="180" cy="128" r="46" stroke-dasharray="3 6"/>
+    <circle class="node" cx="180" cy="128" r="30"/>
+    <circle cx="180" cy="128" r="5" fill="#fafafa"/>
+    <text class="stage" x="180" y="240" text-anchor="middle">Retrieval</text>
+    <text class="detail" x="180" y="282" text-anchor="middle">RAG · pgvector</text>
+    <text class="eq" x="460" y="64" font-size="22" text-anchor="middle">p(y | x)</text>
+    <circle class="ring" cx="460" cy="128" r="46" stroke-dasharray="3 6"/>
+    <circle class="node" cx="460" cy="128" r="30"/>
+    <circle cx="460" cy="128" r="5" fill="#fafafa"/>
+    <text class="stage" x="460" y="240" text-anchor="middle">LLMs</text>
+    <text class="detail" x="460" y="282" text-anchor="middle">Vercel AI SDK</text>
+    <text class="eq" x="740" y="64" font-size="22" text-anchor="middle">f(args)</text>
+    <circle class="ring" cx="740" cy="128" r="46" stroke-dasharray="3 6"/>
+    <circle class="node" cx="740" cy="128" r="30"/>
+    <circle cx="740" cy="128" r="5" fill="#fafafa"/>
+    <text class="stage" x="740" y="240" text-anchor="middle">Tools</text>
+    <text class="detail" x="740" y="282" text-anchor="middle">tool calling · MCP</text>
+    <text class="eq" x="1020" y="64" font-size="22" text-anchor="middle">π(a | s)</text>
+    <circle class="ring" cx="1020" cy="128" r="46" stroke-dasharray="3 6"/>
+    <circle class="node" cx="1020" cy="128" r="30"/>
+    <circle cx="1020" cy="128" r="5" fill="#fafafa"/>
+    <text class="stage" x="1020" y="240" text-anchor="middle">Agents</text>
+    <text class="detail" x="1020" y="282" text-anchor="middle">conversational</text>
+  </g>
+  <rect x="0.5" y="0.5" width="1199" height="319" rx="24" fill="none" stroke="#27272a"/>
+</svg>
