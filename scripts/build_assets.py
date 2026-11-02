@@ -1,4 +1,4 @@
-"""Gera os SVGs do README (assets/banner.svg e assets/focus.svg).
+"""Gera os SVGs desktop/mobile do README e o painel de uso a partir do agregado.
 
 Uso:
   python scripts/build_assets.py                 regenera os SVGs
@@ -227,6 +227,87 @@ def focus():
 """
 
 
+def banner_mobile(photo_b64):
+    """Retrato e textos empilhados, sem reduzir a tipografia do banner desktop."""
+    width, height = 600, 590
+    layers = [3, 4, 4, 2]
+    nodes = [[(210+i*60, 528+(j-(size-1)/2)*18) for j in range(size)]
+             for i, size in enumerate(layers)]
+    edges = ''.join(f'<line class="edge" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}"/>'
+                    for left, right in zip(nodes, nodes[1:]) for x1,y1 in left for x2,y2 in right)
+    circles = ''.join(f'<circle class="node" cx="{x}" cy="{y}" r="3.5"/>' for layer in nodes for x,y in layer)
+    extra = f'''
+    .mobile-name {{ font: 700 52px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1px; }}
+    .mobile-role {{ font: 500 34px {SANS}; fill: {COLOR['foreground']}; }}
+    .mobile-topic {{ font: 400 28px {SANS}; fill: {COLOR['signal']}; }}
+    .mobile-meta {{ font: 400 26px {SANS}; fill: {COLOR['muted']}; }}'''
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
+  <title id="title">Jordy Fontoura</title>
+  <desc id="desc">{BANNER_ALT}. Mobile layout with portrait above the text. Portrait: all rights reserved.</desc>
+  <defs>
+{card_defs(width, height, 0.5, 240)}
+    <clipPath id="avatar"><circle cx="300" cy="130" r="84"/></clipPath>
+  </defs>
+{style(extra)}
+  <g clip-path="url(#card)">
+{card_background(width, height)}
+    <path class="flow" d="M-10,38 H140 Q180,38 190,130"/>
+    <path class="flow" d="M-10,50 H126 Q166,50 190,142"/>
+    <path class="flow" d="M610,38 H460 Q420,38 410,130"/>
+    <path class="flow" d="M610,50 H474 Q434,50 410,142"/>
+    <circle class="ring" cx="300" cy="130" r="96"/>
+    <circle class="ring" cx="300" cy="130" r="112" stroke-dasharray="3 6"/>
+    <text class="eq" x="28" y="32" font-size="20">xᵀAx</text>
+    <text class="eq" x="572" y="32" font-size="20" text-anchor="end">σ(Wx + b)</text>
+    {edges}{circles}
+  </g>
+  {card_border(width, height)}
+  <circle cx="300" cy="130" r="88" fill="{COLOR['background']}" stroke="{COLOR['ring']}" stroke-width="1.5"/>
+  <image x="216" y="46" width="168" height="168" clip-path="url(#avatar)" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,{photo_b64}"/>
+  <g text-anchor="middle">
+    <text class="mobile-name" x="300" y="286">Jordy Fontoura</text>
+    <text class="mobile-role" x="300" y="332">AI Engineer</text>
+    <text class="mobile-topic" x="300" y="372">RAG · agents · MCP</text>
+    <text class="mobile-meta" x="300" y="416">Software developer since 2018.</text>
+    <text class="mobile-meta" x="300" y="460">TypeScript · Python · Rust</text>
+  </g>
+</svg>
+'''
+
+
+def focus_mobile():
+    """As quatro áreas em duas colunas, com conexões fora dos rótulos."""
+    width, height = 600, 420
+    extra = f'''
+    .mobile-stage {{ font: 700 32px {SANS}; fill: {COLOR['foreground']}; }}
+    .mobile-detail {{ font: 400 25px {SANS}; fill: {COLOR['muted']}; }}'''
+    parts = ['<path class="signal" d="M160,68 H440 M160,268 H440"/>',
+             '<path class="edge" fill="none" d="M472,68 H554 Q574,68 574,88 V248 Q574,268 554,268 H472"/>']
+    for (x,y), (stage,detail,formula) in zip([(160,68),(440,68),(160,268),(440,268)], STAGES):
+        parts.extend([
+            f'<text class="eq" x="{x}" y="{y-36}" font-size="20" text-anchor="middle">{formula}</text>',
+            f'<circle class="ring" cx="{x}" cy="{y}" r="32" stroke-dasharray="3 6"/>',
+            f'<circle class="node" cx="{x}" cy="{y}" r="20"/>',
+            f'<circle cx="{x}" cy="{y}" r="3.5" fill="{COLOR["foreground"]}"/>',
+            f'<text class="mobile-stage" x="{x}" y="{y+64}" text-anchor="middle">{stage}</text>',
+            f'<text class="mobile-detail" x="{x}" y="{y+102}" text-anchor="middle">{detail}</text>',
+        ])
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
+  <title id="title">What I build</title>
+  <desc id="desc">{FOCUS_ALT}. Mobile layout in two rows and two columns.</desc>
+  <defs>
+{card_defs(width, height, 0.5, 260)}
+  </defs>
+{style(extra)}
+  <g clip-path="url(#card)">
+{card_background(width, height)}
+    {''.join(parts)}
+  </g>
+  {card_border(width, height)}
+</svg>
+'''
+
+
 def photo_from_banner():
     match = re.search(r'href="data:image/jpeg;base64,([A-Za-z0-9+/=]+)"', (ASSETS / "banner.svg").read_text(encoding="utf-8"))
     if not match:
@@ -255,12 +336,16 @@ def main():
     parser.add_argument("--photo", type=Path)
     args = parser.parse_args()
     photo = base64.b64encode(args.photo.read_bytes()).decode("ascii") if args.photo else photo_from_banner()
-    outputs = {"banner.svg": banner(photo), "focus.svg": focus()}
+    outputs = {"banner.svg": banner(photo), "focus.svg": focus(),
+               "banner-mobile.svg": banner_mobile(photo), "focus-mobile.svg": focus_mobile()}
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
     readme = README.read_text(encoding="utf-8")
     for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
         if f'src="assets/{name}" alt="{alt}"' not in readme:
             errors.append(f"README.md: alt de assets/{name} difere do texto do gerador")
+        mobile = name.replace('.svg', '-mobile.svg')
+        if f'<source media="(max-width: 600px)" srcset="assets/{mobile}">' not in readme:
+            errors.append(f"README.md: falta referência mobile de assets/{name}")
     if args.check:
         for name, svg in outputs.items():
             path = ASSETS / name

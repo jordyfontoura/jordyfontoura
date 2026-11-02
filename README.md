@@ -1,6 +1,7 @@
-<p align="center">
+<picture>
+  <source media="(max-width: 600px)" srcset="assets/banner-mobile.svg">
   <img src="assets/banner.svg" alt="Jordy Fontoura: AI Engineer working with RAG, agents and MCP; software developer since 2018; TypeScript, Python and Rust" width="100%">
-</p>
+</picture>
 
 I'm a software engineer focused on applied AI, working with TypeScript, Python and Rust. I've been building software since 2018, and I've shipped LLM features to production and supported them after launch.
 
@@ -8,9 +9,10 @@ At Dois na Oito, I built generative AI features with RAG, conversational agents 
 
 ## What I work on
 
-<p align="center">
+<picture>
+  <source media="(max-width: 600px)" srcset="assets/focus-mobile.svg">
   <img src="assets/focus.svg" alt="What I build: retrieval (RAG, pgvector), LLMs (Vercel AI SDK), tools (tool calling, MCP) and conversational agents" width="100%">
-</p>
+</picture>
 
 - RAG, conversational agents and integrations that connect LLMs to tools and data.
 - LLM workflows for document processing.

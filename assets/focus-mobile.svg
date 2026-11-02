@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="420" viewBox="0 0 600 420" role="img" aria-labelledby="title desc">
+  <title id="title">What I build</title>
+  <desc id="desc">What I build: retrieval (RAG, pgvector), LLMs (Vercel AI SDK), tools (tool calling, MCP) and conversational agents. Mobile layout in two rows and two columns.</desc>
+  <defs>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.45">
+      <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="flowfade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="260" y2="0">
+      <stop offset="0" stop-color="#3f3f46" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#3f3f46" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#52525b" stop-opacity="0.9"/>
+    </linearGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#fafafa" fill-opacity="0.07"/>
+    </pattern>
+    <clipPath id="card">
+      <rect width="600" height="420" rx="24"/>
+    </clipPath>
+  </defs>
+  <style>
+    .title { font: 700 64px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing: -1.5px; }
+    .lead { font: 400 32px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #d4d4d8; }
+    .meta { font: 500 24px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+    .eq { font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; font-style: italic; fill: #71717a; fill-opacity: 0.75; }
+    .flow { fill: none; stroke: url(#flowfade); stroke-width: 1; }
+    .ring { fill: none; stroke: #27272a; stroke-width: 1; }
+    .edge { stroke: #3f3f46; stroke-width: 1; stroke-opacity: 0.8; }
+    .node { fill: #09090b; stroke: #71717a; stroke-width: 1.5; }
+    .signal { fill: none; stroke: #d4d4d8; stroke-width: 1.5; stroke-opacity: 0.8; }
+    .label { font: italic 400 15px "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; fill: #a1a1aa; }
+    .mobile-stage { font: 700 32px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; }
+    .mobile-detail { font: 400 25px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+  </style>
+  <g clip-path="url(#card)">
+    <rect width="600" height="420" fill="#09090b"/>
+    <rect width="600" height="420" fill="url(#dots)"/>
+    <rect width="600" height="420" fill="url(#glow)"/>
+    <path class="signal" d="M160,68 H440 M160,268 H440"/><path class="edge" fill="none" d="M472,68 H554 Q574,68 574,88 V248 Q574,268 554,268 H472"/><text class="eq" x="160" y="32" font-size="20" text-anchor="middle">sim(q, d)</text><circle class="ring" cx="160" cy="68" r="32" stroke-dasharray="3 6"/><circle class="node" cx="160" cy="68" r="20"/><circle cx="160" cy="68" r="3.5" fill="#fafafa"/><text class="mobile-stage" x="160" y="132" text-anchor="middle">Retrieval</text><text class="mobile-detail" x="160" y="170" text-anchor="middle">RAG · pgvector</text><text class="eq" x="440" y="32" font-size="20" text-anchor="middle">p(y | x)</text><circle class="ring" cx="440" cy="68" r="32" stroke-dasharray="3 6"/><circle class="node" cx="440" cy="68" r="20"/><circle cx="440" cy="68" r="3.5" fill="#fafafa"/><text class="mobile-stage" x="440" y="132" text-anchor="middle">LLMs</text><text class="mobile-detail" x="440" y="170" text-anchor="middle">Vercel AI SDK</text><text class="eq" x="160" y="232" font-size="20" text-anchor="middle">f(args)</text><circle class="ring" cx="160" cy="268" r="32" stroke-dasharray="3 6"/><circle class="node" cx="160" cy="268" r="20"/><circle cx="160" cy="268" r="3.5" fill="#fafafa"/><text class="mobile-stage" x="160" y="332" text-anchor="middle">Tools</text><text class="mobile-detail" x="160" y="370" text-anchor="middle">tool calling · MCP</text><text class="eq" x="440" y="232" font-size="20" text-anchor="middle">π(a | s)</text><circle class="ring" cx="440" cy="268" r="32" stroke-dasharray="3 6"/><circle class="node" cx="440" cy="268" r="20"/><circle cx="440" cy="268" r="3.5" fill="#fafafa"/><text class="mobile-stage" x="440" y="332" text-anchor="middle">Agents</text><text class="mobile-detail" x="440" y="370" text-anchor="middle">conversational</text>
+  </g>
+  <rect x="0.5" y="0.5" width="599" height="419" rx="24" fill="none" stroke="#27272a"/>
+</svg>
