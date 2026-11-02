@@ -13,6 +13,7 @@ nada aqui pode depender de fontes, scripts ou recursos externos.
 import argparse
 import base64
 import re
+import subprocess
 import sys
 import xml.dom.minidom
 from pathlib import Path
@@ -273,6 +274,9 @@ def main():
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1
+    result = subprocess.run([sys.executable, '-I', str(ROOT/'scripts/build_usage.py'), *(['--check'] if args.check else [])])
+    if result.returncode:
+        return result.returncode
     return 0
 
 

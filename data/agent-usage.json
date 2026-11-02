@@ -1,0 +1,857 @@
+{
+  "schema_version": 2,
+  "source": "T3 usage cache v9",
+  "timezone": "UTC-03:00",
+  "since": "2026-10-01",
+  "until_exclusive": "2026-11-01",
+  "latest_record_at": "2026-10-31T23:59:50-03:00",
+  "coverage": "partial",
+  "records": [
+    {
+      "day": "2026-10-01",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 60,
+      "cached_input": 1254190,
+      "cache_creation": 171653,
+      "output": 4126
+    },
+    {
+      "day": "2026-10-01",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 1064,
+      "cached_input": 188742199,
+      "cache_creation": 1695714,
+      "output": 332198
+    },
+    {
+      "day": "2026-10-01",
+      "agent": "Codex",
+      "model": "GPT-6 Astra",
+      "uncached_input": 354356,
+      "cached_input": 3854848,
+      "cache_creation": 0,
+      "output": 16994
+    },
+    {
+      "day": "2026-10-01",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 5496316,
+      "cached_input": 324612096,
+      "cache_creation": 0,
+      "output": 704847
+    },
+    {
+      "day": "2026-10-01",
+      "agent": "Codex",
+      "model": "GPT-6 Sol",
+      "uncached_input": 286322,
+      "cached_input": 28554112,
+      "cache_creation": 0,
+      "output": 25987
+    },
+    {
+      "day": "2026-10-02",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 1036,
+      "cached_input": 155227637,
+      "cache_creation": 1110936,
+      "output": 298389
+    },
+    {
+      "day": "2026-10-02",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 6466866,
+      "cached_input": 439440512,
+      "cache_creation": 0,
+      "output": 857365
+    },
+    {
+      "day": "2026-10-03",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 2328,
+      "cached_input": 565000635,
+      "cache_creation": 2058025,
+      "output": 1423425
+    },
+    {
+      "day": "2026-10-03",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 6207939,
+      "cached_input": 396838016,
+      "cache_creation": 0,
+      "output": 942553
+    },
+    {
+      "day": "2026-10-03",
+      "agent": "Codex",
+      "model": "GPT-6 Sol",
+      "uncached_input": 173476,
+      "cached_input": 13286272,
+      "cache_creation": 0,
+      "output": 35662
+    },
+    {
+      "day": "2026-10-04",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 1782,
+      "cached_input": 342687498,
+      "cache_creation": 3492290,
+      "output": 580218
+    },
+    {
+      "day": "2026-10-04",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 3971077,
+      "cached_input": 264336000,
+      "cache_creation": 0,
+      "output": 546642
+    },
+    {
+      "day": "2026-10-04",
+      "agent": "Codex",
+      "model": "GPT-6 Sol",
+      "uncached_input": 88035,
+      "cached_input": 4232448,
+      "cache_creation": 0,
+      "output": 9011
+    },
+    {
+      "day": "2026-10-05",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 38,
+      "cached_input": 858497,
+      "cache_creation": 236202,
+      "output": 20755
+    },
+    {
+      "day": "2026-10-05",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 1478,
+      "cached_input": 242488746,
+      "cache_creation": 6359523,
+      "output": 613314
+    },
+    {
+      "day": "2026-10-05",
+      "agent": "Codex",
+      "model": "GPT-6 Astra",
+      "uncached_input": 1432141,
+      "cached_input": 49586816,
+      "cache_creation": 0,
+      "output": 120941
+    },
+    {
+      "day": "2026-10-05",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 6502072,
+      "cached_input": 468331648,
+      "cache_creation": 0,
+      "output": 839219
+    },
+    {
+      "day": "2026-10-05",
+      "agent": "Codex",
+      "model": "GPT-6 Sol",
+      "uncached_input": 1250485,
+      "cached_input": 26624000,
+      "cache_creation": 0,
+      "output": 53371
+    },
+    {
+      "day": "2026-10-06",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 26,
+      "cached_input": 273942,
+      "cache_creation": 37289,
+      "output": 4001
+    },
+    {
+      "day": "2026-10-06",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 2070,
+      "cached_input": 234329225,
+      "cache_creation": 9040856,
+      "output": 640122
+    },
+    {
+      "day": "2026-10-06",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 298310,
+      "cached_input": 20429312,
+      "cache_creation": 0,
+      "output": 40819
+    },
+    {
+      "day": "2026-10-06",
+      "agent": "Codex",
+      "model": "GPT-6 Sol",
+      "uncached_input": 156893,
+      "cached_input": 11579136,
+      "cache_creation": 0,
+      "output": 22629
+    },
+    {
+      "day": "2026-10-07",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 1870,
+      "cached_input": 247620588,
+      "cache_creation": 3112582,
+      "output": 1024001
+    },
+    {
+      "day": "2026-10-07",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 536,
+      "cached_input": 89745467,
+      "cache_creation": 917153,
+      "output": 296734
+    },
+    {
+      "day": "2026-10-07",
+      "agent": "Codex",
+      "model": "GPT-6 Astra",
+      "uncached_input": 12990,
+      "cached_input": 13440,
+      "cache_creation": 0,
+      "output": 90
+    },
+    {
+      "day": "2026-10-07",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 1296402,
+      "cached_input": 79570816,
+      "cache_creation": 0,
+      "output": 169505
+    },
+    {
+      "day": "2026-10-07",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 69526,
+      "cached_input": 487040,
+      "cache_creation": 0,
+      "output": 2200
+    },
+    {
+      "day": "2026-10-08",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 804,
+      "cached_input": 90797358,
+      "cache_creation": 3355757,
+      "output": 529277
+    },
+    {
+      "day": "2026-10-08",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 2380,
+      "cached_input": 354264580,
+      "cache_creation": 3785186,
+      "output": 830354
+    },
+    {
+      "day": "2026-10-08",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 3983693,
+      "cached_input": 287624960,
+      "cache_creation": 0,
+      "output": 502679
+    },
+    {
+      "day": "2026-10-09",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 22,
+      "cached_input": 4929683,
+      "cache_creation": 1291784,
+      "output": 13943
+    },
+    {
+      "day": "2026-10-09",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 3034,
+      "cached_input": 317654384,
+      "cache_creation": 11864472,
+      "output": 854862
+    },
+    {
+      "day": "2026-10-09",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 6271321,
+      "cached_input": 354345344,
+      "cache_creation": 0,
+      "output": 916087
+    },
+    {
+      "day": "2026-10-09",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 1363195,
+      "cached_input": 53356032,
+      "cache_creation": 0,
+      "output": 138039
+    },
+    {
+      "day": "2026-10-10",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 14,
+      "cached_input": 266858,
+      "cache_creation": 54385,
+      "output": 1323
+    },
+    {
+      "day": "2026-10-10",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 1602,
+      "cached_input": 178098732,
+      "cache_creation": 14100407,
+      "output": 461262
+    },
+    {
+      "day": "2026-10-10",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 9626566,
+      "cached_input": 802134528,
+      "cache_creation": 0,
+      "output": 1512400
+    },
+    {
+      "day": "2026-10-10",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 596753,
+      "cached_input": 3473536,
+      "cache_creation": 0,
+      "output": 15410
+    },
+    {
+      "day": "2026-10-11",
+      "agent": "Claude Code",
+      "model": "Claude Haiku 5.5",
+      "uncached_input": 8,
+      "cached_input": 80704,
+      "cache_creation": 39017,
+      "output": 2111
+    },
+    {
+      "day": "2026-10-11",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 890,
+      "cached_input": 146056880,
+      "cache_creation": 2020941,
+      "output": 884868
+    },
+    {
+      "day": "2026-10-11",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 802,
+      "cached_input": 97519976,
+      "cache_creation": 7419790,
+      "output": 185207
+    },
+    {
+      "day": "2026-10-11",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 10782762,
+      "cached_input": 778556032,
+      "cache_creation": 0,
+      "output": 1632429
+    },
+    {
+      "day": "2026-10-11",
+      "agent": "Codex",
+      "model": "GPT-6 Sol",
+      "uncached_input": 616082,
+      "cached_input": 28788224,
+      "cache_creation": 0,
+      "output": 68335
+    },
+    {
+      "day": "2026-10-11",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 468800,
+      "cached_input": 11840640,
+      "cache_creation": 0,
+      "output": 31591
+    },
+    {
+      "day": "2026-10-12",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 395,
+      "cached_input": 34839044,
+      "cache_creation": 1775330,
+      "output": 245110
+    },
+    {
+      "day": "2026-10-12",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 5730,
+      "cached_input": 1047098932,
+      "cache_creation": 5412154,
+      "output": 2157731
+    },
+    {
+      "day": "2026-10-12",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 102940,
+      "cached_input": 1138688,
+      "cache_creation": 0,
+      "output": 13198
+    },
+    {
+      "day": "2026-10-13",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 1203,
+      "cached_input": 104781537,
+      "cache_creation": 3640829,
+      "output": 971289
+    },
+    {
+      "day": "2026-10-13",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 352,
+      "cached_input": 100766294,
+      "cache_creation": 296400,
+      "output": 106546
+    },
+    {
+      "day": "2026-10-13",
+      "agent": "Codex",
+      "model": "GPT-6 Sol",
+      "uncached_input": 241836,
+      "cached_input": 15587200,
+      "cache_creation": 0,
+      "output": 15123
+    },
+    {
+      "day": "2026-10-13",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 5898649,
+      "cached_input": 289953920,
+      "cache_creation": 0,
+      "output": 1528172
+    },
+    {
+      "day": "2026-10-14",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 1564,
+      "cached_input": 94270422,
+      "cache_creation": 3153453,
+      "output": 919589
+    },
+    {
+      "day": "2026-10-14",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 37818,
+      "cached_input": 110592,
+      "cache_creation": 0,
+      "output": 1007
+    },
+    {
+      "day": "2026-10-14",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 10111255,
+      "cached_input": 389358080,
+      "cache_creation": 0,
+      "output": 2106910
+    },
+    {
+      "day": "2026-10-15",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 1824,
+      "cached_input": 129884652,
+      "cache_creation": 5253445,
+      "output": 1753491
+    },
+    {
+      "day": "2026-10-15",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 15267423,
+      "cached_input": 825575424,
+      "cache_creation": 0,
+      "output": 3300202
+    },
+    {
+      "day": "2026-10-16",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 2796,
+      "cached_input": 249730735,
+      "cache_creation": 5878227,
+      "output": 1726496
+    },
+    {
+      "day": "2026-10-16",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 42,
+      "cached_input": 1275855,
+      "cache_creation": 64158,
+      "output": 30022
+    },
+    {
+      "day": "2026-10-16",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 13422184,
+      "cached_input": 719156096,
+      "cache_creation": 0,
+      "output": 2595121
+    },
+    {
+      "day": "2026-10-17",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 1756,
+      "cached_input": 152702093,
+      "cache_creation": 3089035,
+      "output": 1278973
+    },
+    {
+      "day": "2026-10-17",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 3878479,
+      "cached_input": 183307392,
+      "cache_creation": 0,
+      "output": 738457
+    },
+    {
+      "day": "2026-10-18",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 1772,
+      "cached_input": 112347339,
+      "cache_creation": 3154109,
+      "output": 1079392
+    },
+    {
+      "day": "2026-10-18",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 6339471,
+      "cached_input": 219375744,
+      "cache_creation": 0,
+      "output": 957131
+    },
+    {
+      "day": "2026-10-19",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 4508,
+      "cached_input": 342560542,
+      "cache_creation": 8410869,
+      "output": 3090756
+    },
+    {
+      "day": "2026-10-19",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 206,
+      "cached_input": 12634142,
+      "cache_creation": 315890,
+      "output": 69276
+    },
+    {
+      "day": "2026-10-19",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 21199427,
+      "cached_input": 1173381504,
+      "cache_creation": 0,
+      "output": 3305242
+    },
+    {
+      "day": "2026-10-20",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 154,
+      "cached_input": 6470480,
+      "cache_creation": 985814,
+      "output": 82610
+    },
+    {
+      "day": "2026-10-20",
+      "agent": "Claude Code",
+      "model": "Claude Sonnet 5.5",
+      "uncached_input": 388,
+      "cached_input": 36696009,
+      "cache_creation": 755621,
+      "output": 160115
+    },
+    {
+      "day": "2026-10-20",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 1391669,
+      "cached_input": 44809344,
+      "cache_creation": 0,
+      "output": 290771
+    },
+    {
+      "day": "2026-10-21",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 4,
+      "cached_input": 790955,
+      "cache_creation": 792739,
+      "output": 318
+    },
+    {
+      "day": "2026-10-21",
+      "agent": "Codex",
+      "model": "GPT-6 Luna",
+      "uncached_input": 597794,
+      "cached_input": 19108864,
+      "cache_creation": 0,
+      "output": 98441
+    },
+    {
+      "day": "2026-10-21",
+      "agent": "Codex",
+      "model": "GPT-6 Sol",
+      "uncached_input": 32262,
+      "cached_input": 981632,
+      "cache_creation": 0,
+      "output": 3969
+    },
+    {
+      "day": "2026-10-21",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 1647145,
+      "cached_input": 62852992,
+      "cache_creation": 0,
+      "output": 342526
+    },
+    {
+      "day": "2026-10-22",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 28,
+      "cached_input": 1388032,
+      "cache_creation": 847199,
+      "output": 11866
+    },
+    {
+      "day": "2026-10-22",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 2835741,
+      "cached_input": 102671616,
+      "cache_creation": 0,
+      "output": 398757
+    },
+    {
+      "day": "2026-10-23",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 5094,
+      "cached_input": 520969964,
+      "cache_creation": 9559814,
+      "output": 3813653
+    },
+    {
+      "day": "2026-10-23",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 10918810,
+      "cached_input": 627317888,
+      "cache_creation": 0,
+      "output": 2220651
+    },
+    {
+      "day": "2026-10-24",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 3820,
+      "cached_input": 380553199,
+      "cache_creation": 7238974,
+      "output": 2871725
+    },
+    {
+      "day": "2026-10-24",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 9215334,
+      "cached_input": 314120704,
+      "cache_creation": 0,
+      "output": 1182479
+    },
+    {
+      "day": "2026-10-25",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 1092,
+      "cached_input": 107413789,
+      "cache_creation": 2065405,
+      "output": 570555
+    },
+    {
+      "day": "2026-10-25",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 10834500,
+      "cached_input": 468539904,
+      "cache_creation": 0,
+      "output": 1471510
+    },
+    {
+      "day": "2026-10-26",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 2010,
+      "cached_input": 244950056,
+      "cache_creation": 4174622,
+      "output": 1868197
+    },
+    {
+      "day": "2026-10-26",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 3791903,
+      "cached_input": 145970432,
+      "cache_creation": 0,
+      "output": 750148
+    },
+    {
+      "day": "2026-10-27",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 2497,
+      "cached_input": 250716082,
+      "cache_creation": 6792689,
+      "output": 2920241
+    },
+    {
+      "day": "2026-10-27",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 6929520,
+      "cached_input": 314333056,
+      "cache_creation": 0,
+      "output": 1376561
+    },
+    {
+      "day": "2026-10-28",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 423,
+      "cached_input": 27005121,
+      "cache_creation": 1798234,
+      "output": 456018
+    },
+    {
+      "day": "2026-10-28",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 1969263,
+      "cached_input": 171378048,
+      "cache_creation": 0,
+      "output": 280936
+    },
+    {
+      "day": "2026-10-29",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 326,
+      "cached_input": 10483690,
+      "cache_creation": 1376300,
+      "output": 129851
+    },
+    {
+      "day": "2026-10-29",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 2852237,
+      "cached_input": 163536896,
+      "cache_creation": 0,
+      "output": 356779
+    },
+    {
+      "day": "2026-10-29",
+      "agent": "Codex",
+      "model": "GPT-6.1 Terra",
+      "uncached_input": 26153,
+      "cached_input": 32768,
+      "cache_creation": 0,
+      "output": 412
+    },
+    {
+      "day": "2026-10-30",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 2006,
+      "cached_input": 183963192,
+      "cache_creation": 3868987,
+      "output": 1560083
+    },
+    {
+      "day": "2026-10-30",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 3548309,
+      "cached_input": 265662080,
+      "cache_creation": 0,
+      "output": 475637
+    },
+    {
+      "day": "2026-10-31",
+      "agent": "Claude Code",
+      "model": "Claude Opus 5.5",
+      "uncached_input": 906,
+      "cached_input": 66422245,
+      "cache_creation": 2062799,
+      "output": 565718
+    },
+    {
+      "day": "2026-10-31",
+      "agent": "Codex",
+      "model": "GPT-6.1 Sol",
+      "uncached_input": 2189769,
+      "cached_input": 132284032,
+      "cache_creation": 0,
+      "output": 468912
+    }
+  ]
+}
