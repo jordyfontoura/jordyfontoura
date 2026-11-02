@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.svg" alt="Jordy Fontoura: software developer since 2018, building open-source tools in TypeScript and Rust" width="100%">
+</p>
+
 I'm passionate about my wife, have 2 cats that I love very much, and I've been into programming and games since I was 10 years old, which is when I started coding in **RPG Maker**.
 
 After some time I learned frontend development, entered college for computational mathematics, and since 2018 I've been working as a software developer. In my free time, I develop some open-source tools in **TypeScript** and **Rust**, and occasionally make some games too.
