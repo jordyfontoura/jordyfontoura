@@ -3,15 +3,12 @@
 Uso:
   python scripts/build_assets.py                 regenera os SVGs
   python scripts/build_assets.py --check         confere SVGs e textos alternativos do README
-  python scripts/build_assets.py --photo FOTO    troca o retrato (JPEG quadrado, sem EXIF)
-
-Sem --photo, o retrato é reaproveitado do banner já gerado: o JPEG avulso não é versionado.
+Os banners são vetoriais, sem foto embutida ou arquivo de imagem auxiliar.
 O GitHub serve os SVGs com `default-src 'none'; style-src 'unsafe-inline'; sandbox`, então
 nada aqui pode depender de fontes, scripts ou recursos externos.
 """
 
 import argparse
-import base64
 import re
 import subprocess
 import sys
@@ -110,22 +107,22 @@ def close(markup):
     return markup + "</tspan>" * markup.count('<tspan dy="8">')
 
 
-def banner(photo_b64):
-    width, height = 1200, 360
+def banner():
+    width, height = 1200, 320
     formulas = [
         # Acima da rede
         (990, 34, 15, "H(X) = −Σ p(x) log p(x)"),
         (892, 64, 16, "softmax(QKᵀ / √d) V"),
-        (1112, 78, 16, "P ≠ NP ?"),
+        (1112, 64, 16, "P ≠ NP ?"),
         # À direita da rede
-        (1104, 114, 16, "max(0, x)"),
+        (1104, 96, 16, "max(0, x)"),
         # Abaixo da rede
-        (905, 296, 16, "θ ← θ − η ∇L(θ)"),
-        (1056, 296, 16, "e" + sup("iπ") + " + 1 = 0"),
-        (905, 336, 16, "P(A|B) = P(B|A) P(A) / P(B)"),
+        (905, 264, 16, "θ ← θ − η ∇L(θ)"),
+        (1056, 264, 16, "e" + sup("iπ") + " + 1 = 0"),
+        (905, 302, 16, "P(A|B) = P(B|A) P(A) / P(B)"),
     ]
     # Rede neural: camadas com 3, 5, 5 e 2 neurônios.
-    layers, net_x, net_cy, net_gap = [3, 5, 5, 2], [900, 980, 1060, 1140], 186, 34
+    layers, net_x, net_cy, net_gap = [3, 5, 5, 2], [900, 980, 1060, 1140], 164, 30
 
     def layer_nodes(index):
         top = net_cy - net_gap * (layers[index] - 1) / 2
@@ -140,40 +137,37 @@ def banner(photo_b64):
     # Linhas de fluxo: saem da borda esquerda, contornam o texto e convergem na entrada da rede.
     inputs = nodes[0]
     flows = []
-    for i, y0 in enumerate([16, 30, 44, 316, 330, 344]):
+    for i, y0 in enumerate([16, 30, 42, 276, 290, 304]):
         xe, ye = inputs[0] if i < 2 else inputs[1] if i in (2, 3) else inputs[2]
         flows.append(f'<path class="flow" d="M-10,{y0} H770 C850,{y0} 830,{ye:.1f} {xe - 8},{ye:.1f}"/>')
     equations = "\n".join(f'    <text class="eq" x="{x}" y="{y}" font-size="{size}">{close(text)}</text>'
                           for x, y, size, text in formulas)
+    extra = f'''
+    .title {{ font: 700 72px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1.5px; }}
+    .lead {{ font: 400 36px {SANS}; fill: {COLOR['signal']}; }}
+    .meta {{ font: 500 30px {SANS}; fill: {COLOR['muted']}; }}'''
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Portrait of Jordy Fontoura; in the background, a neural network and formulas from computing, mathematics and physics. Portrait: all rights reserved.</desc>
+  <desc id="desc">{BANNER_ALT}. Text on the left; neural network and formulas from computing, mathematics and physics on the right.</desc>
   <defs>
-{card_defs(width, height, 0.14, 900)}
-    <clipPath id="avatar">
-      <circle cx="170" cy="180" r="112"/>
-    </clipPath>
+{card_defs(width, height, 0.7, 900)}
   </defs>
-{style()}
+{style(extra)}
   <g clip-path="url(#card)">
 {card_background(width, height)}
     {"".join(flows)}
-    <circle class="ring" cx="170" cy="180" r="140"/>
-    <circle class="ring" cx="170" cy="180" r="166" stroke-dasharray="3 6"/>
 {equations}
     {"".join(edges)}
     <path class="signal" d="{path}"/>
     {"".join(circles)}
     {"".join(f'<circle cx="{x}" cy="{y:.1f}" r="3" fill="{COLOR["foreground"]}"/>' for x, y in highlight)}
-    <text class="label" x="{net_x[0] - 10}" y="{net_cy - net_gap * 2 - 26}">y = σ(Wx + b)</text>
+    <text class="label" x="{net_x[0] - 10}" y="{net_cy - net_gap * 2 - 20}">y = σ(Wx + b)</text>
   </g>
   {card_border(width, height)}
-  <circle cx="170" cy="180" r="118" fill="{COLOR["background"]}" stroke="{COLOR["ring"]}" stroke-width="1.5"/>
-  <image x="58" y="68" width="224" height="224" clip-path="url(#avatar)" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,{photo_b64}"/>
-  <text class="title" x="330" y="138">Jordy Fontoura</text>
-  <text class="lead" x="334" y="188">AI Engineer · RAG, agents, MCP</text>
-  <text class="lead" x="334" y="228">Software developer since 2018.</text>
-  <text class="meta" x="334" y="280">TypeScript · Python · Rust</text>
+  <text class="title" x="64" y="100">Jordy Fontoura</text>
+  <text class="lead" x="68" y="154">AI Engineer · RAG, agents, MCP</text>
+  <text class="lead" x="68" y="201">Software developer since 2018.</text>
+  <text class="meta" x="68" y="256">TypeScript · Python · Rust</text>
 </svg>
 """
 
@@ -227,11 +221,11 @@ def focus():
 """
 
 
-def banner_mobile(photo_b64):
-    """Retrato e textos empilhados, sem reduzir a tipografia do banner desktop."""
-    width, height = 600, 590
+def banner_mobile():
+    """Texto primeiro, com rede discreta abaixo, em uma composição compacta."""
+    width, height = 600, 380
     layers = [3, 4, 4, 2]
-    nodes = [[(210+i*60, 528+(j-(size-1)/2)*18) for j in range(size)]
+    nodes = [[(350+i*58, 325+(j-(size-1)/2)*14) for j in range(size)]
              for i, size in enumerate(layers)]
     edges = ''.join(f'<line class="edge" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}"/>'
                     for left, right in zip(nodes, nodes[1:]) for x1,y1 in left for x2,y2 in right)
@@ -239,37 +233,31 @@ def banner_mobile(photo_b64):
     extra = f'''
     .mobile-name {{ font: 700 52px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1px; }}
     .mobile-role {{ font: 500 34px {SANS}; fill: {COLOR['foreground']}; }}
-    .mobile-topic {{ font: 400 28px {SANS}; fill: {COLOR['signal']}; }}
-    .mobile-meta {{ font: 400 26px {SANS}; fill: {COLOR['muted']}; }}'''
+    .mobile-topic {{ font: 400 30px {SANS}; fill: {COLOR['signal']}; }}
+    .mobile-meta {{ font: 400 30px {SANS}; fill: {COLOR['muted']}; }}'''
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Mobile layout with portrait above the text. Portrait: all rights reserved.</desc>
+  <desc id="desc">{BANNER_ALT}. Compact mobile layout with text above a small neural network.</desc>
   <defs>
-{card_defs(width, height, 0.5, 240)}
-    <clipPath id="avatar"><circle cx="300" cy="130" r="84"/></clipPath>
+{card_defs(width, height, 0.7, 350)}
   </defs>
 {style(extra)}
   <g clip-path="url(#card)">
 {card_background(width, height)}
-    <path class="flow" d="M-10,38 H140 Q180,38 190,130"/>
-    <path class="flow" d="M-10,50 H126 Q166,50 190,142"/>
-    <path class="flow" d="M610,38 H460 Q420,38 410,130"/>
-    <path class="flow" d="M610,50 H474 Q434,50 410,142"/>
-    <circle class="ring" cx="300" cy="130" r="96"/>
-    <circle class="ring" cx="300" cy="130" r="112" stroke-dasharray="3 6"/>
-    <text class="eq" x="28" y="32" font-size="20">xᵀAx</text>
-    <text class="eq" x="572" y="32" font-size="20" text-anchor="end">σ(Wx + b)</text>
+    <path class="flow" d="M-10,280 H270 C320,280 310,311 346.5,311"/>
+    <path class="flow" d="M-10,290 H258 C308,290 310,325 346.5,325"/>
+    <path class="flow" d="M-10,300 H246 C296,300 310,339 346.5,339"/>
+    <text class="eq" x="40" y="335" font-size="20">y = σ(Wx + b)</text>
+    <text class="eq" x="40" y="359" font-size="18">xᵀAx</text>
     {edges}{circles}
   </g>
   {card_border(width, height)}
-  <circle cx="300" cy="130" r="88" fill="{COLOR['background']}" stroke="{COLOR['ring']}" stroke-width="1.5"/>
-  <image x="216" y="46" width="168" height="168" clip-path="url(#avatar)" preserveAspectRatio="xMidYMid slice" href="data:image/jpeg;base64,{photo_b64}"/>
-  <g text-anchor="middle">
-    <text class="mobile-name" x="300" y="286">Jordy Fontoura</text>
-    <text class="mobile-role" x="300" y="332">AI Engineer</text>
-    <text class="mobile-topic" x="300" y="372">RAG · agents · MCP</text>
-    <text class="mobile-meta" x="300" y="416">Software developer since 2018.</text>
-    <text class="mobile-meta" x="300" y="460">TypeScript · Python · Rust</text>
+  <g>
+    <text class="mobile-name" x="40" y="76">Jordy Fontoura</text>
+    <text class="mobile-role" x="40" y="122">AI Engineer</text>
+    <text class="mobile-topic" x="40" y="162">RAG · agents · MCP</text>
+    <text class="mobile-meta" x="40" y="213">Software developer since 2018.</text>
+    <text class="mobile-meta" x="40" y="255">TypeScript · Python · Rust</text>
   </g>
 </svg>
 '''
@@ -308,19 +296,12 @@ def focus_mobile():
 '''
 
 
-def photo_from_banner():
-    match = re.search(r'href="data:image/jpeg;base64,([A-Za-z0-9+/=]+)"', (ASSETS / "banner.svg").read_text(encoding="utf-8"))
-    if not match:
-        sys.exit("assets/banner.svg não tem retrato embutido; use --photo")
-    return match.group(1)
-
-
 def problems(name, svg):
     """Restrições do GitHub e orçamento de tamanho."""
     found = []
     xml.dom.minidom.parseString(svg)
-    for pattern in (r"<script", r"<foreignObject", r"@import", r"@font-face", r"url\((?!#)",
-                    r'href="(?!#|data:image/jpeg;base64,)'):
+    for pattern in (r"<script", r"<foreignObject", r"<image", r"@import", r"@font-face", r"url\((?!#)",
+                    r'href="(?!#)'):
         if re.search(pattern, svg):
             found.append(f"{name}: contém {pattern}")
     if re.search(r"https?://(?!www\.w3\.org/2000/svg\")", svg):
@@ -333,11 +314,9 @@ def problems(name, svg):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
-    parser.add_argument("--photo", type=Path)
     args = parser.parse_args()
-    photo = base64.b64encode(args.photo.read_bytes()).decode("ascii") if args.photo else photo_from_banner()
-    outputs = {"banner.svg": banner(photo), "focus.svg": focus(),
-               "banner-mobile.svg": banner_mobile(photo), "focus-mobile.svg": focus_mobile()}
+    outputs = {"banner.svg": banner(), "focus.svg": focus(),
+               "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile()}
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
     readme = README.read_text(encoding="utf-8")
     for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
