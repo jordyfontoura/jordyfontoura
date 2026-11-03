@@ -108,21 +108,17 @@ def close(markup):
 
 
 def banner():
-    width, height = 1200, 320
+    width, height = 1200, 200
     formulas = [
-        # Acima da rede
-        (990, 34, 15, "H(X) = −Σ p(x) log p(x)"),
-        (892, 64, 16, "softmax(QKᵀ / √d) V"),
-        (1112, 64, 16, "P ≠ NP ?"),
-        # À direita da rede
-        (1104, 96, 16, "max(0, x)"),
-        # Abaixo da rede
-        (905, 264, 16, "θ ← θ − η ∇L(θ)"),
-        (1056, 264, 16, "e" + sup("iπ") + " + 1 = 0"),
-        (905, 302, 16, "P(A|B) = P(B|A) P(A) / P(B)"),
+        (810, 32, 14, "y = σ(Wx + b)"),
+        (960, 32, 14, "softmax(QKᵀ / √d) V"),
+        (1110, 32, 14, "P ≠ NP ?"),
+        (1110, 104, 14, "max(0, x)"),
+        (810, 182, 14, "θ ← θ − η ∇L(θ)"),
+        (980, 182, 14, "e" + sup("iπ") + " + 1 = 0"),
     ]
     # Rede neural: camadas com 3, 5, 5 e 2 neurônios.
-    layers, net_x, net_cy, net_gap = [3, 5, 5, 2], [900, 980, 1060, 1140], 164, 30
+    layers, net_x, net_cy, net_gap = [3, 5, 5, 2], [820, 910, 1000, 1090], 100, 24
 
     def layer_nodes(index):
         top = net_cy - net_gap * (layers[index] - 1) / 2
@@ -137,15 +133,15 @@ def banner():
     # Linhas de fluxo: saem da borda esquerda, contornam o texto e convergem na entrada da rede.
     inputs = nodes[0]
     flows = []
-    for i, y0 in enumerate([16, 30, 42, 276, 290, 304]):
+    for i, y0 in enumerate([12, 22, 32, 168, 178, 188]):
         xe, ye = inputs[0] if i < 2 else inputs[1] if i in (2, 3) else inputs[2]
-        flows.append(f'<path class="flow" d="M-10,{y0} H770 C850,{y0} 830,{ye:.1f} {xe - 8},{ye:.1f}"/>')
+        flows.append(f'<path class="flow" d="M-10,{y0} H600 C740,{y0} 750,{ye:.1f} {xe - 8},{ye:.1f}"/>')
     equations = "\n".join(f'    <text class="eq" x="{x}" y="{y}" font-size="{size}">{close(text)}</text>'
                           for x, y, size, text in formulas)
     extra = f'''
-    .title {{ font: 700 72px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1.5px; }}
-    .lead {{ font: 400 36px {SANS}; fill: {COLOR['signal']}; }}
-    .meta {{ font: 500 30px {SANS}; fill: {COLOR['muted']}; }}'''
+    .title {{ font: 700 42px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1px; }}
+    .lead {{ font: 400 24px {SANS}; fill: {COLOR['signal']}; }}
+    .meta {{ font: 500 22px {SANS}; fill: {COLOR['muted']}; }}'''
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
   <desc id="desc">{BANNER_ALT}. Text on the left; neural network and formulas from computing, mathematics and physics on the right.</desc>
@@ -161,43 +157,42 @@ def banner():
     <path class="signal" d="{path}"/>
     {"".join(circles)}
     {"".join(f'<circle cx="{x}" cy="{y:.1f}" r="3" fill="{COLOR["foreground"]}"/>' for x, y in highlight)}
-    <text class="label" x="{net_x[0] - 10}" y="{net_cy - net_gap * 2 - 20}">y = σ(Wx + b)</text>
   </g>
   {card_border(width, height)}
-  <text class="title" x="64" y="100">Jordy Fontoura</text>
-  <text class="lead" x="68" y="154">AI Engineer · RAG, agents, MCP</text>
-  <text class="lead" x="68" y="201">Software developer since 2018.</text>
-  <text class="meta" x="68" y="256">TypeScript · Python · Rust</text>
+  <text class="title" x="56" y="66">Jordy Fontoura</text>
+  <text class="lead" x="56" y="104">AI Engineer · RAG, agents, MCP</text>
+  <text class="meta" x="56" y="134">Software developer since 2018.</text>
+  <text class="meta" x="56" y="164">TypeScript · Python · Rust</text>
 </svg>
 """
 
 
 def focus():
     """Cartão "What I build": etapas ligadas pelo caminho em destaque da rede do banner."""
-    width, height = 1200, 320
-    xs, cy = [180, 460, 740, 1020], 128
+    width, height = 1200, 180
+    xs, cy = [180, 460, 740, 1020], 72
     extra = f"""
-    .stage {{ font: 700 40px {SANS}; fill: {COLOR["foreground"]}; letter-spacing: -0.5px; }}
-    .detail {{ font: 400 28px {SANS}; fill: {COLOR["muted"]}; }}"""
+    .stage {{ font: 700 22px {SANS}; fill: {COLOR["foreground"]}; letter-spacing: -0.5px; }}
+    .detail {{ font: 400 20px {SANS}; fill: {COLOR["muted"]}; }}"""
     parts = []
     # Linhas que entram pela borda esquerda e saem pela direita, como no banner.
-    for dy in (-14, 0, 14):
-        parts.append(f'<path class="flow" d="M-10,{cy + dy * 4} C80,{cy + dy * 4} 70,{cy + dy} {xs[0] - 48},{cy + dy}"/>')
-        parts.append(f'<path class="flow flow-out" d="M{xs[-1] + 48},{cy + dy} C{width - 70},{cy + dy} '
-                     f'{width - 80},{cy + dy * 4} {width + 10},{cy + dy * 4}"/>')
+    for dy in (-10, 0, 10):
+        parts.append(f'<path class="flow" d="M-10,{cy + dy * 3} C80,{cy + dy * 3} 70,{cy + dy} {xs[0] - 26},{cy + dy}"/>')
+        parts.append(f'<path class="flow flow-out" d="M{xs[-1] + 26},{cy + dy} C{width - 70},{cy + dy} '
+                     f'{width - 80},{cy + dy * 3} {width + 10},{cy + dy * 3}"/>')
     # Malha discreta entre etapas vizinhas, sob o caminho principal.
     for a, b in zip(xs, xs[1:]):
-        for dy1 in (-18, 18):
-            for dy2 in (-18, 18):
-                parts.append(f'<line class="edge" x1="{a + 30}" y1="{cy + dy1}" x2="{b - 30}" y2="{cy + dy2}" stroke-opacity="0.45"/>')
+        for dy1 in (-12, 12):
+            for dy2 in (-12, 12):
+                parts.append(f'<line class="edge" x1="{a + 26}" y1="{cy + dy1}" x2="{b - 26}" y2="{cy + dy2}" stroke-opacity="0.45"/>')
     parts.append(f'<path class="signal" d="M{xs[0]},{cy} H{xs[-1]}"/>')
     for x, (stage, detail, formula) in zip(xs, STAGES):
-        parts.append(f'<text class="eq" x="{x}" y="{cy - 64}" font-size="22" text-anchor="middle">{formula}</text>')
-        parts.append(f'<circle class="ring" cx="{x}" cy="{cy}" r="46" stroke-dasharray="3 6"/>')
-        parts.append(f'<circle class="node" cx="{x}" cy="{cy}" r="30"/>')
-        parts.append(f'<circle cx="{x}" cy="{cy}" r="5" fill="{COLOR["foreground"]}"/>')
-        parts.append(f'<text class="stage" x="{x}" y="{cy + 112}" text-anchor="middle">{stage}</text>')
-        parts.append(f'<text class="detail" x="{x}" y="{cy + 154}" text-anchor="middle">{detail}</text>')
+        parts.append(f'<text class="eq" x="{x}" y="34" font-size="15" text-anchor="middle">{formula}</text>')
+        parts.append(f'<circle class="ring" cx="{x}" cy="{cy}" r="26" stroke-dasharray="3 6"/>')
+        parts.append(f'<circle class="node" cx="{x}" cy="{cy}" r="18"/>')
+        parts.append(f'<circle cx="{x}" cy="{cy}" r="3" fill="{COLOR["foreground"]}"/>')
+        parts.append(f'<text class="stage" x="{x}" y="128" text-anchor="middle">{stage}</text>')
+        parts.append(f'<text class="detail" x="{x}" y="156" text-anchor="middle">{detail}</text>')
     body = "\n    ".join(parts)
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">What I build</title>

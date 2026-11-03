@@ -169,8 +169,8 @@ def panel(data, mobile=False, medium=False):
     agents, models, days = metrics(data)
     total = sum(agents.values())
     mobile = mobile or medium
-    width = 600 if medium else 360 if mobile else 720
-    height = 518 + len(agents)*54 + len(models)*52 if mobile else 700
+    width = 600 if medium else 360 if mobile else 880
+    height = 518 + len(agents)*54 + len(models)*52 if mobile else 320
     fg, muted, bg, border = '#fafafa', '#a1a1aa', '#09090b', '#27272a'
     colors = ['#fafafa', '#a1a1aa', '#52525b', '#3f3f46']
     ordered = agents.most_common()
@@ -184,17 +184,22 @@ def panel(data, mobile=False, medium=False):
         parts.append(f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" rx="{radius}" fill="{fill}"/>')
     def rule(y):
         parts.append(f'<path d="M24 {y}H{width-24}" stroke="{border}"/>')
-    text(24, 38, 'My agent activity', 25, fg, 600)
-    text(24, 88, compact(total), 40, fg, 650)
     month = date.fromisoformat(data['since']).strftime('%B %Y')
-    text(24, 116, 'recorded tokens · '+month, 18)
-    text(24 if mobile else width-24, 145 if mobile else 85,
-         data['since'] + ' → < ' + data['until_exclusive'], 16, end=not mobile)
-    if not mobile:
-        text(width-24, 114, 'Partial history · UTC-03:00', 16, end=True)
-    chart_top, bottom = (173, 273) if mobile else (160, 290)
+    if mobile:
+        text(24, 38, 'My agent activity', 25, fg, 600)
+        text(24, 88, compact(total), 40, fg, 650)
+        text(24, 116, 'recorded tokens · '+month, 18)
+        text(24, 145, data['since'] + ' → < ' + data['until_exclusive'], 16)
+    else:
+        text(24, 36, 'My agent activity', 18, fg, 600)
+        text(24, 58, 'recorded tokens · '+month, 14)
+        text(width-24, 40, compact(total), 30, fg, 650, end=True)
+        text(width-24, 66, data['since']+' → < '+data['until_exclusive']+' · UTC-03:00', 14, end=True)
+        rule(80)
+    chart_top, bottom = (173, 273) if mobile else (104, 236)
+    chart_width = width-48 if mobile else 400
     maximum = max(sum(w.values()) for w in days)
-    span = (width - 48) / len(days)
+    span = chart_width / len(days)
     gap = min(7, span/4)
     for i, day in enumerate(days):
         cursor = bottom
@@ -207,28 +212,31 @@ def panel(data, mobile=False, medium=False):
             rect(24+i*span, bottom-2, span-gap, 2, border, 0)
         elif sum(day.values())/maximum*(bottom-chart_top) < 1:
             parts.append(f'<circle cx="{24+i*span+(span-gap)/2:.2f}" cy="{bottom}" r="1.5" fill="{fg}"/>')
-    text(24, bottom+26, 'Daily recorded volume', 16)
-    text(width-24, bottom+26, 'oldest → latest', 14, end=True)
-    rule(bottom+45)
-    def ranking(items, x, y, section_width, heading, agent=False):
-        text(x, y, heading, 20, fg, 600)
-        for i, (name, count) in enumerate(items):
-            top = y+33+i*52
-            text(x, top, name, 17, fg)
-            text(x+section_width, top, f'{count/total:.0%}', 17, fg, end=True)
-            rect(x, top+12, section_width, 8, '#18181b')
-            rect(x, top+12, section_width*count/total, 8, palette[name] if agent else muted)
-    y = bottom+78
-    ranking(ordered, 24, y, width-48 if mobile else 280, 'By agent', True)
-    ranking(models, 24 if mobile else 376, y+len(ordered)*54+56 if mobile else y,
-            width-48 if mobile else 320, 'Top models · by tokens')
-    rule(height-100 if mobile else height-84)
-    text(24, height-76 if mobile else height-57, 'Input + output incl. cache · not cost', 14 if mobile else 17)
+    text(24, bottom+26 if mobile else 258, 'Daily recorded volume', 16 if mobile else 14)
+    text(24+chart_width, bottom+26 if mobile else 258, 'oldest → latest', 14, end=True)
     if mobile:
+        rule(bottom+45)
+    def ranking(items, x, y, section_width, heading, agent=False):
+        text(x, y, heading, 20 if mobile else 16, fg, 600)
+        for i, (name, count) in enumerate(items):
+            top = y+33+i*52 if mobile else y+28+i*32
+            text(x, top, name, 17 if mobile else 14, fg)
+            text(x+section_width, top, f'{count/total:.0%}', 17 if mobile else 14, fg, end=True)
+            bar_y, bar_height = (top+12, 8) if mobile else (top+8, 6)
+            rect(x, bar_y, section_width, bar_height, '#18181b')
+            rect(x, bar_y, section_width*count/total, bar_height, palette[name] if agent else muted)
+    y = bottom+78 if mobile else 104
+    ranking(ordered, 24 if mobile else 456, y, width-48 if mobile else 156, 'By agent', True)
+    ranking(models, 24 if mobile else 644, y+len(ordered)*54+56 if mobile else y,
+            width-48 if mobile else 212, 'Top models · by tokens')
+    rule(height-100 if mobile else 278)
+    if mobile:
+        text(24, height-76, 'Input + output incl. cache · not cost', 14)
         text(24, height-51, 'Partial history · UTC-03:00', 14)
-    text(24, height-26 if mobile else height-32, 'Latest record: '+data['latest_record_at'][:10], 14 if mobile else 17)
-    if not mobile:
-        text(width-24, height-32, 'Snapshot · partial coverage', 15, end=True)
+        text(24, height-26, 'Latest record: '+data['latest_record_at'][:10], 14)
+    else:
+        text(24, 302, 'Input + output incl. cache · not cost · partial history', 14)
+        text(width-24, 302, 'Latest record: '+data['latest_record_at'][:10], 14, end=True)
     body = ''.join(parts)
     result = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
 <title id="title">My recorded coding-agent activity</title>
@@ -263,7 +271,7 @@ def main():
             expected = ('<picture>\n'
                         '  <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">\n'
                         '  <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">\n'
-                        f'  <img src="assets/agent-usage.svg" alt="{ALT}" width="720">')
+                        f'  <img src="assets/agent-usage.svg" alt="{ALT}" width="880">')
             if expected not in readme:
                 raise ValueError('Referência ou texto alternativo do painel ausente.')
         outputs = {DATA: json.dumps(data, indent=2, ensure_ascii=False)+'\n',

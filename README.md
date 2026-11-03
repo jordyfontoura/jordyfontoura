@@ -27,7 +27,7 @@ I use Claude, Codex and local models in my development workflow, with specs, con
 <picture>
   <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">
   <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">
-  <img src="assets/agent-usage.svg" alt="Recorded coding-agent usage by day, agent and model for the last closed calendar month. Input and output tokens, including cache; partial history. Local model names are hidden." width="720">
+  <img src="assets/agent-usage.svg" alt="Recorded coding-agent usage by day, agent and model for the last closed calendar month. Input and output tokens, including cache; partial history. Local model names are hidden." width="880">
 </picture>
 
 ## Some things I've built
