@@ -165,10 +165,11 @@ def compact(number):
     return str(number)
 
 
-def panel(data, mobile=False):
+def panel(data, mobile=False, medium=False):
     agents, models, days = metrics(data)
     total = sum(agents.values())
-    width = 360 if mobile else 720
+    mobile = mobile or medium
+    width = 600 if medium else 360 if mobile else 720
     height = 518 + len(agents)*54 + len(models)*52 if mobile else 700
     fg, muted, bg, border = '#fafafa', '#a1a1aa', '#09090b', '#27272a'
     colors = ['#fafafa', '#a1a1aa', '#52525b', '#3f3f46']
@@ -176,6 +177,8 @@ def panel(data, mobile=False):
     palette = {name: colors[i] for i, (name, _) in enumerate(ordered)}
     parts = []
     def text(x, y, value, size=18, color=muted, weight=400, end=False):
+        if medium and end:
+            x -= 1  # Reserva para a extensão dos glifos além da âncora à direita.
         parts.append(f'<text x="{x}" y="{y}" font-size="{size}" fill="{color}" font-weight="{weight}" text-anchor="{"end" if end else "start"}">{escape(str(value))}</text>')
     def rect(x, y, w, h, fill, radius=3):
         parts.append(f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" rx="{radius}" fill="{fill}"/>')
@@ -229,7 +232,7 @@ def panel(data, mobile=False):
     body = ''.join(parts)
     result = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
 <title id="title">My recorded coding-agent activity</title>
-<desc id="desc">{escape(ALT)} {total:,} tokens from {data['since']} (inclusive) to {data['until_exclusive']} (exclusive).</desc>
+<desc id="desc">{escape(ALT)} {total:,} tokens from {data['since']} (inclusive) to {data['until_exclusive']} (exclusive).{' Intermediate layout.' if medium else ''}</desc>
 <rect x="0.5" y="0.5" width="{width-1}" height="{height-1}" rx="18" fill="{bg}" stroke="{border}"/>
 <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif">{body}</g>
 </svg>
@@ -257,11 +260,16 @@ def main():
         validate(data)
         if args.check:
             readme = (ROOT/'README.md').read_text(encoding='utf-8')
-            if f'src="assets/agent-usage.svg" alt="{ALT}"' not in readme or 'srcset="assets/agent-usage-mobile.svg"' not in readme:
+            expected = ('<picture>\n'
+                        '  <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">\n'
+                        '  <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">\n'
+                        f'  <img src="assets/agent-usage.svg" alt="{ALT}" width="720">')
+            if expected not in readme:
                 raise ValueError('Referência ou texto alternativo do painel ausente.')
         outputs = {DATA: json.dumps(data, indent=2, ensure_ascii=False)+'\n',
                    ROOT/'assets/agent-usage.svg': panel(data),
-                   ROOT/'assets/agent-usage-mobile.svg': panel(data, True)}
+                   ROOT/'assets/agent-usage-mobile.svg': panel(data, True),
+                   ROOT/'assets/agent-usage-medium.svg': panel(data, medium=True)}
         for path, content in outputs.items():
             if args.check:
                 if path.read_text(encoding='utf-8') != content:

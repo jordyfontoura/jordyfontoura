@@ -1,4 +1,4 @@
-"""Gera os SVGs desktop/mobile do README e o painel de uso a partir do agregado.
+"""Gera os SVGs desktop/intermediário/mobile e o painel de uso a partir do agregado.
 
 Uso:
   python scripts/build_assets.py                 regenera os SVGs
@@ -221,11 +221,12 @@ def focus():
 """
 
 
-def banner_mobile():
-    """Texto primeiro, com rede discreta abaixo, em uma composição compacta."""
-    width, height = 600, 380
+def banner_mobile(medium=False):
+    """Texto primeiro, com rede abaixo no celular ou ao lado na versão intermediária."""
+    width, height = (760, 300) if medium else (600, 380)
+    net_x, net_y = (540, 150) if medium else (350, 325)
     layers = [3, 4, 4, 2]
-    nodes = [[(350+i*58, 325+(j-(size-1)/2)*14) for j in range(size)]
+    nodes = [[(net_x+i*58, net_y+(j-(size-1)/2)*14) for j in range(size)]
              for i, size in enumerate(layers)]
     edges = ''.join(f'<line class="edge" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}"/>'
                     for left, right in zip(nodes, nodes[1:]) for x1,y1 in left for x2,y2 in right)
@@ -235,20 +236,25 @@ def banner_mobile():
     .mobile-role {{ font: 500 34px {SANS}; fill: {COLOR['foreground']}; }}
     .mobile-topic {{ font: 400 30px {SANS}; fill: {COLOR['signal']}; }}
     .mobile-meta {{ font: 400 30px {SANS}; fill: {COLOR['muted']}; }}'''
+    decoration = '''<path class="flow" d="M-10,16 H470 C510,16 510,136 536.5,136"/>
+    <path class="flow" d="M-10,284 H470 C510,284 510,164 536.5,164"/>
+    <text class="eq" x="540" y="96" font-size="20">y = σ(Wx + b)</text>
+    <text class="eq" x="540" y="220" font-size="18">xᵀAx</text>''' if medium else '''<path class="flow" d="M-10,280 H270 C320,280 310,311 346.5,311"/>
+    <path class="flow" d="M-10,290 H258 C308,290 310,325 346.5,325"/>
+    <path class="flow" d="M-10,300 H246 C296,300 310,339 346.5,339"/>
+    <text class="eq" x="40" y="335" font-size="20">y = σ(Wx + b)</text>
+    <text class="eq" x="40" y="359" font-size="18">xᵀAx</text>'''
+    layout = 'Intermediate layout with a neural network beside the text' if medium else 'Compact mobile layout with text above a small neural network'
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Compact mobile layout with text above a small neural network.</desc>
+  <desc id="desc">{BANNER_ALT}. {layout}.</desc>
   <defs>
 {card_defs(width, height, 0.7, 350)}
   </defs>
 {style(extra)}
   <g clip-path="url(#card)">
 {card_background(width, height)}
-    <path class="flow" d="M-10,280 H270 C320,280 310,311 346.5,311"/>
-    <path class="flow" d="M-10,290 H258 C308,290 310,325 346.5,325"/>
-    <path class="flow" d="M-10,300 H246 C296,300 310,339 346.5,339"/>
-    <text class="eq" x="40" y="335" font-size="20">y = σ(Wx + b)</text>
-    <text class="eq" x="40" y="359" font-size="18">xᵀAx</text>
+    {decoration}
     {edges}{circles}
   </g>
   {card_border(width, height)}
@@ -263,15 +269,17 @@ def banner_mobile():
 '''
 
 
-def focus_mobile():
+def focus_mobile(medium=False):
     """As quatro áreas em duas colunas, com conexões fora dos rótulos."""
-    width, height = 600, 420
+    width, height = (760 if medium else 600), 420
+    left, right = (200, 560) if medium else (160, 440)
+    bend = width - 26
     extra = f'''
     .mobile-stage {{ font: 700 32px {SANS}; fill: {COLOR['foreground']}; }}
     .mobile-detail {{ font: 400 25px {SANS}; fill: {COLOR['muted']}; }}'''
-    parts = ['<path class="signal" d="M160,68 H440 M160,268 H440"/>',
-             '<path class="edge" fill="none" d="M472,68 H554 Q574,68 574,88 V248 Q574,268 554,268 H472"/>']
-    for (x,y), (stage,detail,formula) in zip([(160,68),(440,68),(160,268),(440,268)], STAGES):
+    parts = [f'<path class="signal" d="M{left},68 H{right} M{left},268 H{right}"/>',
+             f'<path class="edge" fill="none" d="M{right+32},68 H{bend-20} Q{bend},68 {bend},88 V248 Q{bend},268 {bend-20},268 H{right+32}"/>']
+    for (x,y), (stage,detail,formula) in zip([(left,68),(right,68),(left,268),(right,268)], STAGES):
         parts.extend([
             f'<text class="eq" x="{x}" y="{y-36}" font-size="20" text-anchor="middle">{formula}</text>',
             f'<circle class="ring" cx="{x}" cy="{y}" r="32" stroke-dasharray="3 6"/>',
@@ -282,7 +290,7 @@ def focus_mobile():
         ])
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">What I build</title>
-  <desc id="desc">{FOCUS_ALT}. Mobile layout in two rows and two columns.</desc>
+  <desc id="desc">{FOCUS_ALT}. {'Intermediate' if medium else 'Mobile'} layout in two rows and two columns.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}
   </defs>
@@ -316,15 +324,18 @@ def main():
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     outputs = {"banner.svg": banner(), "focus.svg": focus(),
-               "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile()}
+               "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
+               "banner-medium.svg": banner_mobile(True), "focus-medium.svg": focus_mobile(True)}
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
     readme = README.read_text(encoding="utf-8")
     for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
         if f'src="assets/{name}" alt="{alt}"' not in readme:
             errors.append(f"README.md: alt de assets/{name} difere do texto do gerador")
-        mobile = name.replace('.svg', '-mobile.svg')
-        if f'<source media="(max-width: 600px)" srcset="assets/{mobile}">' not in readme:
-            errors.append(f"README.md: falta referência mobile de assets/{name}")
+        sources = '\n'.join(f'  <source media="(max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+".svg")}">'
+                            for limit, variant in ((480, 'mobile'), (1011, 'medium')))
+        expected = '<picture>\n'+sources+f'\n  <img src="assets/{name}" alt="{alt}" width="880">'
+        if expected not in readme:
+            errors.append(f"README.md: fontes responsivas ou largura de assets/{name} incorretas")
     if args.check:
         for name, svg in outputs.items():
             path = ASSETS / name

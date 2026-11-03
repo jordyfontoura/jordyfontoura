@@ -1,6 +1,7 @@
 <picture>
-  <source media="(max-width: 600px)" srcset="assets/banner-mobile.svg">
-  <img src="assets/banner.svg" alt="Jordy Fontoura: AI Engineer working with RAG, agents and MCP; software developer since 2018; TypeScript, Python and Rust" width="100%">
+  <source media="(max-width: 480px)" srcset="assets/banner-mobile.svg">
+  <source media="(max-width: 1011px)" srcset="assets/banner-medium.svg">
+  <img src="assets/banner.svg" alt="Jordy Fontoura: AI Engineer working with RAG, agents and MCP; software developer since 2018; TypeScript, Python and Rust" width="880">
 </picture>
 
 I'm a software engineer focused on applied AI, working with TypeScript, Python and Rust. I've been building software since 2018, and I've shipped LLM features to production and supported them after launch.
@@ -10,8 +11,9 @@ At Dois na Oito, I built generative AI features with RAG, conversational agents 
 ## What I work on
 
 <picture>
-  <source media="(max-width: 600px)" srcset="assets/focus-mobile.svg">
-  <img src="assets/focus.svg" alt="What I build: retrieval (RAG, pgvector), LLMs (Vercel AI SDK), tools (tool calling, MCP) and conversational agents" width="100%">
+  <source media="(max-width: 480px)" srcset="assets/focus-mobile.svg">
+  <source media="(max-width: 1011px)" srcset="assets/focus-medium.svg">
+  <img src="assets/focus.svg" alt="What I build: retrieval (RAG, pgvector), LLMs (Vercel AI SDK), tools (tool calling, MCP) and conversational agents" width="880">
 </picture>
 
 - RAG, conversational agents and integrations that connect LLMs to tools and data.
@@ -23,8 +25,9 @@ At Dois na Oito, I built generative AI features with RAG, conversational agents 
 I use Claude, Codex and local models in my development workflow, with specs, context and instructions for agents, code review and automated checks. I publish some of that tooling as open source.
 
 <picture>
-  <source media="(max-width: 600px)" srcset="assets/agent-usage-mobile.svg">
-  <img src="assets/agent-usage.svg" alt="Recorded coding-agent usage by day, agent and model for the last closed calendar month. Input and output tokens, including cache; partial history. Local model names are hidden." width="100%">
+  <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">
+  <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">
+  <img src="assets/agent-usage.svg" alt="Recorded coding-agent usage by day, agent and model for the last closed calendar month. Input and output tokens, including cache; partial history. Local model names are hidden." width="720">
 </picture>
 
 ## Some things I've built

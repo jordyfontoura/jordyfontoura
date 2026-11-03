@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="300" viewBox="0 0 760 300" role="img" aria-labelledby="title desc">
+  <title id="title">Jordy Fontoura</title>
+  <desc id="desc">Jordy Fontoura: AI Engineer working with RAG, agents and MCP; software developer since 2018; TypeScript, Python and Rust. Intermediate layout with a neural network beside the text.</desc>
+  <defs>
+    <radialGradient id="glow" cx="0.7" cy="0.5" r="0.45">
+      <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="flowfade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="350" y2="0">
+      <stop offset="0" stop-color="#3f3f46" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#3f3f46" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#52525b" stop-opacity="0.9"/>
+    </linearGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#fafafa" fill-opacity="0.07"/>
+    </pattern>
+    <clipPath id="card">
+      <rect width="760" height="300" rx="24"/>
+    </clipPath>
+  </defs>
+  <style>
+    .title { font: 700 64px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing: -1.5px; }
+    .lead { font: 400 32px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #d4d4d8; }
+    .meta { font: 500 24px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+    .eq { font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; font-style: italic; fill: #71717a; fill-opacity: 0.75; }
+    .flow { fill: none; stroke: url(#flowfade); stroke-width: 1; }
+    .ring { fill: none; stroke: #27272a; stroke-width: 1; }
+    .edge { stroke: #3f3f46; stroke-width: 1; stroke-opacity: 0.8; }
+    .node { fill: #09090b; stroke: #71717a; stroke-width: 1.5; }
+    .signal { fill: none; stroke: #d4d4d8; stroke-width: 1.5; stroke-opacity: 0.8; }
+    .label { font: italic 400 15px "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; fill: #a1a1aa; }
+    .mobile-name { font: 700 52px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing:-1px; }
+    .mobile-role { font: 500 34px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; }
+    .mobile-topic { font: 400 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #d4d4d8; }
+    .mobile-meta { font: 400 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+  </style>
+  <g clip-path="url(#card)">
+    <rect width="760" height="300" fill="#09090b"/>
+    <rect width="760" height="300" fill="url(#dots)"/>
+    <rect width="760" height="300" fill="url(#glow)"/>
+    <path class="flow" d="M-10,16 H470 C510,16 510,136 536.5,136"/>
+    <path class="flow" d="M-10,284 H470 C510,284 510,164 536.5,164"/>
+    <text class="eq" x="540" y="96" font-size="20">y = σ(Wx + b)</text>
+    <text class="eq" x="540" y="220" font-size="18">xᵀAx</text>
+    <line class="edge" x1="540" y1="136.0" x2="598" y2="129.0"/><line class="edge" x1="540" y1="136.0" x2="598" y2="143.0"/><line class="edge" x1="540" y1="136.0" x2="598" y2="157.0"/><line class="edge" x1="540" y1="136.0" x2="598" y2="171.0"/><line class="edge" x1="540" y1="150.0" x2="598" y2="129.0"/><line class="edge" x1="540" y1="150.0" x2="598" y2="143.0"/><line class="edge" x1="540" y1="150.0" x2="598" y2="157.0"/><line class="edge" x1="540" y1="150.0" x2="598" y2="171.0"/><line class="edge" x1="540" y1="164.0" x2="598" y2="129.0"/><line class="edge" x1="540" y1="164.0" x2="598" y2="143.0"/><line class="edge" x1="540" y1="164.0" x2="598" y2="157.0"/><line class="edge" x1="540" y1="164.0" x2="598" y2="171.0"/><line class="edge" x1="598" y1="129.0" x2="656" y2="129.0"/><line class="edge" x1="598" y1="129.0" x2="656" y2="143.0"/><line class="edge" x1="598" y1="129.0" x2="656" y2="157.0"/><line class="edge" x1="598" y1="129.0" x2="656" y2="171.0"/><line class="edge" x1="598" y1="143.0" x2="656" y2="129.0"/><line class="edge" x1="598" y1="143.0" x2="656" y2="143.0"/><line class="edge" x1="598" y1="143.0" x2="656" y2="157.0"/><line class="edge" x1="598" y1="143.0" x2="656" y2="171.0"/><line class="edge" x1="598" y1="157.0" x2="656" y2="129.0"/><line class="edge" x1="598" y1="157.0" x2="656" y2="143.0"/><line class="edge" x1="598" y1="157.0" x2="656" y2="157.0"/><line class="edge" x1="598" y1="157.0" x2="656" y2="171.0"/><line class="edge" x1="598" y1="171.0" x2="656" y2="129.0"/><line class="edge" x1="598" y1="171.0" x2="656" y2="143.0"/><line class="edge" x1="598" y1="171.0" x2="656" y2="157.0"/><line class="edge" x1="598" y1="171.0" x2="656" y2="171.0"/><line class="edge" x1="656" y1="129.0" x2="714" y2="143.0"/><line class="edge" x1="656" y1="129.0" x2="714" y2="157.0"/><line class="edge" x1="656" y1="143.0" x2="714" y2="143.0"/><line class="edge" x1="656" y1="143.0" x2="714" y2="157.0"/><line class="edge" x1="656" y1="157.0" x2="714" y2="143.0"/><line class="edge" x1="656" y1="157.0" x2="714" y2="157.0"/><line class="edge" x1="656" y1="171.0" x2="714" y2="143.0"/><line class="edge" x1="656" y1="171.0" x2="714" y2="157.0"/><circle class="node" cx="540" cy="136.0" r="3.5"/><circle class="node" cx="540" cy="150.0" r="3.5"/><circle class="node" cx="540" cy="164.0" r="3.5"/><circle class="node" cx="598" cy="129.0" r="3.5"/><circle class="node" cx="598" cy="143.0" r="3.5"/><circle class="node" cx="598" cy="157.0" r="3.5"/><circle class="node" cx="598" cy="171.0" r="3.5"/><circle class="node" cx="656" cy="129.0" r="3.5"/><circle class="node" cx="656" cy="143.0" r="3.5"/><circle class="node" cx="656" cy="157.0" r="3.5"/><circle class="node" cx="656" cy="171.0" r="3.5"/><circle class="node" cx="714" cy="143.0" r="3.5"/><circle class="node" cx="714" cy="157.0" r="3.5"/>
+  </g>
+  <rect x="0.5" y="0.5" width="759" height="299" rx="24" fill="none" stroke="#27272a"/>
+  <g>
+    <text class="mobile-name" x="40" y="76">Jordy Fontoura</text>
+    <text class="mobile-role" x="40" y="122">AI Engineer</text>
+    <text class="mobile-topic" x="40" y="162">RAG · agents · MCP</text>
+    <text class="mobile-meta" x="40" y="213">Software developer since 2018.</text>
+    <text class="mobile-meta" x="40" y="255">TypeScript · Python · Rust</text>
+  </g>
+</svg>

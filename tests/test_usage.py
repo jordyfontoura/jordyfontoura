@@ -58,7 +58,7 @@ class UsageTests(unittest.TestCase):
 
     def test_private_fields_never_reach_public_outputs(self):
         result = usage.collect(document([row(model=1)]),date(2026,11,1))
-        public = json.dumps(result)+usage.panel(result)+usage.panel(result,True)
+        public = json.dumps(result)+usage.panel(result)+usage.panel(result,True)+usage.panel(result,medium=True)
         for forbidden in ['private-local-7b','private-prompt','private-session-id','customer','123.45']:
             self.assertNotIn(forbidden,public)
         self.assertEqual(result['records'][0]['model'],'Other models')
