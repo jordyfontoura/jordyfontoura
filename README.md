@@ -27,8 +27,6 @@ I use Claude, Codex and local models in my development workflow, with specs, con
   <img src="assets/agent-usage.svg" alt="Recorded coding-agent usage by day, agent and model for the last closed calendar month. Input and output tokens, including cache; partial history. Local model names are hidden." width="100%">
 </picture>
 
-Recorded Claude Code and Codex usage from a partial T3 Code snapshot for the last closed calendar month, from the first day of the previous month up to the first day of the current month (exclusive), in UTC−03:00. Local-model usage is not included in this snapshot. [How this is counted](AGENT-USAGE.md).
-
 ## Some things I've built
 
 - **[skills](https://github.com/jordyfontoura/skills):** the engineering instructions I use with coding agents, in Portuguese, for Claude Code and Codex.
