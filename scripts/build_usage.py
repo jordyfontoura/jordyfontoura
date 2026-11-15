@@ -38,7 +38,7 @@ PUBLIC_MODELS = {
 SAFE_MODELS = set(PUBLIC_MODELS.values()) | {'Other models', 'Local models'}
 SAFE_AGENTS = set(AGENTS.values()) | {'Other agents'}
 CATEGORIES = ('uncached_input', 'cached_input', 'cache_creation', 'output')
-ALT = 'Uso registrado de agentes por dia, agente e modelo no último mês encerrado. Tokens de entrada e saída, com cache; histórico parcial. Nomes de modelos locais ocultos.'
+ALT = 'Uso de agentes de programação'
 
 
 def month_window(reference):
@@ -164,11 +164,31 @@ def metrics(data):
     return agents, top, days
 
 
-def compact(number):
-    for divisor, unit in [(10**9, 'B'), (10**6, 'M'), (10**3, 'K')]:
+def compact(number, precision=1):
+    for divisor, unit in [(10**9, 'bi'), (10**6, 'mi'), (10**3, 'mil')]:
         if number >= divisor:
-            return f'{number/divisor:.1f}{unit}'
-    return str(number)
+            return f'{number/divisor:.{precision}f}'.replace('.', ',')+' '+unit
+    return f'{number:g}'.replace('.', ',')
+
+
+def nice_max(value):
+    if value <= 1:
+        return 1
+    base = 10 ** (len(str(value))-1)
+    return next(step*base for step in (1,2,5,10) if step*base >= value)
+
+
+def alternative_text(data):
+    agents, _, _ = metrics(data)
+    total = sum(agents.values())
+    period = date.fromisoformat(data['since']).strftime('%m/%Y')
+    distribution = '; '.join(f"{DISPLAY_NAMES.get(name,name)} {count/total:.0%}"
+                             for name,count in agents.most_common())
+    text = f"{ALT} em {period}: {total:,} tokens; {distribution}.".replace(f'{total:,}', f'{total:,}'.replace(',', '.'))
+    text += ' Entrada, saída e cache; histórico parcial. Tokens não representam custo ou produtividade.'
+    if 'Local models' in agents:
+        text += ' Modelos locais agregados sem divulgar seus nomes.'
+    return text
 
 
 def panel(data, mobile=False, medium=False):
@@ -189,7 +209,7 @@ def panel(data, mobile=False, medium=False):
         parts.append(f'<text x="{x}" y="{y}" font-size="{size}" fill="{color}" font-weight="{weight}" text-anchor="{anchor}">{escape(str(value))}</text>')
 
     def rect(x, y, w, h, color, radius=2):
-        parts.append(f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" rx="{radius}" fill="{color}"/>')
+        parts.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h:.1f}" rx="{radius}" fill="{color}"/>')
 
     def rule(x1, y, x2, dashed=False):
         dash = ' stroke-dasharray="3 5"' if dashed else ''
@@ -209,13 +229,13 @@ def panel(data, mobile=False, medium=False):
         text(width-32, 70, 'tokens registrados', 16, anchor='end')
         rule(32, 91, width-32)
 
-    x0, chart_width = (80, width-112) if stacked else (86, 454)
+    x0, chart_width = (92, width-124) if stacked else (98, 442)
     top, bottom = (184, 324) if stacked else (120, 285)
-    maximum = max(sum(day.values()) for day in days)
+    maximum = nice_max(max(sum(day.values()) for day in days))
     for fraction in [0, .5, 1]:
         y = bottom - (bottom-top)*fraction
         rule(x0, y, x0+chart_width, True)
-        text(x0-12, y+5, compact(round(maximum*fraction)), 13 if stacked else 14, anchor='end')
+        text(x0-12, y+5, compact(maximum*fraction).replace(',0 ', ' '), 13 if stacked else 14, anchor='end')
     span = chart_width / len(days)
     for i, day in enumerate(days):
         cursor = bottom
@@ -255,15 +275,15 @@ def panel(data, mobile=False, medium=False):
         text(32, footer_y+28, 'Entrada + saída e cache', 15)
         text(32, footer_y+51, 'Tokens não representam custo', 15)
         text(32, footer_y+74, 'Histórico parcial · UTC-03:00', 14)
-        text(32, footer_y+97, 'Último registro: '+data['latest_record_at'][:10], 14)
+        text(32, footer_y+97, 'Último registro: '+datetime.fromisoformat(data['latest_record_at']).strftime('%d/%m/%Y'), 14)
     else:
         text(32, footer_y+25, 'Entrada + saída e cache · tokens não representam custo', 14)
         text(32, footer_y+48, 'Histórico parcial · UTC-03:00', 14)
-        text(width-32, footer_y+48, 'Último registro: '+data['latest_record_at'][:10], 14, anchor='end')
+        text(width-32, footer_y+48, 'Último registro: '+datetime.fromisoformat(data['latest_record_at']).strftime('%d/%m/%Y'), 14, anchor='end')
     body = ''.join(parts)
     result = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
 <title id="title">Uso registrado de agentes</title>
-<desc id="desc">{escape(ALT)} {total:,} tokens de {data['since']} (inclusive) a {data['until_exclusive']} (exclusive).</desc>
+<desc id="desc">{escape(alternative_text(data))}</desc>
 <rect x="0.5" y="0.5" width="{width-1}" height="{height-1}" rx="24" fill="{COLOR['background']}" stroke="{COLOR['border']}"/>
 <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif">{body}</g>
 </svg>
@@ -289,15 +309,21 @@ def main():
         else:
             data = json.loads(DATA.read_text(encoding='utf-8'))
         validate(data)
+        alt = alternative_text(data)
+        readme_path = ROOT/'README.md'
+        readme = readme_path.read_text(encoding='utf-8')
         if args.check:
-            readme = (ROOT/'README.md').read_text(encoding='utf-8')
             expected = ('<picture>\n'
                         '  <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">\n'
                         '  <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">\n'
-                        f'  <img src="assets/agent-usage.svg" alt="{ALT}" width="880">')
+                        f'  <img src="assets/agent-usage.svg" alt="{alt}" width="880">')
             if expected not in readme:
                 raise ValueError('Referência ou texto alternativo do painel ausente.')
-        outputs = {DATA: json.dumps(data, indent=2, ensure_ascii=False)+'\n',
+        updated_readme, references = re.subn(r'(<img src="assets/agent-usage.svg" alt=")[^"]*(" width="880">)',
+                                               lambda match: match[1]+alt+match[2], readme)
+        if references != 1:
+            raise ValueError('Referência única do painel ausente.')
+        outputs = {readme_path: updated_readme, DATA: json.dumps(data, indent=2, ensure_ascii=False)+'\n',
                    ROOT/'assets/agent-usage.svg': panel(data),
                    ROOT/'assets/agent-usage-mobile.svg': panel(data, True),
                    ROOT/'assets/agent-usage-medium.svg': panel(data, medium=True)}

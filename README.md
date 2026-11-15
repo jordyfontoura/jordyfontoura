@@ -4,16 +4,24 @@
   <source media="(prefers-reduced-motion: reduce)" srcset="assets/banner-still.svg">
   <source media="(max-width: 480px)" srcset="assets/banner-mobile.svg">
   <source media="(max-width: 1011px)" srcset="assets/banner-medium.svg">
-  <img src="assets/banner.svg" alt="Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; desenvolvedor desde 2018; TypeScript, Python e Rust" width="880">
+  <img src="assets/banner.svg" alt="Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; carreira em software desde 2018; TypeScript, Python e Rust" width="880">
 </picture>
 
 [LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com) · [Projetos](#projetos-abertos)
 
-Construo software com **IA aplicada**, de RAG e agentes conversacionais a integrações com ferramentas e dados. Trabalho com **TypeScript, Python e Rust**, desenvolvo desde 2018 e acompanho o que entrego depois que entra em produção.
+Levo recursos de LLM à produção e trabalho na manutenção depois do lançamento. Tenho base em backend e experiência em liderança técnica; quero continuar próximo do código e das decisões técnicas.
 
-Na **Dois na Oito**, construí recursos de IA generativa com RAG, agentes conversacionais e integrações MCP, além de recomendação e personalização. Também fui **Tech Lead na Bonaparte**. Tenho interesse em oportunidades remotas em engenharia de IA.
+## Experiência em produto
 
-## Do contexto à ação
+**Dois na Oito · Senior Full Stack Developer · jan/2025–set/2026**
+
+Implementei recursos de IA generativa com RAG, agentes conversacionais e integrações MCP em produtos digitais. Desenvolvi APIs e serviços para aplicações web e mobile, além de recursos de recomendação, personalização e controle de acesso.
+
+**Bonaparte · Tech Lead · fev/2024–jan/2025**
+
+Atuei na liderança técnica de equipe. Minha passagem pela empresa também incluiu backend, microsserviços, arquitetura, modelagem de dados e testes.
+
+## O que construo
 
 <picture>
   <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/focus-mobile-still.svg">
@@ -24,48 +32,70 @@ Na **Dois na Oito**, construí recursos de IA generativa com RAG, agentes conver
   <img src="assets/focus.svg" alt="O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes de conversa" width="880">
 </picture>
 
-- **Busca e agentes:** RAG, conversação e integrações entre LLMs, ferramentas e dados.
-- **Documentos:** fluxos de processamento com modelos de linguagem.
-- **Voz:** síntese e comparação de modelos com Python e PyTorch.
+Em outros projetos, desenvolvi fluxos de processamento de documentos com LLMs e trabalhei com síntese de voz e comparação de modelos usando Python e PyTorch.
 
 ## Projetos abertos
 
-**[skills](https://github.com/jordyfontoura/skills)** · Markdown
+<a href="https://github.com/jordyfontoura/skills">
+<picture>
+  <source media="(max-width: 1011px)" srcset="assets/project-skills-mobile.svg">
+  <img src="assets/project-skills.svg" alt="skills: Instruções de engenharia para agentes de código. Claude Code · Codex · português. Abrir repositório." width="880">
+</picture>
+</a>
 
-Instruções de engenharia em português para trabalhar com agentes no Claude Code e Codex.
+<a href="https://github.com/jordyfontoura/TryLess">
+<picture>
+  <source media="(max-width: 1011px)" srcset="assets/project-tryless-mobile.svg">
+  <img src="assets/project-tryless.svg" alt="TryLess: Erros tipados em TypeScript com Result. TypeScript · npm. Abrir repositório." width="880">
+</picture>
+</a>
 
-**[TryLess](https://github.com/jordyfontoura/TryLess)** · TypeScript
+<a href="https://github.com/jordyfontoura/gitclean">
+<picture>
+  <source media="(max-width: 1011px)" srcset="assets/project-gitclean-mobile.svg">
+  <img src="assets/project-gitclean.svg" alt="gitclean: Veja o espaço usado antes de limpar arquivos ignorados. Rust · CLI interativa. Abrir repositório." width="880">
+</picture>
+</a>
 
-Tratamento de erros com tipos `Result` inspirados em Rust. [Disponível no npm ↗](https://www.npmjs.com/package/tryless)
+<a href="https://github.com/jordyfontoura/np">
+<picture>
+  <source media="(max-width: 1011px)" srcset="assets/project-np-mobile.svg">
+  <img src="assets/project-np.svg" alt="np: Um comando para npm, Yarn e pnpm. Rust · CLI. Abrir repositório." width="880">
+</picture>
+</a>
 
-**[gitclean](https://github.com/jordyfontoura/gitclean)** · Rust
+<a href="https://github.com/jordyfontoura/argus">
+<picture>
+  <source media="(max-width: 1011px)" srcset="assets/project-argus-mobile.svg">
+  <img src="assets/project-argus.svg" alt="Argus: Monitore hardware e configure alertas no Windows. Rust · Tauri. Abrir repositório." width="880">
+</picture>
+</a>
 
-CLI para inspecionar uso de disco e limpar arquivos ignorados pelo Git. [Disponível no crates.io ↗](https://crates.io/crates/gitclean)
+Pacotes publicados: [TryLess no npm](https://www.npmjs.com/package/tryless) · [gitclean no crates.io](https://crates.io/crates/gitclean) · [np no crates.io](https://crates.io/crates/np-cli).
 
-Também criei o [np](https://github.com/jordyfontoura/np), um proxy de gerenciadores de pacotes, e o [argus](https://github.com/jordyfontoura/argus), um monitor de hardware para Windows com Rust e Tauri. A maior parte do meu trabalho com IA está em repositórios privados.
+A maior parte do meu trabalho com IA está em repositórios privados. Os projetos acima mostram o que compartilho como código aberto.
 
 ## No meu terminal
 
-Uso Claude, Codex e modelos locais com especificações, contexto para agentes, revisão de código e verificações automatizadas. Parte dessas ferramentas está nos projetos acima.
+Uso Claude, Codex e modelos locais para programar. Alinho o objetivo e o contexto do projeto, especifico o que precisa de definição, reviso o código e executo testes e verificações. Publiquei essas orientações no [skills](https://github.com/jordyfontoura/skills).
 
 <details>
-<summary>Uso registrado dos agentes de programação</summary>
+<summary>Uso de agentes: distribuição mensal de tokens</summary>
 
 <picture>
   <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">
   <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">
-  <img src="assets/agent-usage.svg" alt="Uso registrado de agentes por dia, agente e modelo no último mês encerrado. Tokens de entrada e saída, com cache; histórico parcial. Nomes de modelos locais ocultos." width="880">
+  <img src="assets/agent-usage.svg" alt="Uso de agentes de programação em 10/2026: 19.010.018.919 tokens; Codex 60%; Claude Code 40%. Entrada, saída e cache; histórico parcial. Tokens não representam custo ou produtividade." width="880">
 </picture>
 
 </details>
 
-## Ferramentas de trabalho
+## Tecnologias de trabalho
 
-- **IA:** Vercel AI SDK, OpenAI SDK, embeddings, PostgreSQL/pgvector, tool calling, MCP e PyTorch.
-- **Backend:** TypeScript, Node.js, NestJS, Fastify, APIs, microsserviços e modelagem de dados.
-- **Frontend:** React/Next.js e Vue/Nuxt.js.
-- **Infraestrutura:** Docker, Kubernetes, AWS e Google Cloud.
-- **Rust:** ferramentas de terminal e aplicações desktop, principalmente em projetos pessoais e abertos.
+<picture>
+  <source media="(max-width: 1011px)" srcset="assets/stack-mobile.svg">
+  <img src="assets/stack.svg" alt="Tecnologias por área: IA com Python, PyTorch, Vercel AI SDK, OpenAI SDK e PostgreSQL/pgvector; backend com TypeScript, Node.js, NestJS e Fastify; web com React/Next.js e Vue/Nuxt.js; infraestrutura com Docker, Kubernetes, AWS e Google Cloud; Rust em CLIs e aplicativos desktop pessoais e abertos." width="880">
+</picture>
 
 ## Fora do terminal
 
@@ -73,4 +103,6 @@ Amo minha esposa, meus dois gatos e jogos. Comecei a programar aos 10 anos com *
 
 ---
 
-**Vamos conversar?** [LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [jordyfontoura@outlook.com](mailto:jordyfontoura@outlook.com)
+**Busco uma posição remota como AI Engineer ou em engenharia de software com foco em IA aplicada.**
+
+[Vamos conversar no LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [jordyfontoura@outlook.com](mailto:jordyfontoura@outlook.com)

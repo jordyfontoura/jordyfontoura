@@ -84,7 +84,7 @@
     <circle class="node" cx="765" cy="72" r="18"/>
     <circle cx="765" cy="72" r="3" fill="#fafafa"/>
     <text class="stage" x="765" y="128" text-anchor="middle">Agentes</text>
-    <text class="detail" x="765" y="156" text-anchor="middle">conversacionais</text>
+    <text class="detail" x="765" y="156" text-anchor="middle">conversa com LLMs</text>
   </g>
   <rect x="0.5" y="0.5" width="899" height="179" rx="24" fill="none" stroke="#27272a"/>
 </svg>

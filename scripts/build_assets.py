@@ -32,7 +32,7 @@ GRID = 24
 
 # Textos: a mesma frase vai para o SVG e para o alt do README.
 BANNER_ALT = ("Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; "
-              "desenvolvedor desde 2018; TypeScript, Python e Rust")
+              "carreira em software desde 2018; TypeScript, Python e Rust")
 FOCUS_ALT = ("O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), "
              "ferramentas (tool calling, MCP) e agentes de conversa")
 STAGES = [
@@ -40,7 +40,7 @@ STAGES = [
     ("Busca", "RAG · pgvector", "sim(q, d)"),
     ("LLMs", "Vercel AI SDK", "p(y | x)"),
     ("Ferramentas", "tool calling · MCP", "f(args)"),
-    ("Agentes", "conversacionais", "π(a | s)"),
+    ("Agentes", "conversa com LLMs", "π(a | s)"),
 ]
 
 
@@ -115,12 +115,12 @@ def banner_art(width, height, compact=False):
              '<text x="40" y="156" class="role">Engenharia de IA aplicada</text>'
              '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
              '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
-             '<text x="40" y="288" class="caption">Programando desde 2018.</text>') if compact else (
+             '<text x="40" y="288" class="caption">Carreira desde 2018.</text>') if compact else (
              f'<text x="56" y="142" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
              '<text x="58" y="190" class="role">Engenharia de IA aplicada</text>'
              '<text x="58" y="242" class="body">RAG · agentes · MCP</text>'
              '<text x="58" y="281" class="body">TypeScript · Python · Rust</text>'
-             '<text x="58" y="334" class="caption">Desenvolvendo software desde 2018.</text>')
+             '<text x="58" y="334" class="caption">Carreira em software desde 2018.</text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
   <desc id="desc">{BANNER_ALT}. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
@@ -310,11 +310,15 @@ def main():
     outputs = {"banner.svg": banner(), "focus.svg": focus(),
                "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
                "banner-medium.svg": banner_medium(), "focus-medium.svg": focus_mobile(True)}
+    cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
+    card_outputs = cards['outputs'](COLOR, SANS)
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
     outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg)
                     for name, svg in list(outputs.items())})
+    outputs.update(card_outputs)
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
     readme = README.read_text(encoding="utf-8")
+    errors.extend(cards['reference_problems'](readme))
     for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
         if f'src="assets/{name}" alt="{alt}"' not in readme:
             errors.append(f"README.md: alt de assets/{name} difere do texto do gerador")
