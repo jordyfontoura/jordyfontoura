@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="410" viewBox="0 0 900 410" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="450" viewBox="0 0 900 450" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; carreira em software desde 2018; TypeScript, Python e Rust. Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
+  <desc id="desc">Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; carreira em software desde 2018; TypeScript, Python e Rust. Rede neural estática, sem animação.</desc>
   <defs>    <radialGradient id="glow" cx="0.8" cy="0.5" r="0.45">
       <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
       <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
@@ -11,15 +11,15 @@
       <circle cx="2" cy="2" r="1" fill="#fafafa" fill-opacity="0.07"/>
     </pattern>
     <clipPath id="card">
-      <rect width="900" height="410" rx="24"/>
+      <rect width="900" height="450" rx="24"/>
     </clipPath>
-    <clipPath id="command-mask"><rect class="reveal" x="40" y="360" width="520" height="40"/></clipPath>
+    <clipPath id="command-mask"><rect class="reveal" x="40" y="400" width="520" height="40"/></clipPath>
   </defs>
   <style>
     .name { font:700 64px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#fafafa; letter-spacing:-2px; }
-    .role { font:500 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#e4e4e7; }
-    .body { font:400 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
-    .caption { font:400 28px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
+    .role { font:500 36px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#e4e4e7; }
+    .body { font:400 34px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
+    .caption { font:400 34px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
     .terminal,.core { font:500 26px ui-monospace,Consolas,monospace; fill:#d4d4d8; }
     .mesh { stroke:#d4d4d8; stroke-opacity:.17; fill:none; }
     .neuron { fill:#d4d4d8; opacity:.65; animation:none; }
@@ -35,16 +35,16 @@
     @media (prefers-reduced-motion:reduce) { .neuron,.orbit,.packet,.reveal,.caret { animation:none; } }
   </style>
   <g clip-path="url(#card)">
-        <rect width="900" height="410" fill="#09090b"/>
-    <rect width="900" height="410" fill="url(#dots)"/>
-    <rect width="900" height="410" fill="url(#glow)"/>
+        <rect width="900" height="450" fill="#09090b"/>
+    <rect width="900" height="450" fill="url(#dots)"/>
+    <rect width="900" height="450" fill="url(#glow)"/>
     <path d="M0,52 H900" stroke="#27272a"/>
     <circle cx="24" cy="26" r="4" fill="#52525b"/><circle cx="40" cy="26" r="4" fill="#52525b"/><circle cx="56" cy="26" r="4" fill="#d4d4d8"/>
     <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
     <path class="mesh" d="M780.1,208.0 L703.1,176.1"/><circle class="neuron" style="animation-delay:0.000s" cx="780.1" cy="208.0" r="3"/><path class="mesh" d="M766.9,239.9 L735.0,162.9"/><circle class="neuron" style="animation-delay:0.035s" cx="766.9" cy="239.9" r="3"/><path class="mesh" d="M735.0,253.1 L766.9,176.1"/><circle class="neuron" style="animation-delay:0.070s" cx="735.0" cy="253.1" r="3"/><path class="mesh" d="M703.1,239.9 L829.0,208.0"/><circle class="neuron" style="animation-delay:0.105s" cx="703.1" cy="239.9" r="3"/><path class="mesh" d="M689.9,208.0 L821.8,244.0"/><circle class="neuron" style="animation-delay:0.140s" cx="689.9" cy="208.0" r="3"/><path class="mesh" d="M703.1,176.1 L801.5,274.5"/><circle class="neuron" style="animation-delay:0.175s" cx="703.1" cy="176.1" r="3"/><path class="mesh" d="M735.0,162.9 L771.0,294.8"/><circle class="neuron" style="animation-delay:0.210s" cx="735.0" cy="162.9" r="3"/><path class="mesh" d="M766.9,176.1 L735.0,302.0"/><circle class="neuron" style="animation-delay:0.245s" cx="766.9" cy="176.1" r="3"/><path class="mesh" d="M829.0,208.0 L699.0,294.8"/><circle class="neuron" style="animation-delay:0.280s" cx="829.0" cy="208.0" r="3"/><path class="mesh" d="M821.8,244.0 L668.5,274.5"/><circle class="neuron" style="animation-delay:0.315s" cx="821.8" cy="244.0" r="3"/><path class="mesh" d="M801.5,274.5 L648.2,244.0"/><circle class="neuron" style="animation-delay:0.350s" cx="801.5" cy="274.5" r="3"/><path class="mesh" d="M771.0,294.8 L641.0,208.0"/><circle class="neuron" style="animation-delay:0.385s" cx="771.0" cy="294.8" r="3"/><path class="mesh" d="M735.0,302.0 L648.2,172.0"/><circle class="neuron" style="animation-delay:0.420s" cx="735.0" cy="302.0" r="3"/><path class="mesh" d="M699.0,294.8 L668.5,141.5"/><circle class="neuron" style="animation-delay:0.455s" cx="699.0" cy="294.8" r="3"/><path class="mesh" d="M668.5,274.5 L699.0,121.2"/><circle class="neuron" style="animation-delay:0.490s" cx="668.5" cy="274.5" r="3"/><path class="mesh" d="M648.2,244.0 L735.0,114.0"/><circle class="neuron" style="animation-delay:0.525s" cx="648.2" cy="244.0" r="3"/><path class="mesh" d="M641.0,208.0 L771.0,121.2"/><circle class="neuron" style="animation-delay:0.560s" cx="641.0" cy="208.0" r="3"/><path class="mesh" d="M648.2,172.0 L801.5,141.5"/><circle class="neuron" style="animation-delay:0.595s" cx="648.2" cy="172.0" r="3"/><path class="mesh" d="M668.5,141.5 L821.8,172.0"/><circle class="neuron" style="animation-delay:0.630s" cx="668.5" cy="141.5" r="3"/><path class="mesh" d="M699.0,121.2 L780.1,208.0"/><circle class="neuron" style="animation-delay:0.665s" cx="699.0" cy="121.2" r="3"/><path class="mesh" d="M735.0,114.0 L766.9,239.9"/><circle class="neuron" style="animation-delay:0.700s" cx="735.0" cy="114.0" r="3"/><path class="mesh" d="M771.0,121.2 L735.0,253.1"/><circle class="neuron" style="animation-delay:0.735s" cx="771.0" cy="121.2" r="3"/><path class="mesh" d="M801.5,141.5 L703.1,239.9"/><circle class="neuron" style="animation-delay:0.770s" cx="801.5" cy="141.5" r="3"/><path class="mesh" d="M821.8,172.0 L689.9,208.0"/><circle class="neuron" style="animation-delay:0.805s" cx="821.8" cy="172.0" r="3"/><circle class="orbit" cx="735" cy="208" r="108"/><path class="packet" d="M627,208 H843"/><circle cx="735" cy="208" r="28" fill="#242427" stroke="#d4d4d8"/><text x="735" y="214" text-anchor="middle" class="core">IA</text>
-    <text x="56" y="142" class="name">Jordy Fontoura<tspan fill="#d4d4d8">.</tspan></text><text x="58" y="190" class="role">Engenheiro de IA</text><text x="58" y="242" class="body">RAG · agentes · MCP</text><text x="58" y="281" class="body">TypeScript · Python · Rust</text><text x="58" y="334" class="caption">Carreira em software desde 2018.</text>
-    <text x="40" y="386" class="terminal" clip-path="url(#command-mask)" textLength="520" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
-    <rect class="caret" x="40" y="364" width="2" height="27"/>
+    <text x="56" y="142" class="name">Jordy Fontoura<tspan fill="#d4d4d8">.</tspan></text><text x="58" y="190" class="role">Engenheiro de IA</text><text x="58" y="242" class="body">RAG · agentes · MCP</text><text x="58" y="281" class="body">TypeScript · Python · Rust</text><text x="58" y="374" class="caption">Carreira em software desde 2018.</text>
+    <text x="40" y="426" class="terminal" clip-path="url(#command-mask)" textLength="520" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
+    <rect class="caret" x="40" y="404" width="2" height="27"/>
   </g>
-  <rect x="0.5" y="0.5" width="899" height="409" rx="24" fill="none" stroke="#27272a"/>
+  <rect x="0.5" y="0.5" width="899" height="449" rx="24" fill="none" stroke="#27272a"/>
 </svg>

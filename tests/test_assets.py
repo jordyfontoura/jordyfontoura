@@ -76,7 +76,9 @@ class MotionTests(unittest.TestCase):
         self.assertTrue(assets.problems('css-delay.svg', svg))
 
     def test_banner_scale_matches_across_medium_desktop(self):
-        self.assertEqual(assets.banner(), assets.banner_medium())
+        self.assertIn(assets.BANNER_ALT, assets.banner_medium())
+        self.assertIn('400 34px',assets.banner_medium())
+        self.assertGreaterEqual(34*408/900,15)
 
     def test_typing_advances_one_complete_character_per_step(self):
         svg = assets.banner()

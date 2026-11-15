@@ -7,7 +7,7 @@
   <img src="assets/banner-still.svg" alt="Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; carreira em software desde 2018; TypeScript, Python e Rust" width="880">
 </picture>
 
-[LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com) · [Projetos](#projetos-abertos) · [Com animação](README.md)
+[LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com) · [Projetos](#projetos-abertos) · [Com animação](https://github.com/jordyfontoura/jordyfontoura/blob/nightly/README.md)
 
 Já coloquei uma aplicação com LLM em produção e dei suporte após o lançamento. Sou desenvolvedor full stack sênior, com experiência em liderança; quero continuar próximo do código e das decisões técnicas.
 

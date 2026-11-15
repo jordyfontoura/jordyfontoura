@@ -50,7 +50,15 @@ def miniature_art(key):
 
 
 def miniature(key):
-    return '<g class="motion-art">'+miniature_art(key)+'</g>'
+    routes = {
+        'skills':'M0,70 V8 H38 V70 H60 V8 H98 V70 H120 V8 H158 V70',
+        'tryless':'M65,40 H90 V15 H115',
+        'gitclean':'M13,64.5 H145',
+        'np':'M40,40 H75 V70 H95',
+        'argus':'M8,27 L25,39 L43,16 L60,32 L79,22 L99,38 L119,15 L150,25',
+    }
+    phase=list(URLS).index(key)*-.55
+    return miniature_art(key)+f'<path class="motion-art" style="animation-delay:{phase}s" pathLength="96" d="{routes[key]}"/>'
 
 
 def wrapped_detail(detail, width):
@@ -69,8 +77,8 @@ def project_card(project, index, variant, colors, font):
     meta_class = 'mobile-meta' if mobile else 'meta'
     body = f'<rect class="box" x="24" y="24" width="64" height="72" rx="12"/><text class="index" x="56" y="66" text-anchor="middle">{index:02}</text>'
     body += f'<text class="{name_class}" x="112" y="52">{escape(project["name"])}</text>'
-    if mobile:
-        body += '<text class="mobile-name" x="380" y="52">↗</text>'
+    arrow_x = 380 if mobile or compact else width-200
+    body += f'<text class="{"mobile-name" if mobile else "name"}" x="{arrow_x}" y="52">↗</text>'
     if mobile or compact:
         body += f'<text class="{meta_class}" x="32" y="{height-24}">{escape(project["meta"])}</text>'
         for i,line in enumerate(wrapped_detail(project['detail'],32 if mobile else 46)):
@@ -95,7 +103,7 @@ def stack_symbol(index):
         'M4,5 H20 V11 H4 Z M4,15 H20 V21 H4 Z M7,8 H9 M7,18 H9',
         'M5,5 H19 V19 H5 Z M9,1 V5 M15,1 V5 M9,19 V23 M15,19 V23 M1,9 H5 M19,9 H23 M1,15 H5 M19,15 H23',
     ]
-    return f'<g class="motion-art"><path class="line" d="{paths[index]}"/></g>'
+    return f'<path class="line" d="{paths[index]}"/><path class="motion-art" style="animation-delay:{index*-.65}s" pathLength="96" d="{paths[index]}"/>'
 
 
 def stack_card(variant, colors, font):
@@ -104,7 +112,7 @@ def stack_card(variant, colors, font):
     if mobile:
         cursor = 48
         for index,(title,lines) in enumerate(STACK):
-            body += f'<g transform="translate(32 {cursor-23})">{stack_symbol(index)}</g><text class="stack-mobile-title" x="72" y="{cursor}">{escape(title)}</text>'
+            body += f'<g transform="translate(32 {cursor-26}) scale(1.3)">{stack_symbol(index)}</g><text class="stack-mobile-title" x="72" y="{cursor}">{escape(title)}</text>'
             for i,line in enumerate(lines):
                 body += f'<text class="stack-mobile-body" x="32" y="{cursor+42+i*34}">{escape(line)}</text>'
             cursor += 42+(len(lines)-1)*34+64
@@ -157,7 +165,7 @@ def outputs(colors,font):
         suffix='-'+variant if variant else ''
         result['stack'+suffix+'.svg']=stack_card(variant,colors,font)
     for name,svg in list(result.items()):
-        css='.motion-art {opacity:.75; animation:art-pulse 3.8s ease-in-out infinite;} @keyframes art-pulse {0%,100% {opacity:.75;} 50% {opacity:1;}} @media (prefers-reduced-motion: reduce) {.motion-art {animation:none;}}'
+        css=f'.motion-art {{fill:none; stroke:{colors["foreground"]}; stroke-width:3; stroke-linecap:round; stroke-opacity:0; stroke-dasharray:24 72; animation:art-flow 3.8s linear infinite;}} @keyframes art-flow {{from {{stroke-dashoffset:0;stroke-opacity:1;}} to {{stroke-dashoffset:-96;stroke-opacity:1;}}}} @media (prefers-reduced-motion: reduce) {{.motion-art {{animation:none;}}}}'
         result[name]=svg.replace('</style>',css+'</style>')
     result.update({name.replace('.svg','-still.svg'):re.sub(r'animation:[^;]+;','animation:none;',svg) for name,svg in list(result.items())})
     return result

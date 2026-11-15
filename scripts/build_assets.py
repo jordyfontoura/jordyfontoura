@@ -216,7 +216,9 @@ def focus():
 
 def banner_medium():
     """Versão horizontal para a coluna do perfil em tablets e notebooks."""
-    return banner()
+    # Mais espaço para letras na coluna estreita do perfil, sem um banner vertical.
+    svg=banner_art(900,450).replace('y="334"','y="374"')
+    return svg.replace('500 30px','500 36px').replace('400 30px','400 34px').replace('400 28px','400 34px')
 
 
 def banner_mobile():
@@ -330,7 +332,7 @@ def main():
     cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
     card_outputs = cards['outputs'](COLOR, SANS)
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
-    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg)
+    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg).replace('Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.', 'Rede neural estática, sem animação.')
                     for name, svg in list(outputs.items())})
     outputs.update(card_outputs)
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
@@ -367,7 +369,7 @@ def main():
     # O link persistente no topo oferece controle também sem suporte à media query.
     static = re.sub(r'assets/((?:banner|focus|project-|stack)[\w-]*)(?<!-still)\.svg',
                     lambda m:'assets/'+m[1]+'-still.svg', README.read_text(encoding='utf-8'))
-    static = static.replace('[Sem animação](README-static.md)', '[Com animação](README.md)')
+    static = static.replace('[Sem animação](https://github.com/jordyfontoura/jordyfontoura/blob/nightly/README-static.md)', '[Com animação](https://github.com/jordyfontoura/jordyfontoura/blob/nightly/README.md)')
     static_path=ROOT/'README-static.md'
     if args.check:
         if not static_path.exists() or static_path.read_text(encoding='utf-8')!=static:
