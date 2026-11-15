@@ -30,3 +30,17 @@ class MotionTests(unittest.TestCase):
     def test_missing_reduced_motion_is_rejected(self):
         svg = assets.banner().replace('prefers-reduced-motion', 'unknown-motion')
         self.assertTrue(assets.problems('no-reduce.svg', svg))
+
+    def test_animation_rename_preserves_delay_validation(self):
+        svg = assets.banner().replace('activate', 'spark').replace('3.8s', '4.5s')
+        self.assertTrue(assets.problems('renamed.svg', svg))
+
+    def test_every_animated_class_must_be_disabled(self):
+        svg = assets.banner().replace('.neuron,.orbit,.packet { animation:none;', '.orbit,.packet { animation:none;')
+        self.assertTrue(assets.problems('partial-reduce.svg', svg))
+
+    def test_medium_banner_stays_horizontal(self):
+        svg = assets.banner_medium()
+        document = assets.xml.dom.minidom.parseString(svg)
+        root = document.documentElement
+        self.assertGreaterEqual(float(root.getAttribute('width')) / float(root.getAttribute('height')), 2)

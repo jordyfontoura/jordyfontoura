@@ -9,6 +9,7 @@ nada aqui pode depender de fontes, scripts ou recursos externos.
 """
 
 import argparse
+import math
 import re
 import subprocess
 import sys
@@ -102,9 +103,8 @@ def card_border(width, height):
 
 def banner_art(width, height, compact=False):
     """Terminal vetorial com um campo neural; texto nunca depende da animação."""
-    import math
-    cx, cy = (440, 450) if compact else (930, 208)
-    radius = 105 if compact else 128
+    cx, cy = (440, 450) if compact else (735, 208) if width == 900 else (930, 208)
+    radius = 105 if compact else 94 if width == 900 else 128
     parts = []
     points = []
     for ring, count in ((0.48, 8), (1, 16)):
@@ -125,7 +125,7 @@ def banner_art(width, height, compact=False):
              '<text x="40" y="156" class="role">Engenharia de IA aplicada</text>'
              '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
              '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
-             '<text x="40" y="288" class="caption">Software desde 2018.</text>') if compact else (
+             '<text x="40" y="288" class="caption">Programando desde 2018.</text>') if compact else (
              '<text x="56" y="142" class="name">Jordy Fontoura<tspan fill="#76e4bb">.</tspan></text>'
              '<text x="58" y="190" class="role">Engenharia de IA aplicada</text>'
              '<text x="58" y="242" class="body">RAG · agentes · MCP</text>'
@@ -217,6 +217,11 @@ def focus():
 """
 
 
+def banner_medium():
+    """Versão horizontal para a coluna do perfil em tablets e notebooks."""
+    return banner_art(900, 410)
+
+
 def banner_mobile():
     # Mesmo layout vertical nos tamanhos menores: nenhum texto invade o campo neural.
     return banner_art(600, 630, compact=True)
@@ -265,18 +270,25 @@ def problems(name, svg):
             found.append(f"{name}: contém {pattern}")
     if re.search(r"https?://(?!www\.w3\.org/2000/svg\")", svg):
         found.append(f"{name}: referência externa")
-    animations = re.findall(r"animation:\s*(?!none)([^;}]+)", svg)
-    if animations:
-        if not re.search(r"@media\s*\(prefers-reduced-motion:\s*reduce\)", svg):
-            found.append(f"{name}: falta preferência por movimento reduzido")
-        max_delay = max([0.0] + [float(v) for v in re.findall(r"animation-delay:([\d.]+)s", svg)])
-        for animation in animations:
-            animation = animation.strip()
-            if animation == 'none':
-                continue
-            duration = re.search(r"([\d.]+)s", animation)
-            if not duration or 'infinite' in animation or not re.search(r"\s1(?:\s|$)", animation) or float(duration[1]) + (max_delay if animation.startswith('activate ') else 0) >= 5:
-                found.append(f"{name}: animação deve executar uma vez e terminar antes de cinco segundos")
+    # Cada regra é conferida contra os elementos que ela anima, sem depender do nome.
+    reduced = re.search(r"@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*([^{}]+)\{\s*animation:\s*none;\s*\}\s*\}", svg)
+    disabled = set(re.findall(r"\.([\w-]+)", reduced[1])) if reduced else set()
+    document = xml.dom.minidom.parseString(svg)
+    for selectors, declarations in re.findall(r"([^{}]+)\{([^{}]*)\}", svg):
+        animation = re.search(r"(?:^|;)\s*animation:\s*([^;]+)", declarations)
+        if not animation or animation[1].strip() == 'none':
+            continue
+        classes = set(re.findall(r"\.([\w-]+)", selectors))
+        if not classes or not classes <= disabled:
+            found.append(f"{name}: toda animação deve respeitar movimento reduzido")
+        delays = [0.0]
+        for element in document.getElementsByTagName('*'):
+            if classes.intersection(element.getAttribute('class').split()):
+                delays.extend(float(v) for v in re.findall(r"animation-delay:([\d.]+)s", element.getAttribute('style')))
+        value = animation[1].strip()
+        duration = re.search(r"([\d.]+)s", value)
+        if not duration or 'infinite' in value or not re.search(r"\s1(?:\s|$)", value) or float(duration[1]) + max(delays) >= 5:
+            found.append(f"{name}: animação deve executar uma vez e terminar antes de cinco segundos")
     if len(svg.encode("utf-8")) > MAX_BYTES:
         found.append(f"{name}: maior que {MAX_BYTES} bytes")
     return found
@@ -288,7 +300,7 @@ def main():
     args = parser.parse_args()
     outputs = {"banner.svg": banner(), "focus.svg": focus(),
                "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
-               "banner-medium.svg": banner_mobile(), "focus-medium.svg": focus_mobile(True)}
+               "banner-medium.svg": banner_medium(), "focus-medium.svg": focus_mobile(True)}
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
     outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg)
                     for name, svg in list(outputs.items())})
