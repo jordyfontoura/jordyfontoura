@@ -17,7 +17,7 @@ Busco uma posição remota como engenheiro de IA ou engenheiro de software com f
 
 **Dois na Oito · Senior Full Stack Developer · jan/2025–set/2026**
 
-Implementei RAG, agentes conversacionais e integrações MCP em uma aplicação de atendimento com IA. Em outros produtos, desenvolvi APIs para web e mobile, recomendações de leitura, personalização, visualização de dados e controle de acesso.
+Implementei RAG, agentes conversacionais e integração MCP em uma aplicação de atendimento com IA. Em outros produtos, desenvolvi APIs para web e mobile e recursos de recomendação de leitura, personalização, visualização de dados e controle de acesso.
 
 **Bonaparte · Líder técnico · fev/2024–jan/2025**
 
@@ -38,7 +38,7 @@ Na primeira passagem pela empresa, desenvolvi microsserviços e trabalhei com ar
   <img src="assets/focus.svg" alt="O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes conversacionais" width="880">
 </picture>
 
-Em outros projetos privados, desenvolvi fluxos de processamento de documentos com LLMs e trabalhei com síntese e comparação de modelos de voz usando Python e PyTorch.
+Em outros projetos privados, desenvolvi fluxos de processamento de documentos com LLMs e trabalhei com síntese de voz e comparação de modelos usando Python e PyTorch.
 
 ## Projetos abertos
 
