@@ -9,9 +9,11 @@
 
 [LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com) · [Projetos](#projetos-abertos)
 
-Levo recursos de LLM à produção e trabalho na manutenção depois do lançamento. Tenho base em backend e experiência em liderança técnica; quero continuar próximo do código e das decisões técnicas.
+Levo recursos de LLM à produção e trabalho na manutenção depois do lançamento. Tenho base em backend e experiência de liderança; quero continuar próximo do código e das decisões técnicas.
 
-## Experiência em produto
+Busco uma posição remota como engenheiro de IA ou em engenharia de software com foco em IA aplicada.
+
+## Experiência selecionada
 
 **Dois na Oito · Senior Full Stack Developer · jan/2025–set/2026**
 
@@ -19,7 +21,7 @@ Implementei recursos de IA generativa com RAG, agentes conversacionais e integra
 
 **Bonaparte · Tech Lead · fev/2024–jan/2025**
 
-Atuei na liderança técnica de equipe. Minha passagem pela empresa também incluiu backend, microsserviços, arquitetura, modelagem de dados e testes.
+Voltei à Bonaparte para liderar uma equipe técnica. Na primeira passagem, de jan/2021 a ago/2023, desenvolvi microsserviços e trabalhei com arquitetura, modelagem de dados e testes.
 
 ## O que construo
 
@@ -29,7 +31,7 @@ Atuei na liderança técnica de equipe. Minha passagem pela empresa também incl
   <source media="(prefers-reduced-motion: reduce)" srcset="assets/focus-still.svg">
   <source media="(max-width: 480px)" srcset="assets/focus-mobile.svg">
   <source media="(max-width: 1011px)" srcset="assets/focus-medium.svg">
-  <img src="assets/focus.svg" alt="O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes de conversa" width="880">
+  <img src="assets/focus.svg" alt="O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes conversacionais" width="880">
 </picture>
 
 Em outros projetos, desenvolvi fluxos de processamento de documentos com LLMs e trabalhei com síntese de voz e comparação de modelos usando Python e PyTorch.
@@ -38,54 +40,64 @@ Em outros projetos, desenvolvi fluxos de processamento de documentos com LLMs e 
 
 <a href="https://github.com/jordyfontoura/skills">
 <picture>
-  <source media="(max-width: 1011px)" srcset="assets/project-skills-mobile.svg">
-  <img src="assets/project-skills.svg" alt="skills: Instruções de engenharia para agentes de código. Claude Code · Codex · português. Abrir repositório." width="880">
+  <source media="(max-width: 480px)" srcset="assets/project-skills-mobile.svg">
+  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-skills-compact.svg">
+  <source media="(max-width: 1011px)" srcset="assets/project-skills-medium.svg">
+  <img src="assets/project-skills.svg" alt="skills: alinhe decisões, implemente e peça provas aos agentes. Claude Code, Codex, português. Abrir repositório." width="880">
 </picture>
 </a>
 
 <a href="https://github.com/jordyfontoura/TryLess">
 <picture>
-  <source media="(max-width: 1011px)" srcset="assets/project-tryless-mobile.svg">
-  <img src="assets/project-tryless.svg" alt="TryLess: Erros tipados em TypeScript com Result. TypeScript · npm. Abrir repositório." width="880">
+  <source media="(max-width: 480px)" srcset="assets/project-tryless-mobile.svg">
+  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-tryless-compact.svg">
+  <source media="(max-width: 1011px)" srcset="assets/project-tryless-medium.svg">
+  <img src="assets/project-tryless.svg" alt="TryLess: trate erros com Result em TypeScript. TypeScript, npm. Abrir repositório." width="880">
 </picture>
 </a>
 
 <a href="https://github.com/jordyfontoura/gitclean">
 <picture>
-  <source media="(max-width: 1011px)" srcset="assets/project-gitclean-mobile.svg">
-  <img src="assets/project-gitclean.svg" alt="gitclean: Veja o espaço usado antes de limpar arquivos ignorados. Rust · CLI interativa. Abrir repositório." width="880">
+  <source media="(max-width: 480px)" srcset="assets/project-gitclean-mobile.svg">
+  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-gitclean-compact.svg">
+  <source media="(max-width: 1011px)" srcset="assets/project-gitclean-medium.svg">
+  <img src="assets/project-gitclean.svg" alt="gitclean: inspecione e limpe arquivos ignorados pelo Git. Rust, CLI interativa. Abrir repositório." width="880">
 </picture>
 </a>
 
 <a href="https://github.com/jordyfontoura/np">
 <picture>
-  <source media="(max-width: 1011px)" srcset="assets/project-np-mobile.svg">
-  <img src="assets/project-np.svg" alt="np: Um comando para npm, Yarn e pnpm. Rust · CLI. Abrir repositório." width="880">
+  <source media="(max-width: 480px)" srcset="assets/project-np-mobile.svg">
+  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-np-compact.svg">
+  <source media="(max-width: 1011px)" srcset="assets/project-np-medium.svg">
+  <img src="assets/project-np.svg" alt="np: use npm, Yarn e pnpm com um só comando. Rust, CLI. Abrir repositório." width="880">
 </picture>
 </a>
 
 <a href="https://github.com/jordyfontoura/argus">
 <picture>
-  <source media="(max-width: 1011px)" srcset="assets/project-argus-mobile.svg">
-  <img src="assets/project-argus.svg" alt="Argus: Monitore hardware e configure alertas no Windows. Rust · Tauri. Abrir repositório." width="880">
+  <source media="(max-width: 480px)" srcset="assets/project-argus-mobile.svg">
+  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-argus-compact.svg">
+  <source media="(max-width: 1011px)" srcset="assets/project-argus-medium.svg">
+  <img src="assets/project-argus.svg" alt="Argus: monitore hardware e configure alertas no Windows. Rust, Tauri. Abrir repositório." width="880">
 </picture>
 </a>
 
 Pacotes publicados: [TryLess no npm](https://www.npmjs.com/package/tryless) · [gitclean no crates.io](https://crates.io/crates/gitclean) · [np no crates.io](https://crates.io/crates/np-cli).
 
-A maior parte do meu trabalho com IA está em repositórios privados. Os projetos acima mostram o que compartilho como código aberto.
+A maior parte do meu trabalho com IA está em repositórios privados.
 
 ## No meu terminal
 
-Uso Claude, Codex e modelos locais para programar. Alinho o objetivo e o contexto do projeto, especifico o que precisa de definição, reviso o código e executo testes e verificações. Publiquei essas orientações no [skills](https://github.com/jordyfontoura/skills).
+Uso Claude Code, Codex e modelos locais como agentes de programação. Alinho o objetivo e o contexto do projeto, especifico o que precisa de definição, reviso o código e executo testes e verificações. Publiquei essas orientações no [skills](https://github.com/jordyfontoura/skills).
 
 <details>
-<summary>Uso de agentes: distribuição mensal de tokens</summary>
+<summary>Uso de agentes de programação: volume diário e distribuição de tokens</summary>
 
 <picture>
   <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">
   <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">
-  <img src="assets/agent-usage.svg" alt="Uso de agentes de programação em 10/2026: 19.010.018.919 tokens; Codex 60%; Claude Code 40%. Entrada, saída e cache; histórico parcial. Tokens não representam custo ou produtividade." width="880">
+  <img src="assets/agent-usage.svg" alt="Uso de agentes de programação em out/2026: 19.010.018.919 tokens; Codex 60%; Claude Code 40%. Entrada, saída e cache; histórico parcial. Tokens não representam custo ou produtividade." width="880">
 </picture>
 
 </details>
@@ -93,16 +105,18 @@ Uso Claude, Codex e modelos locais para programar. Alinho o objetivo e o context
 ## Tecnologias de trabalho
 
 <picture>
-  <source media="(max-width: 1011px)" srcset="assets/stack-mobile.svg">
-  <img src="assets/stack.svg" alt="Tecnologias por área: IA com Python, PyTorch, Vercel AI SDK, OpenAI SDK e PostgreSQL/pgvector; backend com TypeScript, Node.js, NestJS e Fastify; web com React/Next.js e Vue/Nuxt.js; infraestrutura com Docker, Kubernetes, AWS e Google Cloud; Rust em CLIs e aplicativos desktop pessoais e abertos." width="880">
+  <source media="(max-width: 480px)" srcset="assets/stack-mobile.svg">
+  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/stack-compact.svg">
+  <source media="(max-width: 1011px)" srcset="assets/stack-medium.svg">
+  <img src="assets/stack.svg" alt="Tecnologias por área: IA com Python, PyTorch, Vercel AI SDK, OpenAI SDK e PostgreSQL/pgvector; backend com TypeScript, Node.js, NestJS e Fastify; web com React/Next.js e Vue/Nuxt.js; infraestrutura com Docker, Kubernetes, AWS e Google Cloud; Rust em projetos pessoais e abertos de CLIs e aplicativos desktop." width="880">
 </picture>
 
 ## Fora do terminal
 
-Amo minha esposa, meus dois gatos e jogos. Comecei a programar aos 10 anos com **RPG Maker**, passei pelo frontend e estudei matemática computacional na faculdade. No tempo livre, faço ferramentas abertas e, de vez em quando, jogos também.
+Amo minha esposa, meus dois gatos e jogos. Comecei a programar aos 10 anos com **RPG Maker**, passei pelo frontend e estudei matemática computacional na faculdade. No tempo livre, faço ferramentas abertas e às vezes crio jogos.
 
 ---
 
-**Busco uma posição remota como AI Engineer ou em engenharia de software com foco em IA aplicada.**
+**Vamos conversar sobre uma posição remota em engenharia de IA ou de software com foco em IA aplicada.**
 
 [Vamos conversar no LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [jordyfontoura@outlook.com](mailto:jordyfontoura@outlook.com)

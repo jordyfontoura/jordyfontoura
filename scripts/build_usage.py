@@ -178,13 +178,19 @@ def nice_max(value):
     return next(step*base for step in (1,2,5,10) if step*base >= value)
 
 
+def month_label(value):
+    months = ('jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez')
+    return f'{months[value.month-1]}/{value.year}'
+
+
 def alternative_text(data):
     agents, _, _ = metrics(data)
     total = sum(agents.values())
-    period = date.fromisoformat(data['since']).strftime('%m/%Y')
+    period = month_label(date.fromisoformat(data['since']))
     distribution = '; '.join(f"{DISPLAY_NAMES.get(name,name)} {count/total:.0%}"
                              for name,count in agents.most_common())
-    text = f"{ALT} em {period}: {total:,} tokens; {distribution}.".replace(f'{total:,}', f'{total:,}'.replace(',', '.'))
+    formatted_total = f'{total:,}'.replace(',', '.')
+    text = f"{ALT} em {period}: {formatted_total} tokens; {distribution}."
     text += ' Entrada, saída e cache; histórico parcial. Tokens não representam custo ou produtividade.'
     if 'Local models' in agents:
         text += ' Modelos locais agregados sem divulgar seus nomes.'
@@ -220,11 +226,11 @@ def panel(data, mobile=False, medium=False):
     if stacked:
         text(32, 40, 'Uso de agentes', 25, fg, 650)
         text(32, 89, compact(total), 38, COLOR['accent'], 650)
-        text(32, 118, 'tokens registrados · '+start.strftime('%m/%Y'), 17)
+        text(32, 118, 'tokens registrados · '+month_label(start), 17)
         text(32, 145, f'{start:%d/%m} a {end:%d/%m}', 16)
     else:
         text(32, 43, 'Uso de agentes', 24, fg, 650)
-        text(32, 70, f'{start:%m/%Y} · {start:%d/%m} a {end:%d/%m}', 16)
+        text(32, 70, f'{month_label(start)} · {start:%d/%m} a {end:%d/%m}', 16)
         text(width-32, 43, compact(total), 32, COLOR['accent'], 650, 'end')
         text(width-32, 70, 'tokens registrados', 16, anchor='end')
         rule(32, 91, width-32)
@@ -265,7 +271,7 @@ def panel(data, mobile=False, medium=False):
         bar_width = ranking_end-ranking_x-20
         rect(ranking_x+20, y+9, bar_width, 3, COLOR['border'], 1)
         rect(ranking_x+20, y+9, bar_width*count/total, 3, AGENT_COLORS[name], 1)
-    text(ranking_x, model_title_y, 'MODELOS · TOKENS', 17 if stacked else 14, muted, 600)
+    text(ranking_x, model_title_y, 'POR MODELO', 17 if stacked else 14, muted, 600)
     for i, (name, count) in enumerate(models):
         y = model_y + i*(40 if stacked else 25)
         text(ranking_x, y, DISPLAY_NAMES.get(name,name), 18 if stacked else 16, COLOR['lead'])
@@ -282,7 +288,7 @@ def panel(data, mobile=False, medium=False):
         text(width-32, footer_y+48, 'Último registro: '+datetime.fromisoformat(data['latest_record_at']).strftime('%d/%m/%Y'), 14, anchor='end')
     body = ''.join(parts)
     result = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-<title id="title">Uso registrado de agentes</title>
+<title id="title">Uso de agentes</title>
 <desc id="desc">{escape(alternative_text(data))}</desc>
 <rect x="0.5" y="0.5" width="{width-1}" height="{height-1}" rx="24" fill="{COLOR['background']}" stroke="{COLOR['border']}"/>
 <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif">{body}</g>
@@ -309,7 +315,7 @@ def main():
         else:
             data = json.loads(DATA.read_text(encoding='utf-8'))
         validate(data)
-        alt = alternative_text(data)
+        alt = escape(alternative_text(data), quote=True)
         readme_path = ROOT/'README.md'
         readme = readme_path.read_text(encoding='utf-8')
         if args.check:

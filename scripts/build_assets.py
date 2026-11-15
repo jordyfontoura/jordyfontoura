@@ -34,13 +34,13 @@ GRID = 24
 BANNER_ALT = ("Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; "
               "carreira em software desde 2018; TypeScript, Python e Rust")
 FOCUS_ALT = ("O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), "
-             "ferramentas (tool calling, MCP) e agentes de conversa")
+             "ferramentas (tool calling, MCP) e agentes conversacionais")
 STAGES = [
     # (rótulo, detalhe, fórmula decorativa)
     ("Busca", "RAG · pgvector", "sim(q, d)"),
     ("LLMs", "Vercel AI SDK", "p(y | x)"),
     ("Ferramentas", "tool calling · MCP", "f(args)"),
-    ("Agentes", "conversa com LLMs", "π(a | s)"),
+    ("Agentes", "conversacionais", "π(a | s)"),
 ]
 
 
@@ -112,12 +112,12 @@ def banner_art(width, height, compact=False):
     parts.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="core">IA</text>')
     name_size = 46 if compact else 64
     lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
-             '<text x="40" y="156" class="role">Engenharia de IA aplicada</text>'
+             '<text x="40" y="156" class="role">Engenheiro de IA</text>'
              '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
              '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
              '<text x="40" y="288" class="caption">Carreira desde 2018.</text>') if compact else (
              f'<text x="56" y="142" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
-             '<text x="58" y="190" class="role">Engenharia de IA aplicada</text>'
+             '<text x="58" y="190" class="role">Engenheiro de IA</text>'
              '<text x="58" y="242" class="body">RAG · agentes · MCP</text>'
              '<text x="58" y="281" class="body">TypeScript · Python · Rust</text>'
              '<text x="58" y="334" class="caption">Carreira em software desde 2018.</text>')
