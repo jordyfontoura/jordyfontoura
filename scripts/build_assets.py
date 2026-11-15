@@ -9,76 +9,69 @@ nada aqui pode depender de fontes, scripts ou recursos externos.
 """
 
 import argparse
+import math
 import re
 import subprocess
 import sys
 import xml.dom.minidom
 from pathlib import Path
+from runpy import run_path
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets"
 README = ROOT / "README.md"
 MAX_BYTES = 100_000
 
-# Tokens do design system, extraídos do banner (zinc do shadcn). Cada SVG é um cartão
-# escuro e opaco: o mesmo arquivo serve aos temas claro e escuro do GitHub.
-COLOR = {
-    "background": "#09090b",
-    "card": "#18181b",
-    "border": "#27272a",
-    "ring": "#3f3f46",
-    "line": "#52525b",
-    "subtle": "#71717a",  # só decoração; 4,12:1 sobre o fundo
-    "muted": "#a1a1aa",  # texto secundário; 7,76:1
-    "signal": "#d4d4d8",
-    "foreground": "#fafafa",
-}
+# Executar o arquivo local permite manter os CLIs isolados com python -I.
+COLOR = run_path(str(Path(__file__).with_name('theme.py')))['COLOR']
+
 SANS = 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
 MATH = '"Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif'
 RADIUS = 24
 GRID = 24
 
 # Textos: a mesma frase vai para o SVG e para o alt do README.
-BANNER_ALT = ("Jordy Fontoura: AI Engineer working with RAG, agents and MCP; "
-              "software developer since 2018; TypeScript, Python and Rust")
-FOCUS_ALT = ("What I build: retrieval (RAG, pgvector), LLMs (Vercel AI SDK), "
-             "tools (tool calling, MCP) and conversational agents")
+BANNER_ALT = ("Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; "
+              "carreira em software desde 2018; TypeScript, Python e Rust")
+FOCUS_ALT = ("O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), "
+             "ferramentas (tool calling, MCP) e agentes conversacionais")
 STAGES = [
     # (rótulo, detalhe, fórmula decorativa)
-    ("Retrieval", "RAG · pgvector", "sim(q, d)"),
+    ("Busca", "RAG · pgvector", "sim(q, d)"),
     ("LLMs", "Vercel AI SDK", "p(y | x)"),
-    ("Tools", "tool calling · MCP", "f(args)"),
-    ("Agents", "conversational", "π(a | s)"),
+    ("Ferramentas", "tool calling · MCP", "f(args)"),
+    ("Agentes", "conversacionais", "π(a | s)"),
 ]
 
 
 def style(extra=""):
     return f"""  <style>
-    .title {{ font: 700 64px {SANS}; fill: {COLOR["foreground"]}; letter-spacing: -1.5px; }}
-    .lead {{ font: 400 32px {SANS}; fill: {COLOR["signal"]}; }}
-    .meta {{ font: 500 24px {SANS}; fill: {COLOR["muted"]}; }}
     .eq {{ font-family: {MATH}; font-style: italic; fill: {COLOR["subtle"]}; fill-opacity: 0.75; }}
     .flow {{ fill: none; stroke: url(#flowfade); stroke-width: 1; }}
     .ring {{ fill: none; stroke: {COLOR["border"]}; stroke-width: 1; }}
     .edge {{ stroke: {COLOR["ring"]}; stroke-width: 1; stroke-opacity: 0.8; }}
     .node {{ fill: {COLOR["background"]}; stroke: {COLOR["subtle"]}; stroke-width: 1.5; }}
-    .signal {{ fill: none; stroke: {COLOR["signal"]}; stroke-width: 1.5; stroke-opacity: 0.8; }}
-    .label {{ font: italic 400 15px {MATH}; fill: {COLOR["muted"]}; }}{extra}
+    .signal {{ fill: none; stroke: {COLOR["accent"]}; stroke-width: 2; stroke-opacity: 0.8; stroke-dasharray: 12 8; animation: flow 4.8s linear 1; }}
+    @keyframes flow {{ to {{ stroke-dashoffset: -160; }} }}
+    @media (prefers-reduced-motion: reduce) {{ .signal {{ animation: none; }} }}
+{extra}
   </style>"""
 
 
-def card_defs(width, height, glow_cx, flow_x2, flow_dir="right"):
+def card_defs(width, height, glow_cx, flow_x2, flow_dir="right", include_flow=True):
     """Fundo, pontos, brilho e gradiente das linhas, comuns aos cartões."""
     x1, x2 = (0, flow_x2) if flow_dir == "right" else (flow_x2, 0)
+    flow = f'''    <linearGradient id="flowfade" gradientUnits="userSpaceOnUse" x1="{x1}" y1="0" x2="{x2}" y2="0">
+      <stop offset="0" stop-color="{COLOR["ring"]}" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="{COLOR["ring"]}" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="{COLOR["line"]}" stop-opacity="0.9"/>
+    </linearGradient>''' if include_flow else ""
     return f"""    <radialGradient id="glow" cx="{glow_cx}" cy="0.5" r="0.45">
       <stop offset="0" stop-color="{COLOR["foreground"]}" stop-opacity="0.06"/>
       <stop offset="1" stop-color="{COLOR["foreground"]}" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="flowfade" gradientUnits="userSpaceOnUse" x1="{x1}" y1="0" x2="{x2}" y2="0">
-      <stop offset="0" stop-color="{COLOR["ring"]}" stop-opacity="0"/>
-      <stop offset="0.45" stop-color="{COLOR["ring"]}" stop-opacity="0.35"/>
-      <stop offset="1" stop-color="{COLOR["line"]}" stop-opacity="0.9"/>
-    </linearGradient>
+{flow}
+
     <pattern id="dots" width="{GRID}" height="{GRID}" patternUnits="userSpaceOnUse">
       <circle cx="2" cy="2" r="1" fill="{COLOR["foreground"]}" fill-opacity="0.07"/>
     </pattern>
@@ -98,82 +91,87 @@ def card_border(width, height):
             f'fill="none" stroke="{COLOR["border"]}"/>')
 
 
-def sup(text):
-    return f'<tspan dy="-8" font-size="0.7em">{text}</tspan><tspan dy="8">'
-
-
-def close(markup):
-    """Fecha os tspans abertos por sup()."""
-    return markup + "</tspan>" * markup.count('<tspan dy="8">')
+def banner_art(width, height, compact=False):
+    """Terminal vetorial com um campo neural; texto nunca depende da animação."""
+    cx, cy = (440, 450) if compact else (735, 208)
+    radius = 105 if compact else 94
+    parts = []
+    points = []
+    for ring, count in ((0.48, 8), (1, 16)):
+        for i in range(count):
+            angle = i * math.tau / count
+            points.append((cx + math.cos(angle)*radius*ring,
+                           cy + math.sin(angle)*radius*ring))
+    for i, (x, y) in enumerate(points):
+        nx, ny = points[(i+5) % len(points)]
+        parts.append(f'<path class="mesh" d="M{x:.1f},{y:.1f} L{nx:.1f},{ny:.1f}"/>')
+        parts.append(f'<circle class="neuron" style="animation-delay:{i*.035:.3f}s" cx="{x:.1f}" cy="{y:.1f}" r="3"/>')
+    parts.append(f'<circle class="orbit" cx="{cx}" cy="{cy}" r="{radius+14}"/>')
+    parts.append(f'<path class="packet" d="M{cx-radius-14},{cy} H{cx+radius+14}"/>')
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="28" fill="{COLOR["accent_background"]}" stroke="{COLOR["accent"]}"/>')
+    parts.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="core">IA</text>')
+    name_size = 46 if compact else 64
+    lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
+             '<text x="40" y="156" class="role">Engenheiro de IA</text>'
+             '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
+             '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
+             '<text x="40" y="288" class="caption">Carreira desde 2018.</text>') if compact else (
+             f'<text x="56" y="142" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
+             '<text x="58" y="190" class="role">Engenheiro de IA</text>'
+             '<text x="58" y="242" class="body">RAG · agentes · MCP</text>'
+             '<text x="58" y="281" class="body">TypeScript · Python · Rust</text>'
+             '<text x="58" y="334" class="caption">Carreira em software desde 2018.</text>')
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
+  <title id="title">Jordy Fontoura</title>
+  <desc id="desc">{BANNER_ALT}. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
+  <defs>{card_defs(width, height, 0.8, width, include_flow=False)}
+    <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="520" height="40"/></clipPath>
+  </defs>
+  <style>
+    .name {{ font:700 {name_size}px {SANS}; fill:{COLOR["foreground"]}; letter-spacing:-2px; }}
+    .role {{ font:500 30px {SANS}; fill:{COLOR["lead"]}; }}
+    .body {{ font:400 30px {SANS}; fill:{COLOR["muted"]}; }}
+    .caption {{ font:400 28px {SANS}; fill:{COLOR["muted"]}; }}
+    .terminal,.core {{ font:500 26px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
+    .mesh {{ stroke:{COLOR["accent"]}; stroke-opacity:.17; fill:none; }}
+    .neuron {{ fill:{COLOR["accent"]}; opacity:.65; animation:activate 3.8s ease-in-out 1 both; }}
+    .orbit {{ fill:none; stroke:{COLOR["accent"]}; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear 1 forwards; }}
+    .packet {{ fill:none; stroke:{COLOR["accent"]}; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out 1 forwards; opacity:0; }}
+    @keyframes orbit {{ to {{ stroke-dashoffset:-168; }} }}
+    @keyframes transfer {{ 0% {{ stroke-dashoffset:332; opacity:0; }} 15%,75% {{ opacity:.8; }} 100% {{ stroke-dashoffset:0; opacity:0; }} }}
+    @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; }} }}
+    .reveal {{ width:520px; animation:typing 3.2s steps(34,end) 1 both; }}
+    .caret {{ fill:{COLOR["accent"]}; opacity:0; animation:cursor 3.2s steps(34,end) 1 both; }}
+    @keyframes typing {{ from {{ width:0px; }} to {{ width:520px; }} }}
+    @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX(520px); opacity:0; }} }}
+    @media (prefers-reduced-motion:reduce) {{ .neuron,.orbit,.packet,.reveal,.caret {{ animation:none; }} }}
+  </style>
+  <g clip-path="url(#card)">
+    {card_background(width,height)}
+    <path d="M0,52 H{width}" stroke="{COLOR["border"]}"/>
+    <circle cx="24" cy="26" r="4" fill="{COLOR["line"]}"/><circle cx="40" cy="26" r="4" fill="{COLOR["line"]}"/><circle cx="56" cy="26" r="4" fill="{COLOR["accent"]}"/>
+    <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
+    {''.join(parts)}
+    {lines}
+    <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="520" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
+    <rect class="caret" x="40" y="{height-46}" width="2" height="27"/>
+  </g>
+  {card_border(width,height)}
+</svg>
+'''
 
 
 def banner():
-    width, height = 1200, 200
-    formulas = [
-        (810, 32, 14, "y = σ(Wx + b)"),
-        (960, 32, 14, "softmax(QKᵀ / √d) V"),
-        (1110, 32, 14, "P ≠ NP ?"),
-        (1110, 104, 14, "max(0, x)"),
-        (810, 182, 14, "θ ← θ − η ∇L(θ)"),
-        (980, 182, 14, "e" + sup("iπ") + " + 1 = 0"),
-    ]
-    # Rede neural: camadas com 3, 5, 5 e 2 neurônios.
-    layers, net_x, net_cy, net_gap = [3, 5, 5, 2], [820, 910, 1000, 1090], 100, 24
-
-    def layer_nodes(index):
-        top = net_cy - net_gap * (layers[index] - 1) / 2
-        return [(net_x[index], top + net_gap * i) for i in range(layers[index])]
-
-    nodes = [layer_nodes(i) for i in range(len(layers))]
-    edges = [f'<line class="edge" x1="{x1}" y1="{y1:.1f}" x2="{x2}" y2="{y2:.1f}"/>'
-             for left, right in zip(nodes, nodes[1:]) for x1, y1 in left for x2, y2 in right]
-    circles = [f'<circle class="node" cx="{x}" cy="{y:.1f}" r="7"/>' for layer in nodes for x, y in layer]
-    highlight = [nodes[0][1], nodes[1][1], nodes[2][3], nodes[3][1]]
-    path = " ".join(f"{'M' if i == 0 else 'L'}{x},{y:.1f}" for i, (x, y) in enumerate(highlight))
-    # Linhas de fluxo: saem da borda esquerda, contornam o texto e convergem na entrada da rede.
-    inputs = nodes[0]
-    flows = []
-    for i, y0 in enumerate([12, 22, 32, 168, 178, 188]):
-        xe, ye = inputs[0] if i < 2 else inputs[1] if i in (2, 3) else inputs[2]
-        flows.append(f'<path class="flow" d="M-10,{y0} H600 C740,{y0} 750,{ye:.1f} {xe - 8},{ye:.1f}"/>')
-    equations = "\n".join(f'    <text class="eq" x="{x}" y="{y}" font-size="{size}">{close(text)}</text>'
-                          for x, y, size, text in formulas)
-    extra = f'''
-    .title {{ font: 700 42px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1px; }}
-    .lead {{ font: 400 24px {SANS}; fill: {COLOR['signal']}; }}
-    .meta {{ font: 500 22px {SANS}; fill: {COLOR['muted']}; }}'''
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Text on the left; neural network and formulas from computing, mathematics and physics on the right.</desc>
-  <defs>
-{card_defs(width, height, 0.7, 900)}
-  </defs>
-{style(extra)}
-  <g clip-path="url(#card)">
-{card_background(width, height)}
-    {"".join(flows)}
-{equations}
-    {"".join(edges)}
-    <path class="signal" d="{path}"/>
-    {"".join(circles)}
-    {"".join(f'<circle cx="{x}" cy="{y:.1f}" r="3" fill="{COLOR["foreground"]}"/>' for x, y in highlight)}
-  </g>
-  {card_border(width, height)}
-  <text class="title" x="56" y="66">Jordy Fontoura</text>
-  <text class="lead" x="56" y="104">AI Engineer · RAG, agents, MCP</text>
-  <text class="meta" x="56" y="134">Software developer since 2018.</text>
-  <text class="meta" x="56" y="164">TypeScript · Python · Rust</text>
-</svg>
-"""
+    return banner_art(900, 410)
 
 
 def focus():
-    """Cartão "What I build": etapas ligadas pelo caminho em destaque da rede do banner."""
-    width, height = 1200, 180
-    xs, cy = [180, 460, 740, 1020], 72
+    """Cartão "O que construo": etapas ligadas pelo caminho em destaque da rede do banner."""
+    width, height = 900, 180
+    xs, cy = [135, 345, 555, 765], 72
     extra = f"""
-    .stage {{ font: 700 22px {SANS}; fill: {COLOR["foreground"]}; letter-spacing: -0.5px; }}
-    .detail {{ font: 400 20px {SANS}; fill: {COLOR["muted"]}; }}"""
+    .stage {{ font: 700 24px {SANS}; fill: {COLOR["foreground"]}; letter-spacing: -0.5px; }}
+    .detail {{ font: 400 22px {SANS}; fill: {COLOR["muted"]}; }}"""
     parts = []
     # Linhas que entram pela borda esquerda e saem pela direita, como no banner.
     for dy in (-10, 0, 10):
@@ -195,8 +193,8 @@ def focus():
         parts.append(f'<text class="detail" x="{x}" y="156" text-anchor="middle">{detail}</text>')
     body = "\n    ".join(parts)
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">What I build</title>
-  <desc id="desc">{FOCUS_ALT}, drawn as connected nodes in the style of the profile banner.</desc>
+  <title id="title">O que construo</title>
+  <desc id="desc">{FOCUS_ALT}, em etapas conectadas no estilo do banner.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}
     <linearGradient id="flowfadeout" gradientUnits="userSpaceOnUse" x1="{width}" y1="0" x2="{width - 260}" y2="0">
@@ -216,64 +214,24 @@ def focus():
 """
 
 
-def banner_mobile(medium=False):
-    """Texto primeiro, com rede abaixo no celular ou ao lado na versão intermediária."""
-    width, height = (760, 300) if medium else (600, 380)
-    net_x, net_y = (540, 150) if medium else (350, 325)
-    layers = [3, 4, 4, 2]
-    nodes = [[(net_x+i*58, net_y+(j-(size-1)/2)*14) for j in range(size)]
-             for i, size in enumerate(layers)]
-    edges = ''.join(f'<line class="edge" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}"/>'
-                    for left, right in zip(nodes, nodes[1:]) for x1,y1 in left for x2,y2 in right)
-    circles = ''.join(f'<circle class="node" cx="{x}" cy="{y}" r="3.5"/>' for layer in nodes for x,y in layer)
-    extra = f'''
-    .mobile-name {{ font: 700 52px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1px; }}
-    .mobile-role {{ font: 500 34px {SANS}; fill: {COLOR['foreground']}; }}
-    .mobile-topic {{ font: 400 30px {SANS}; fill: {COLOR['signal']}; }}
-    .mobile-meta {{ font: 400 30px {SANS}; fill: {COLOR['muted']}; }}'''
-    decoration = '''<path class="flow" d="M-10,16 H470 C510,16 510,136 536.5,136"/>
-    <path class="flow" d="M-10,284 H470 C510,284 510,164 536.5,164"/>
-    <text class="eq" x="540" y="96" font-size="20">y = σ(Wx + b)</text>
-    <text class="eq" x="540" y="220" font-size="18">xᵀAx</text>''' if medium else '''<path class="flow" d="M-10,280 H270 C320,280 310,311 346.5,311"/>
-    <path class="flow" d="M-10,290 H258 C308,290 310,325 346.5,325"/>
-    <path class="flow" d="M-10,300 H246 C296,300 310,339 346.5,339"/>
-    <text class="eq" x="40" y="335" font-size="20">y = σ(Wx + b)</text>
-    <text class="eq" x="40" y="359" font-size="18">xᵀAx</text>'''
-    layout = 'Intermediate layout with a neural network beside the text' if medium else 'Compact mobile layout with text above a small neural network'
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. {layout}.</desc>
-  <defs>
-{card_defs(width, height, 0.7, 350)}
-  </defs>
-{style(extra)}
-  <g clip-path="url(#card)">
-{card_background(width, height)}
-    {decoration}
-    {edges}{circles}
-  </g>
-  {card_border(width, height)}
-  <g>
-    <text class="mobile-name" x="40" y="76">Jordy Fontoura</text>
-    <text class="mobile-role" x="40" y="122">AI Engineer</text>
-    <text class="mobile-topic" x="40" y="162">RAG · agents · MCP</text>
-    <text class="mobile-meta" x="40" y="213">Software developer since 2018.</text>
-    <text class="mobile-meta" x="40" y="255">TypeScript · Python · Rust</text>
-  </g>
-</svg>
-'''
+def banner_medium():
+    """Versão horizontal para a coluna do perfil em tablets e notebooks."""
+    return banner()
+
+
+def banner_mobile():
+    # Mesmo layout vertical nos tamanhos menores: nenhum texto invade o campo neural.
+    return banner_art(600, 630, compact=True)
 
 
 def focus_mobile(medium=False):
     """As quatro áreas em duas colunas, com conexões fora dos rótulos."""
     width, height = (760 if medium else 600), 420
     left, right = (200, 560) if medium else (160, 440)
-    bend = width - 26
     extra = f'''
     .mobile-stage {{ font: 700 32px {SANS}; fill: {COLOR['foreground']}; }}
     .mobile-detail {{ font: 400 25px {SANS}; fill: {COLOR['muted']}; }}'''
-    parts = [f'<path class="signal" d="M{left},68 H{right} M{left},268 H{right}"/>',
-             f'<path class="edge" fill="none" d="M{right+32},68 H{bend-20} Q{bend},68 {bend},88 V248 Q{bend},268 {bend-20},268 H{right+32}"/>']
+    parts = [f'<path class="signal" d="M{left},68 H{right} M{left},268 H{right}"/>']
     for (x,y), (stage,detail,formula) in zip([(left,68),(right,68),(left,268),(right,268)], STAGES):
         parts.extend([
             f'<text class="eq" x="{x}" y="{y-36}" font-size="20" text-anchor="middle">{formula}</text>',
@@ -284,8 +242,8 @@ def focus_mobile(medium=False):
             f'<text class="mobile-detail" x="{x}" y="{y+102}" text-anchor="middle">{detail}</text>',
         ])
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">What I build</title>
-  <desc id="desc">{FOCUS_ALT}. {'Intermediate' if medium else 'Mobile'} layout in two rows and two columns.</desc>
+  <title id="title">O que construo</title>
+  <desc id="desc">{FOCUS_ALT}. Versão {'intermediária' if medium else 'de celular'}, em duas linhas na ordem de leitura.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}
   </defs>
@@ -309,6 +267,37 @@ def problems(name, svg):
             found.append(f"{name}: contém {pattern}")
     if re.search(r"https?://(?!www\.w3\.org/2000/svg\")", svg):
         found.append(f"{name}: referência externa")
+    # Cada regra é conferida contra os elementos que ela anima, sem depender do nome.
+    reduced = re.search(r"@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*([^{}]+)\{\s*animation:\s*none;\s*\}\s*\}", svg)
+    disabled = set(re.findall(r"\.([\w-]+)", reduced[1])) if reduced else set()
+    document = xml.dom.minidom.parseString(svg)
+    rules = re.findall(r"([^{}]+)\{([^{}]*)\}", svg)
+    def seconds(value):
+        return [float(number) / (1000 if unit == 'ms' else 1)
+                for number, unit in re.findall(r"(-?[\d.]+)(ms|s)\b", value)]
+    for selectors, declarations in rules:
+        animation = re.search(r"(?:^|;)\s*animation:\s*([^;]+)", declarations)
+        if not animation or animation[1].strip() == 'none':
+            continue
+        classes = set(re.findall(r"\.([\w-]+)", selectors))
+        if not classes or not classes <= disabled:
+            found.append(f"{name}: toda animação deve respeitar movimento reduzido")
+        value = animation[1].strip()
+        times = seconds(value)
+        duration = times[0] if times else None
+        delays = [0.0, times[1] if len(times) > 1 else 0.0]
+        for rule_selectors, rule_declarations in rules:
+            if classes.intersection(re.findall(r"\.([\w-]+)", rule_selectors)):
+                delay = re.search(r"animation-delay:\s*([^;]+)", rule_declarations)
+                if delay:
+                    delays.extend(seconds(delay[1]))
+        for element in document.getElementsByTagName('*'):
+            if classes.intersection(element.getAttribute('class').split()):
+                delay = re.search(r"animation-delay:\s*([^;]+)", element.getAttribute('style'))
+                if delay:
+                    delays.extend(seconds(delay[1]))
+        if duration is None or duration < 0 or 'infinite' in value or not re.search(r"\s1(?:\s|$)", value) or duration + max(delays) >= 5:
+            found.append(f"{name}: animação deve executar uma vez e terminar antes de cinco segundos")
     if len(svg.encode("utf-8")) > MAX_BYTES:
         found.append(f"{name}: maior que {MAX_BYTES} bytes")
     return found
@@ -320,15 +309,26 @@ def main():
     args = parser.parse_args()
     outputs = {"banner.svg": banner(), "focus.svg": focus(),
                "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
-               "banner-medium.svg": banner_mobile(True), "focus-medium.svg": focus_mobile(True)}
+               "banner-medium.svg": banner_medium(), "focus-medium.svg": focus_mobile(True)}
+    cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
+    card_outputs = cards['outputs'](COLOR, SANS)
+    # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
+    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg)
+                    for name, svg in list(outputs.items())})
+    outputs.update(card_outputs)
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
     readme = README.read_text(encoding="utf-8")
+    errors.extend(cards['reference_problems'](readme))
     for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
         if f'src="assets/{name}" alt="{alt}"' not in readme:
             errors.append(f"README.md: alt de assets/{name} difere do texto do gerador")
         sources = '\n'.join(f'  <source media="(max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+".svg")}">'
                             for limit, variant in ((480, 'mobile'), (1011, 'medium')))
-        expected = '<picture>\n'+sources+f'\n  <img src="assets/{name}" alt="{alt}" width="880">'
+        still_sources = '\n'.join(
+            f'  <source media="(prefers-reduced-motion: reduce) and (max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+"-still.svg")}">'
+            for limit, variant in ((480, 'mobile'), (1011, 'medium')))
+        still_sources += f'\n  <source media="(prefers-reduced-motion: reduce)" srcset="assets/{name.replace(".svg", "-still.svg")}">'
+        expected = '<picture>\n'+still_sources+'\n'+sources+f'\n  <img src="assets/{name}" alt="{alt}" width="880">'
         if expected not in readme:
             errors.append(f"README.md: fontes responsivas ou largura de assets/{name} incorretas")
     if args.check:

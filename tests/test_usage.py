@@ -105,3 +105,49 @@ class UsageTests(unittest.TestCase):
 
 
 if __name__=='__main__': unittest.main()
+
+
+class PanelLayoutTests(unittest.TestCase):
+    def test_four_agents_leave_room_before_model_heading(self):
+        data = usage.collect(document([row()]), date(2026,11,1))
+        template = data['records'][0]
+        entries = [('Claude Code','Claude Opus 5.5'), ('Codex','GPT-6.1 Sol'),
+                   ('Local models','Local models'), ('Other agents','Other models')]
+        data['records'] = [dict(template, agent=agent, model=model)
+                           for agent, model in entries]
+        svg = usage.ET.fromstring(usage.panel(data))
+        texts = {}
+        for element in svg.iter('{http://www.w3.org/2000/svg}text'):
+            texts.setdefault(element.text, element)
+        last_agent_y = max(float(texts[usage.DISPLAY_NAMES.get(agent,agent)].attrib['y'])
+                           for agent, _ in entries)
+        model_heading_y = float(texts['POR MODELO'].attrib['y'])
+        self.assertGreaterEqual(model_heading_y-last_agent_y, 40)
+
+
+class UsageTextTests(unittest.TestCase):
+    def test_alt_contains_month_total_and_distribution(self):
+        data = usage.collect(document([row()]), date(2026,11,1))
+        text = usage.alternative_text(data)
+        self.assertIn('out/2026', text)
+        self.assertIn('42 tokens', text)
+        self.assertIn('Claude Code 100%', text)
+        self.assertNotIn('Modelos locais', text)
+
+    def test_portuguese_compact_units(self):
+        self.assertEqual(usage.compact(19_000_000_000), '19,0 bi')
+        self.assertEqual(usage.compact(5_000), '5,0 mil')
+        self.assertEqual(usage.compact(.5), '0,5')
+
+    def test_local_alt_explains_aggregation_without_names(self):
+        data = usage.collect(document([row()], provider='local'), date(2026,11,1))
+        text = usage.alternative_text(data)
+        self.assertIn('Modelos locais 100%', text)
+        self.assertIn('Modelos locais agregados sem divulgar seus nomes.', text)
+        self.assertNotIn('claude-opus', text)
+        self.assertNotIn('private-local', text)
+
+    def test_chart_scale_rounds_up_to_readable_boundaries(self):
+        for value, expected in [(1,1),(5,5),(6,10),(999,1000),(1000,1000),(1_565_000_000,2_000_000_000)]:
+            with self.subTest(value=value):
+                self.assertEqual(usage.nice_max(value),expected)
