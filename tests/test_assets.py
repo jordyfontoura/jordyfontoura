@@ -46,12 +46,23 @@ class MotionTests(unittest.TestCase):
         self.assertGreaterEqual(float(root.getAttribute('width')) / float(root.getAttribute('height')), 2)
 
     def test_shorthand_delay_counts_toward_total(self):
-        svg = assets.banner().replace('3.8s ease-in-out 1 both', '3s ease-in-out 2.5s 1 both')
+        svg = assets.focus().replace('animation: flow 4.8s linear 1;', 'animation: flow 3s linear 2500ms 1;')
         self.assertTrue(assets.problems('shorthand-delay.svg', svg))
 
     def test_css_delay_counts_toward_total(self):
-        svg = assets.banner().replace('animation:activate 3.8s', 'animation-delay:1500ms; animation:activate 3.8s')
+        svg = assets.focus().replace('animation: flow 4.8s linear 1;', 'animation: flow 4.8s linear 1; animation-delay:500ms;')
         self.assertTrue(assets.problems('css-delay.svg', svg))
 
     def test_banner_scale_matches_across_medium_desktop(self):
         self.assertEqual(assets.banner(), assets.banner_medium())
+
+    def test_typing_advances_one_complete_character_per_step(self):
+        svg = assets.banner()
+        document = assets.xml.dom.minidom.parseString(svg)
+        command = next(e for e in document.getElementsByTagName('text') if e.hasAttribute('textLength'))
+        content = ''.join(node.data for node in command.childNodes if node.nodeType == node.TEXT_NODE)
+        steps = assets.re.search(r'animation:typing[^;]*steps\((\d+),end\)', svg)
+        self.assertEqual(int(steps[1]), len(content))
+        mask = next(e for e in document.getElementsByTagName('rect') if e.getAttribute('class') == 'reveal')
+        self.assertEqual(float(mask.getAttribute('width')), float(command.getAttribute('textLength')))
+        self.assertEqual(command.getAttribute('lengthAdjust'), 'spacing')

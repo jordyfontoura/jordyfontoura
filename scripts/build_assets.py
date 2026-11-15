@@ -31,7 +31,6 @@ COLOR = {
     "line": "#52525b",
     "subtle": "#71717a",  # só decoração; 4,12:1 sobre o fundo
     "muted": "#a1a1aa",  # texto secundário; 7,76:1
-    "signal": "#d4d4d8",
     "foreground": "#fafafa",
     "accent": "#76e4bb",
     "accent_background": "#102a24",
@@ -137,7 +136,7 @@ def banner_art(width, height, compact=False):
   <title id="title">Jordy Fontoura</title>
   <desc id="desc">{BANNER_ALT}. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
   <defs>{card_defs(width, height, 0.8, width, include_flow=False)}
-    <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="524" height="40"/></clipPath>
+    <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="520" height="40"/></clipPath>
   </defs>
   <style>
     .name {{ font:700 {name_size}px {SANS}; fill:{COLOR["foreground"]}; letter-spacing:-2px; }}
@@ -152,10 +151,10 @@ def banner_art(width, height, compact=False):
     @keyframes orbit {{ to {{ stroke-dashoffset:-168; }} }}
     @keyframes transfer {{ 0% {{ stroke-dashoffset:332; opacity:0; }} 15%,75% {{ opacity:.8; }} 100% {{ stroke-dashoffset:0; opacity:0; }} }}
     @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; }} }}
-    .reveal {{ width:524px; animation:typing 3.2s steps(33,end) 1 both; }}
-    .caret {{ fill:{COLOR["accent"]}; opacity:0; animation:cursor 3.2s steps(33,end) 1 both; }}
-    @keyframes typing {{ from {{ width:0px; }} to {{ width:524px; }} }}
-    @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX(524px); opacity:0; }} }}
+    .reveal {{ width:520px; animation:typing 3.2s steps(34,end) 1 both; }}
+    .caret {{ fill:{COLOR["accent"]}; opacity:0; animation:cursor 3.2s steps(34,end) 1 both; }}
+    @keyframes typing {{ from {{ width:0px; }} to {{ width:520px; }} }}
+    @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX(520px); opacity:0; }} }}
     @media (prefers-reduced-motion:reduce) {{ .neuron,.orbit,.packet,.reveal,.caret {{ animation:none; }} }}
   </style>
   <g clip-path="url(#card)">
@@ -165,7 +164,7 @@ def banner_art(width, height, compact=False):
     <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
     {''.join(parts)}
     {lines}
-    <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="520" lengthAdjust="spacingAndGlyphs">&gt; contexto → ferramentas → produto</text>
+    <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="520" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
     <rect class="caret" x="40" y="{height-46}" width="2" height="27"/>
   </g>
   {card_border(width,height)}
