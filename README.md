@@ -9,19 +9,23 @@
 
 [LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com) · [Projetos](#projetos-abertos)
 
-Levo recursos de LLM à produção e trabalho na manutenção depois do lançamento. Tenho base em backend e experiência de liderança; quero continuar próximo do código e das decisões técnicas.
+Já coloquei uma aplicação com LLM em produção e dei suporte após o lançamento. Sou desenvolvedor full stack sênior, com experiência em liderança; quero continuar próximo do código e das decisões técnicas.
 
-Busco uma posição remota como engenheiro de IA ou em engenharia de software com foco em IA aplicada.
+Busco uma posição remota como engenheiro de IA ou engenheiro de software com foco em IA aplicada.
 
 ## Experiência selecionada
 
 **Dois na Oito · Senior Full Stack Developer · jan/2025–set/2026**
 
-Implementei recursos de IA generativa com RAG, agentes conversacionais e integrações MCP em produtos digitais. Desenvolvi APIs e serviços para aplicações web e mobile, além de recursos de recomendação, personalização e controle de acesso.
+Implementei RAG, agentes conversacionais e integrações MCP em uma aplicação de atendimento com IA. Em outros produtos, desenvolvi APIs para web e mobile, recomendações de leitura, personalização, visualização de dados e controle de acesso.
 
-**Bonaparte · Tech Lead · fev/2024–jan/2025**
+**Bonaparte · Líder técnico · fev/2024–jan/2025**
 
-Voltei à Bonaparte para liderar uma equipe técnica. Na primeira passagem, de jan/2021 a ago/2023, desenvolvi microsserviços e trabalhei com arquitetura, modelagem de dados e testes.
+Liderei uma equipe técnica e trabalhei com NestJS e Google Cloud.
+
+**Bonaparte · Backend/DevOps, Backend Sênior e Full Stack · jan/2021–ago/2023**
+
+Na primeira passagem pela empresa, desenvolvi microsserviços e trabalhei com arquitetura, modelagem de dados e testes.
 
 ## O que construo
 
@@ -34,7 +38,7 @@ Voltei à Bonaparte para liderar uma equipe técnica. Na primeira passagem, de j
   <img src="assets/focus.svg" alt="O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes conversacionais" width="880">
 </picture>
 
-Em outros projetos, desenvolvi fluxos de processamento de documentos com LLMs e trabalhei com síntese de voz e comparação de modelos usando Python e PyTorch.
+Em outros projetos privados, desenvolvi fluxos de processamento de documentos com LLMs e trabalhei com síntese e comparação de modelos de voz usando Python e PyTorch.
 
 ## Projetos abertos
 
@@ -89,7 +93,7 @@ A maior parte do meu trabalho com IA está em repositórios privados.
 
 ## No meu terminal
 
-Uso Claude Code, Codex e modelos locais como agentes de programação. Alinho o objetivo e o contexto do projeto, especifico o que precisa de definição, reviso o código e executo testes e verificações. Publiquei essas orientações no [skills](https://github.com/jordyfontoura/skills).
+Uso Claude Code, Codex e modelos locais como agentes de programação. Alinho o objetivo e o contexto do projeto, especifico o que precisa de definição, reviso o código e executo testes e verificações. Mantenho instruções para esse fluxo no [skills](https://github.com/jordyfontoura/skills).
 
 <details>
 <summary>Uso de agentes de programação: volume diário e distribuição de tokens</summary>
@@ -117,6 +121,6 @@ Amo minha esposa, meus dois gatos e jogos. Comecei a programar aos 10 anos com *
 
 ---
 
-**Vamos conversar sobre uma posição remota em engenharia de IA ou de software com foco em IA aplicada.**
+**Vamos conversar.**
 
-[Vamos conversar no LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [jordyfontoura@outlook.com](mailto:jordyfontoura@outlook.com)
+[LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [jordyfontoura@outlook.com](mailto:jordyfontoura@outlook.com)
