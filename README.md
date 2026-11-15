@@ -1,9 +1,9 @@
 <picture>
   <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/banner-mobile-still.svg">
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 1279px)" srcset="assets/banner-medium-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/banner-medium-still.svg">
   <source media="(prefers-reduced-motion: reduce)" srcset="assets/banner-still.svg">
   <source media="(max-width: 480px)" srcset="assets/banner-mobile.svg">
-  <source media="(max-width: 1279px)" srcset="assets/banner-medium.svg">
+  <source media="(max-width: 1011px)" srcset="assets/banner-medium.svg">
   <img src="assets/banner.svg" alt="Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; desenvolvedor desde 2018; TypeScript, Python e Rust" width="880">
 </picture>
 
@@ -17,10 +17,10 @@ Na **Dois na Oito**, construí recursos de IA generativa com RAG, agentes conver
 
 <picture>
   <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/focus-mobile-still.svg">
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 1279px)" srcset="assets/focus-medium-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/focus-medium-still.svg">
   <source media="(prefers-reduced-motion: reduce)" srcset="assets/focus-still.svg">
   <source media="(max-width: 480px)" srcset="assets/focus-mobile.svg">
-  <source media="(max-width: 1279px)" srcset="assets/focus-medium.svg">
+  <source media="(max-width: 1011px)" srcset="assets/focus-medium.svg">
   <img src="assets/focus.svg" alt="O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes de conversa" width="880">
 </picture>
 

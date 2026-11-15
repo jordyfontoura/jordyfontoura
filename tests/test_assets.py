@@ -36,7 +36,7 @@ class MotionTests(unittest.TestCase):
         self.assertTrue(assets.problems('renamed.svg', svg))
 
     def test_every_animated_class_must_be_disabled(self):
-        svg = assets.banner().replace('.neuron,.orbit,.packet { animation:none;', '.orbit,.packet { animation:none;')
+        svg = assets.banner().replace('.neuron,.orbit,.packet,.reveal,.caret { animation:none;', '.orbit,.packet,.reveal,.caret { animation:none;')
         self.assertTrue(assets.problems('partial-reduce.svg', svg))
 
     def test_medium_banner_stays_horizontal(self):
@@ -44,3 +44,14 @@ class MotionTests(unittest.TestCase):
         document = assets.xml.dom.minidom.parseString(svg)
         root = document.documentElement
         self.assertGreaterEqual(float(root.getAttribute('width')) / float(root.getAttribute('height')), 2)
+
+    def test_shorthand_delay_counts_toward_total(self):
+        svg = assets.banner().replace('3.8s ease-in-out 1 both', '3s ease-in-out 2.5s 1 both')
+        self.assertTrue(assets.problems('shorthand-delay.svg', svg))
+
+    def test_css_delay_counts_toward_total(self):
+        svg = assets.banner().replace('animation:activate 3.8s', 'animation-delay:1500ms; animation:activate 3.8s')
+        self.assertTrue(assets.problems('css-delay.svg', svg))
+
+    def test_banner_scale_matches_across_medium_desktop(self):
+        self.assertEqual(assets.banner(), assets.banner_medium())
