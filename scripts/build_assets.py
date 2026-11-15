@@ -15,27 +15,16 @@ import subprocess
 import sys
 import xml.dom.minidom
 from pathlib import Path
+from runpy import run_path
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets"
 README = ROOT / "README.md"
 MAX_BYTES = 100_000
 
-# Tokens do design system, extraídos do banner (zinc do shadcn). Cada SVG é um cartão
-# escuro e opaco: o mesmo arquivo serve aos temas claro e escuro do GitHub.
-COLOR = {
-    "background": "#09090b",
-    "card": "#18181b",
-    "border": "#27272a",
-    "ring": "#3f3f46",
-    "line": "#52525b",
-    "subtle": "#71717a",  # só decoração; 4,12:1 sobre o fundo
-    "muted": "#a1a1aa",  # texto secundário; 7,76:1
-    "foreground": "#fafafa",
-    "accent": "#76e4bb",
-    "accent_background": "#102a24",
-    "lead": "#e4e4e7",
-}
+# Executar o arquivo local permite manter os CLIs isolados com python -I.
+COLOR = run_path(str(Path(__file__).with_name('theme.py')))['COLOR']
+
 SANS = 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
 MATH = '"Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif'
 RADIUS = 24
