@@ -1,12 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="380" viewBox="0 0 600 380" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="550" viewBox="0 0 600 550" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">Jordy Fontoura: AI Engineer working with RAG, agents and MCP; software developer since 2018; TypeScript, Python and Rust. Compact mobile layout with text above a small neural network.</desc>
-  <defs>
-    <radialGradient id="glow" cx="0.7" cy="0.5" r="0.45">
+  <desc id="desc">Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; desenvolvedor desde 2018; TypeScript, Python e Rust. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
+  <defs>    <radialGradient id="glow" cx="0.8" cy="0.5" r="0.45">
       <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
       <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="flowfade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="350" y2="0">
+    <linearGradient id="flowfade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="600" y2="0">
       <stop offset="0" stop-color="#3f3f46" stop-opacity="0"/>
       <stop offset="0.45" stop-color="#3f3f46" stop-opacity="0.35"/>
       <stop offset="1" stop-color="#52525b" stop-opacity="0.9"/>
@@ -15,42 +14,33 @@
       <circle cx="2" cy="2" r="1" fill="#fafafa" fill-opacity="0.07"/>
     </pattern>
     <clipPath id="card">
-      <rect width="600" height="380" rx="24"/>
-    </clipPath>
-  </defs>
+      <rect width="600" height="550" rx="24"/>
+    </clipPath></defs>
   <style>
-    .title { font: 700 64px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing: -1.5px; }
-    .lead { font: 400 32px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #d4d4d8; }
-    .meta { font: 500 24px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
-    .eq { font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; font-style: italic; fill: #71717a; fill-opacity: 0.75; }
-    .flow { fill: none; stroke: url(#flowfade); stroke-width: 1; }
-    .ring { fill: none; stroke: #27272a; stroke-width: 1; }
-    .edge { stroke: #3f3f46; stroke-width: 1; stroke-opacity: 0.8; }
-    .node { fill: #09090b; stroke: #71717a; stroke-width: 1.5; }
-    .signal { fill: none; stroke: #d4d4d8; stroke-width: 1.5; stroke-opacity: 0.8; }
-    .label { font: italic 400 15px "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; fill: #a1a1aa; }
-    .mobile-name { font: 700 52px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing:-1px; }
-    .mobile-role { font: 500 34px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; }
-    .mobile-topic { font: 400 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #d4d4d8; }
-    .mobile-meta { font: 400 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+    .name { font:700 46px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#fafafa; letter-spacing:-2px; }
+    .role { font:500 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#e4e4e7; }
+    .body { font:400 26px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
+    .caption { font:400 22px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
+    .terminal,.core { font:500 18px ui-monospace,Consolas,monospace; fill:#76e4bb; }
+    .mesh { stroke:#76e4bb; stroke-opacity:.17; fill:none; }
+    .neuron { fill:#76e4bb; animation:activate 3.8s ease-in-out 1; }
+    .orbit { fill:none; stroke:#76e4bb; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear 1; }
+    .packet { fill:none; stroke:#76e4bb; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out 1; opacity:.7; }
+    @keyframes orbit { to { stroke-dashoffset:-168; } }
+    @keyframes transfer { from { stroke-dashoffset:332; } to { stroke-dashoffset:0; } }
+    @keyframes activate { 0%,100% { opacity:.65; } 45% { opacity:1; r:5; } }
+    @media (prefers-reduced-motion:reduce) { .neuron,.orbit,.packet { animation:none; } }
   </style>
   <g clip-path="url(#card)">
-    <rect width="600" height="380" fill="#09090b"/>
-    <rect width="600" height="380" fill="url(#dots)"/>
-    <rect width="600" height="380" fill="url(#glow)"/>
-    <path class="flow" d="M-10,280 H270 C320,280 310,311 346.5,311"/>
-    <path class="flow" d="M-10,290 H258 C308,290 310,325 346.5,325"/>
-    <path class="flow" d="M-10,300 H246 C296,300 310,339 346.5,339"/>
-    <text class="eq" x="40" y="335" font-size="20">y = σ(Wx + b)</text>
-    <text class="eq" x="40" y="359" font-size="18">xᵀAx</text>
-    <line class="edge" x1="350" y1="311.0" x2="408" y2="304.0"/><line class="edge" x1="350" y1="311.0" x2="408" y2="318.0"/><line class="edge" x1="350" y1="311.0" x2="408" y2="332.0"/><line class="edge" x1="350" y1="311.0" x2="408" y2="346.0"/><line class="edge" x1="350" y1="325.0" x2="408" y2="304.0"/><line class="edge" x1="350" y1="325.0" x2="408" y2="318.0"/><line class="edge" x1="350" y1="325.0" x2="408" y2="332.0"/><line class="edge" x1="350" y1="325.0" x2="408" y2="346.0"/><line class="edge" x1="350" y1="339.0" x2="408" y2="304.0"/><line class="edge" x1="350" y1="339.0" x2="408" y2="318.0"/><line class="edge" x1="350" y1="339.0" x2="408" y2="332.0"/><line class="edge" x1="350" y1="339.0" x2="408" y2="346.0"/><line class="edge" x1="408" y1="304.0" x2="466" y2="304.0"/><line class="edge" x1="408" y1="304.0" x2="466" y2="318.0"/><line class="edge" x1="408" y1="304.0" x2="466" y2="332.0"/><line class="edge" x1="408" y1="304.0" x2="466" y2="346.0"/><line class="edge" x1="408" y1="318.0" x2="466" y2="304.0"/><line class="edge" x1="408" y1="318.0" x2="466" y2="318.0"/><line class="edge" x1="408" y1="318.0" x2="466" y2="332.0"/><line class="edge" x1="408" y1="318.0" x2="466" y2="346.0"/><line class="edge" x1="408" y1="332.0" x2="466" y2="304.0"/><line class="edge" x1="408" y1="332.0" x2="466" y2="318.0"/><line class="edge" x1="408" y1="332.0" x2="466" y2="332.0"/><line class="edge" x1="408" y1="332.0" x2="466" y2="346.0"/><line class="edge" x1="408" y1="346.0" x2="466" y2="304.0"/><line class="edge" x1="408" y1="346.0" x2="466" y2="318.0"/><line class="edge" x1="408" y1="346.0" x2="466" y2="332.0"/><line class="edge" x1="408" y1="346.0" x2="466" y2="346.0"/><line class="edge" x1="466" y1="304.0" x2="524" y2="318.0"/><line class="edge" x1="466" y1="304.0" x2="524" y2="332.0"/><line class="edge" x1="466" y1="318.0" x2="524" y2="318.0"/><line class="edge" x1="466" y1="318.0" x2="524" y2="332.0"/><line class="edge" x1="466" y1="332.0" x2="524" y2="318.0"/><line class="edge" x1="466" y1="332.0" x2="524" y2="332.0"/><line class="edge" x1="466" y1="346.0" x2="524" y2="318.0"/><line class="edge" x1="466" y1="346.0" x2="524" y2="332.0"/><circle class="node" cx="350" cy="311.0" r="3.5"/><circle class="node" cx="350" cy="325.0" r="3.5"/><circle class="node" cx="350" cy="339.0" r="3.5"/><circle class="node" cx="408" cy="304.0" r="3.5"/><circle class="node" cx="408" cy="318.0" r="3.5"/><circle class="node" cx="408" cy="332.0" r="3.5"/><circle class="node" cx="408" cy="346.0" r="3.5"/><circle class="node" cx="466" cy="304.0" r="3.5"/><circle class="node" cx="466" cy="318.0" r="3.5"/><circle class="node" cx="466" cy="332.0" r="3.5"/><circle class="node" cx="466" cy="346.0" r="3.5"/><circle class="node" cx="524" cy="318.0" r="3.5"/><circle class="node" cx="524" cy="332.0" r="3.5"/>
+        <rect width="600" height="550" fill="#09090b"/>
+    <rect width="600" height="550" fill="url(#dots)"/>
+    <rect width="600" height="550" fill="url(#glow)"/>
+    <path d="M0,52 H600" stroke="#27272a"/>
+    <circle cx="24" cy="26" r="4" fill="#52525b"/><circle cx="40" cy="26" r="4" fill="#52525b"/><circle cx="56" cy="26" r="4" fill="#76e4bb"/>
+    <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
+    <path class="mesh" d="M490.4,390.0 L404.4,354.4"/><circle class="neuron" style="animation-delay:0.000s" cx="490.4" cy="390.0" r="3"/><path class="mesh" d="M475.6,425.6 L440.0,339.6"/><circle class="neuron" style="animation-delay:0.035s" cx="475.6" cy="425.6" r="3"/><path class="mesh" d="M440.0,440.4 L475.6,354.4"/><circle class="neuron" style="animation-delay:0.070s" cx="440.0" cy="440.4" r="3"/><path class="mesh" d="M404.4,425.6 L545.0,390.0"/><circle class="neuron" style="animation-delay:0.105s" cx="404.4" cy="425.6" r="3"/><path class="mesh" d="M389.6,390.0 L537.0,430.2"/><circle class="neuron" style="animation-delay:0.140s" cx="389.6" cy="390.0" r="3"/><path class="mesh" d="M404.4,354.4 L514.2,464.2"/><circle class="neuron" style="animation-delay:0.175s" cx="404.4" cy="354.4" r="3"/><path class="mesh" d="M440.0,339.6 L480.2,487.0"/><circle class="neuron" style="animation-delay:0.210s" cx="440.0" cy="339.6" r="3"/><path class="mesh" d="M475.6,354.4 L440.0,495.0"/><circle class="neuron" style="animation-delay:0.245s" cx="475.6" cy="354.4" r="3"/><path class="mesh" d="M545.0,390.0 L399.8,487.0"/><circle class="neuron" style="animation-delay:0.280s" cx="545.0" cy="390.0" r="3"/><path class="mesh" d="M537.0,430.2 L365.8,464.2"/><circle class="neuron" style="animation-delay:0.315s" cx="537.0" cy="430.2" r="3"/><path class="mesh" d="M514.2,464.2 L343.0,430.2"/><circle class="neuron" style="animation-delay:0.350s" cx="514.2" cy="464.2" r="3"/><path class="mesh" d="M480.2,487.0 L335.0,390.0"/><circle class="neuron" style="animation-delay:0.385s" cx="480.2" cy="487.0" r="3"/><path class="mesh" d="M440.0,495.0 L343.0,349.8"/><circle class="neuron" style="animation-delay:0.420s" cx="440.0" cy="495.0" r="3"/><path class="mesh" d="M399.8,487.0 L365.8,315.8"/><circle class="neuron" style="animation-delay:0.455s" cx="399.8" cy="487.0" r="3"/><path class="mesh" d="M365.8,464.2 L399.8,293.0"/><circle class="neuron" style="animation-delay:0.490s" cx="365.8" cy="464.2" r="3"/><path class="mesh" d="M343.0,430.2 L440.0,285.0"/><circle class="neuron" style="animation-delay:0.525s" cx="343.0" cy="430.2" r="3"/><path class="mesh" d="M335.0,390.0 L480.2,293.0"/><circle class="neuron" style="animation-delay:0.560s" cx="335.0" cy="390.0" r="3"/><path class="mesh" d="M343.0,349.8 L514.2,315.8"/><circle class="neuron" style="animation-delay:0.595s" cx="343.0" cy="349.8" r="3"/><path class="mesh" d="M365.8,315.8 L537.0,349.8"/><circle class="neuron" style="animation-delay:0.630s" cx="365.8" cy="315.8" r="3"/><path class="mesh" d="M399.8,293.0 L490.4,390.0"/><circle class="neuron" style="animation-delay:0.665s" cx="399.8" cy="293.0" r="3"/><path class="mesh" d="M440.0,285.0 L475.6,425.6"/><circle class="neuron" style="animation-delay:0.700s" cx="440.0" cy="285.0" r="3"/><path class="mesh" d="M480.2,293.0 L440.0,440.4"/><circle class="neuron" style="animation-delay:0.735s" cx="480.2" cy="293.0" r="3"/><path class="mesh" d="M514.2,315.8 L404.4,425.6"/><circle class="neuron" style="animation-delay:0.770s" cx="514.2" cy="315.8" r="3"/><path class="mesh" d="M537.0,349.8 L389.6,390.0"/><circle class="neuron" style="animation-delay:0.805s" cx="537.0" cy="349.8" r="3"/><circle class="orbit" cx="440" cy="390" r="119"/><path class="packet" d="M321,390 H559"/><circle cx="440" cy="390" r="28" fill="#102a24" stroke="#76e4bb"/><text x="440" y="396" text-anchor="middle" class="core">AI</text>
+    <text x="40" y="112" class="name">Jordy Fontoura<tspan fill="#76e4bb">.</tspan></text><text x="40" y="156" class="role">Engenharia de IA aplicada</text><text x="40" y="200" class="body">RAG · agentes · MCP</text><text x="40" y="238" class="body">TypeScript · Python · Rust</text><text x="40" y="288" class="caption">Desenvolvendo software desde 2018.</text>
+    <text x="40" y="526" class="terminal">&gt; contexto → ferramentas → produto</text>
   </g>
-  <rect x="0.5" y="0.5" width="599" height="379" rx="24" fill="none" stroke="#27272a"/>
-  <g>
-    <text class="mobile-name" x="40" y="76">Jordy Fontoura</text>
-    <text class="mobile-role" x="40" y="122">AI Engineer</text>
-    <text class="mobile-topic" x="40" y="162">RAG · agents · MCP</text>
-    <text class="mobile-meta" x="40" y="213">Software developer since 2018.</text>
-    <text class="mobile-meta" x="40" y="255">TypeScript · Python · Rust</text>
-  </g>
+  <rect x="0.5" y="0.5" width="599" height="549" rx="24" fill="none" stroke="#27272a"/>
 </svg>

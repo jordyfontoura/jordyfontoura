@@ -39,16 +39,16 @@ RADIUS = 24
 GRID = 24
 
 # Textos: a mesma frase vai para o SVG e para o alt do README.
-BANNER_ALT = ("Jordy Fontoura: AI Engineer working with RAG, agents and MCP; "
-              "software developer since 2018; TypeScript, Python and Rust")
-FOCUS_ALT = ("What I build: retrieval (RAG, pgvector), LLMs (Vercel AI SDK), "
-             "tools (tool calling, MCP) and conversational agents")
+BANNER_ALT = ("Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; "
+              "desenvolvedor desde 2018; TypeScript, Python e Rust")
+FOCUS_ALT = ("O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), "
+             "ferramentas (tool calling, MCP) e agentes de conversa")
 STAGES = [
     # (rótulo, detalhe, fórmula decorativa)
-    ("Retrieval", "RAG · pgvector", "sim(q, d)"),
+    ("Busca", "RAG · pgvector", "sim(q, d)"),
     ("LLMs", "Vercel AI SDK", "p(y | x)"),
-    ("Tools", "tool calling · MCP", "f(args)"),
-    ("Agents", "conversational", "π(a | s)"),
+    ("Ferramentas", "tool calling · MCP", "f(args)"),
+    ("Agentes", "conversacionais", "π(a | s)"),
 ]
 
 
@@ -62,7 +62,9 @@ def style(extra=""):
     .ring {{ fill: none; stroke: {COLOR["border"]}; stroke-width: 1; }}
     .edge {{ stroke: {COLOR["ring"]}; stroke-width: 1; stroke-opacity: 0.8; }}
     .node {{ fill: {COLOR["background"]}; stroke: {COLOR["subtle"]}; stroke-width: 1.5; }}
-    .signal {{ fill: none; stroke: {COLOR["signal"]}; stroke-width: 1.5; stroke-opacity: 0.8; }}
+    .signal {{ fill: none; stroke: #76e4bb; stroke-width: 2; stroke-opacity: 0.8; stroke-dasharray: 12 8; animation: flow 4.8s linear 1; }}
+    @keyframes flow {{ to {{ stroke-dashoffset: -160; }} }}
+    @media (prefers-reduced-motion: reduce) {{ .signal {{ animation: none; }} }}
     .label {{ font: italic 400 15px {MATH}; fill: {COLOR["muted"]}; }}{extra}
   </style>"""
 
@@ -107,68 +109,76 @@ def close(markup):
     return markup + "</tspan>" * markup.count('<tspan dy="8">')
 
 
-def banner():
-    width, height = 1200, 200
-    formulas = [
-        (810, 32, 14, "y = σ(Wx + b)"),
-        (960, 32, 14, "softmax(QKᵀ / √d) V"),
-        (1110, 32, 14, "P ≠ NP ?"),
-        (1110, 104, 14, "max(0, x)"),
-        (810, 182, 14, "θ ← θ − η ∇L(θ)"),
-        (980, 182, 14, "e" + sup("iπ") + " + 1 = 0"),
-    ]
-    # Rede neural: camadas com 3, 5, 5 e 2 neurônios.
-    layers, net_x, net_cy, net_gap = [3, 5, 5, 2], [820, 910, 1000, 1090], 100, 24
-
-    def layer_nodes(index):
-        top = net_cy - net_gap * (layers[index] - 1) / 2
-        return [(net_x[index], top + net_gap * i) for i in range(layers[index])]
-
-    nodes = [layer_nodes(i) for i in range(len(layers))]
-    edges = [f'<line class="edge" x1="{x1}" y1="{y1:.1f}" x2="{x2}" y2="{y2:.1f}"/>'
-             for left, right in zip(nodes, nodes[1:]) for x1, y1 in left for x2, y2 in right]
-    circles = [f'<circle class="node" cx="{x}" cy="{y:.1f}" r="7"/>' for layer in nodes for x, y in layer]
-    highlight = [nodes[0][1], nodes[1][1], nodes[2][3], nodes[3][1]]
-    path = " ".join(f"{'M' if i == 0 else 'L'}{x},{y:.1f}" for i, (x, y) in enumerate(highlight))
-    # Linhas de fluxo: saem da borda esquerda, contornam o texto e convergem na entrada da rede.
-    inputs = nodes[0]
-    flows = []
-    for i, y0 in enumerate([12, 22, 32, 168, 178, 188]):
-        xe, ye = inputs[0] if i < 2 else inputs[1] if i in (2, 3) else inputs[2]
-        flows.append(f'<path class="flow" d="M-10,{y0} H600 C740,{y0} 750,{ye:.1f} {xe - 8},{ye:.1f}"/>')
-    equations = "\n".join(f'    <text class="eq" x="{x}" y="{y}" font-size="{size}">{close(text)}</text>'
-                          for x, y, size, text in formulas)
-    extra = f'''
-    .title {{ font: 700 42px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1px; }}
-    .lead {{ font: 400 24px {SANS}; fill: {COLOR['signal']}; }}
-    .meta {{ font: 500 22px {SANS}; fill: {COLOR['muted']}; }}'''
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
+def banner_art(width, height, compact=False):
+    """Terminal vetorial com um campo neural; texto nunca depende da animação."""
+    import math
+    cx, cy = (440, 390) if compact else (930, 208)
+    radius = 105 if compact else 128
+    parts = []
+    points = []
+    for ring, count in ((0.48, 8), (1, 16)):
+        for i in range(count):
+            angle = i * math.tau / count
+            points.append((cx + math.cos(angle)*radius*ring,
+                           cy + math.sin(angle)*radius*ring))
+    for i, (x, y) in enumerate(points):
+        nx, ny = points[(i+5) % len(points)]
+        parts.append(f'<path class="mesh" d="M{x:.1f},{y:.1f} L{nx:.1f},{ny:.1f}"/>')
+        parts.append(f'<circle class="neuron" style="animation-delay:{i*.035:.3f}s" cx="{x:.1f}" cy="{y:.1f}" r="3"/>')
+    parts.append(f'<circle class="orbit" cx="{cx}" cy="{cy}" r="{radius+14}"/>')
+    parts.append(f'<path class="packet" d="M{cx-radius-14},{cy} H{cx+radius+14}"/>')
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="28" fill="#102a24" stroke="#76e4bb"/>')
+    parts.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="core">AI</text>')
+    name_size = 46 if compact else 64
+    lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="#76e4bb">.</tspan></text>'
+             '<text x="40" y="156" class="role">Engenharia de IA aplicada</text>'
+             '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
+             '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
+             '<text x="40" y="288" class="caption">Desenvolvendo software desde 2018.</text>') if compact else (
+             '<text x="56" y="142" class="name">Jordy Fontoura<tspan fill="#76e4bb">.</tspan></text>'
+             '<text x="58" y="190" class="role">Engenharia de IA aplicada</text>'
+             '<text x="58" y="242" class="body">RAG · agentes · MCP</text>'
+             '<text x="58" y="281" class="body">TypeScript · Python · Rust</text>'
+             '<text x="58" y="334" class="caption">Desenvolvendo software desde 2018.</text>')
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Text on the left; neural network and formulas from computing, mathematics and physics on the right.</desc>
-  <defs>
-{card_defs(width, height, 0.7, 900)}
-  </defs>
-{style(extra)}
+  <desc id="desc">{BANNER_ALT}. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
+  <defs>{card_defs(width, height, 0.8, width)}</defs>
+  <style>
+    .name {{ font:700 {name_size}px {SANS}; fill:#fafafa; letter-spacing:-2px; }}
+    .role {{ font:500 30px {SANS}; fill:#e4e4e7; }}
+    .body {{ font:400 26px {SANS}; fill:#a1a1aa; }}
+    .caption {{ font:400 22px {SANS}; fill:#a1a1aa; }}
+    .terminal,.core {{ font:500 18px ui-monospace,Consolas,monospace; fill:#76e4bb; }}
+    .mesh {{ stroke:#76e4bb; stroke-opacity:.17; fill:none; }}
+    .neuron {{ fill:#76e4bb; animation:activate 3.8s ease-in-out 1; }}
+    .orbit {{ fill:none; stroke:#76e4bb; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear 1; }}
+    .packet {{ fill:none; stroke:#76e4bb; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out 1; opacity:.7; }}
+    @keyframes orbit {{ to {{ stroke-dashoffset:-168; }} }}
+    @keyframes transfer {{ from {{ stroke-dashoffset:332; }} to {{ stroke-dashoffset:0; }} }}
+    @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; r:5; }} }}
+    @media (prefers-reduced-motion:reduce) {{ .neuron,.orbit,.packet {{ animation:none; }} }}
+  </style>
   <g clip-path="url(#card)">
-{card_background(width, height)}
-    {"".join(flows)}
-{equations}
-    {"".join(edges)}
-    <path class="signal" d="{path}"/>
-    {"".join(circles)}
-    {"".join(f'<circle cx="{x}" cy="{y:.1f}" r="3" fill="{COLOR["foreground"]}"/>' for x, y in highlight)}
+    {card_background(width,height)}
+    <path d="M0,52 H{width}" stroke="#27272a"/>
+    <circle cx="24" cy="26" r="4" fill="#52525b"/><circle cx="40" cy="26" r="4" fill="#52525b"/><circle cx="56" cy="26" r="4" fill="#76e4bb"/>
+    <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
+    {''.join(parts)}
+    {lines}
+    <text x="40" y="{height-24}" class="terminal">&gt; contexto → ferramentas → produto</text>
   </g>
-  {card_border(width, height)}
-  <text class="title" x="56" y="66">Jordy Fontoura</text>
-  <text class="lead" x="56" y="104">AI Engineer · RAG, agents, MCP</text>
-  <text class="meta" x="56" y="134">Software developer since 2018.</text>
-  <text class="meta" x="56" y="164">TypeScript · Python · Rust</text>
+  {card_border(width,height)}
 </svg>
-"""
+'''
+
+
+def banner():
+    return banner_art(1200, 410)
 
 
 def focus():
-    """Cartão "What I build": etapas ligadas pelo caminho em destaque da rede do banner."""
+    """Cartão "O que construo": etapas ligadas pelo caminho em destaque da rede do banner."""
     width, height = 1200, 180
     xs, cy = [180, 460, 740, 1020], 72
     extra = f"""
@@ -195,7 +205,7 @@ def focus():
         parts.append(f'<text class="detail" x="{x}" y="156" text-anchor="middle">{detail}</text>')
     body = "\n    ".join(parts)
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">What I build</title>
+  <title id="title">O que construo</title>
   <desc id="desc">{FOCUS_ALT}, drawn as connected nodes in the style of the profile banner.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}
@@ -217,51 +227,8 @@ def focus():
 
 
 def banner_mobile(medium=False):
-    """Texto primeiro, com rede abaixo no celular ou ao lado na versão intermediária."""
-    width, height = (760, 300) if medium else (600, 380)
-    net_x, net_y = (540, 150) if medium else (350, 325)
-    layers = [3, 4, 4, 2]
-    nodes = [[(net_x+i*58, net_y+(j-(size-1)/2)*14) for j in range(size)]
-             for i, size in enumerate(layers)]
-    edges = ''.join(f'<line class="edge" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}"/>'
-                    for left, right in zip(nodes, nodes[1:]) for x1,y1 in left for x2,y2 in right)
-    circles = ''.join(f'<circle class="node" cx="{x}" cy="{y}" r="3.5"/>' for layer in nodes for x,y in layer)
-    extra = f'''
-    .mobile-name {{ font: 700 52px {SANS}; fill: {COLOR['foreground']}; letter-spacing:-1px; }}
-    .mobile-role {{ font: 500 34px {SANS}; fill: {COLOR['foreground']}; }}
-    .mobile-topic {{ font: 400 30px {SANS}; fill: {COLOR['signal']}; }}
-    .mobile-meta {{ font: 400 30px {SANS}; fill: {COLOR['muted']}; }}'''
-    decoration = '''<path class="flow" d="M-10,16 H470 C510,16 510,136 536.5,136"/>
-    <path class="flow" d="M-10,284 H470 C510,284 510,164 536.5,164"/>
-    <text class="eq" x="540" y="96" font-size="20">y = σ(Wx + b)</text>
-    <text class="eq" x="540" y="220" font-size="18">xᵀAx</text>''' if medium else '''<path class="flow" d="M-10,280 H270 C320,280 310,311 346.5,311"/>
-    <path class="flow" d="M-10,290 H258 C308,290 310,325 346.5,325"/>
-    <path class="flow" d="M-10,300 H246 C296,300 310,339 346.5,339"/>
-    <text class="eq" x="40" y="335" font-size="20">y = σ(Wx + b)</text>
-    <text class="eq" x="40" y="359" font-size="18">xᵀAx</text>'''
-    layout = 'Intermediate layout with a neural network beside the text' if medium else 'Compact mobile layout with text above a small neural network'
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. {layout}.</desc>
-  <defs>
-{card_defs(width, height, 0.7, 350)}
-  </defs>
-{style(extra)}
-  <g clip-path="url(#card)">
-{card_background(width, height)}
-    {decoration}
-    {edges}{circles}
-  </g>
-  {card_border(width, height)}
-  <g>
-    <text class="mobile-name" x="40" y="76">Jordy Fontoura</text>
-    <text class="mobile-role" x="40" y="122">AI Engineer</text>
-    <text class="mobile-topic" x="40" y="162">RAG · agents · MCP</text>
-    <text class="mobile-meta" x="40" y="213">Software developer since 2018.</text>
-    <text class="mobile-meta" x="40" y="255">TypeScript · Python · Rust</text>
-  </g>
-</svg>
-'''
+    # Mesmo layout vertical nos tamanhos menores: nenhum texto invade o campo neural.
+    return banner_art(600, 550, compact=True)
 
 
 def focus_mobile(medium=False):
@@ -284,7 +251,7 @@ def focus_mobile(medium=False):
             f'<text class="mobile-detail" x="{x}" y="{y+102}" text-anchor="middle">{detail}</text>',
         ])
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">What I build</title>
+  <title id="title">O que construo</title>
   <desc id="desc">{FOCUS_ALT}. {'Intermediate' if medium else 'Mobile'} layout in two rows and two columns.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}

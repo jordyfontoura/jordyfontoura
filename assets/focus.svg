@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="180" viewBox="0 0 1200 180" role="img" aria-labelledby="title desc">
-  <title id="title">What I build</title>
-  <desc id="desc">What I build: retrieval (RAG, pgvector), LLMs (Vercel AI SDK), tools (tool calling, MCP) and conversational agents, drawn as connected nodes in the style of the profile banner.</desc>
+  <title id="title">O que construo</title>
+  <desc id="desc">O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes de conversa, drawn as connected nodes in the style of the profile banner.</desc>
   <defs>
     <radialGradient id="glow" cx="0.5" cy="0.5" r="0.45">
       <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
@@ -32,7 +32,9 @@
     .ring { fill: none; stroke: #27272a; stroke-width: 1; }
     .edge { stroke: #3f3f46; stroke-width: 1; stroke-opacity: 0.8; }
     .node { fill: #09090b; stroke: #71717a; stroke-width: 1.5; }
-    .signal { fill: none; stroke: #d4d4d8; stroke-width: 1.5; stroke-opacity: 0.8; }
+    .signal { fill: none; stroke: #76e4bb; stroke-width: 2; stroke-opacity: 0.8; stroke-dasharray: 12 8; animation: flow 4.8s linear 1; }
+    @keyframes flow { to { stroke-dashoffset: -160; } }
+    @media (prefers-reduced-motion: reduce) { .signal { animation: none; } }
     .label { font: italic 400 15px "Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif; fill: #a1a1aa; }
     .stage { font: 700 22px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing: -0.5px; }
     .detail { font: 400 20px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
@@ -65,7 +67,7 @@
     <circle class="ring" cx="180" cy="72" r="26" stroke-dasharray="3 6"/>
     <circle class="node" cx="180" cy="72" r="18"/>
     <circle cx="180" cy="72" r="3" fill="#fafafa"/>
-    <text class="stage" x="180" y="128" text-anchor="middle">Retrieval</text>
+    <text class="stage" x="180" y="128" text-anchor="middle">Busca</text>
     <text class="detail" x="180" y="156" text-anchor="middle">RAG · pgvector</text>
     <text class="eq" x="460" y="34" font-size="15" text-anchor="middle">p(y | x)</text>
     <circle class="ring" cx="460" cy="72" r="26" stroke-dasharray="3 6"/>
@@ -77,14 +79,14 @@
     <circle class="ring" cx="740" cy="72" r="26" stroke-dasharray="3 6"/>
     <circle class="node" cx="740" cy="72" r="18"/>
     <circle cx="740" cy="72" r="3" fill="#fafafa"/>
-    <text class="stage" x="740" y="128" text-anchor="middle">Tools</text>
+    <text class="stage" x="740" y="128" text-anchor="middle">Ferramentas</text>
     <text class="detail" x="740" y="156" text-anchor="middle">tool calling · MCP</text>
     <text class="eq" x="1020" y="34" font-size="15" text-anchor="middle">π(a | s)</text>
     <circle class="ring" cx="1020" cy="72" r="26" stroke-dasharray="3 6"/>
     <circle class="node" cx="1020" cy="72" r="18"/>
     <circle cx="1020" cy="72" r="3" fill="#fafafa"/>
-    <text class="stage" x="1020" y="128" text-anchor="middle">Agents</text>
-    <text class="detail" x="1020" y="156" text-anchor="middle">conversational</text>
+    <text class="stage" x="1020" y="128" text-anchor="middle">Agentes</text>
+    <text class="detail" x="1020" y="156" text-anchor="middle">conversacionais</text>
   </g>
   <rect x="0.5" y="0.5" width="1199" height="179" rx="24" fill="none" stroke="#27272a"/>
 </svg>
