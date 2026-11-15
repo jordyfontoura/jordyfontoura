@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="600" height="630" viewBox="0 0 600 630" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; carreira em software desde 2018; TypeScript, Python e Rust. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
+  <desc id="desc">Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; carreira em software desde 2018; TypeScript, Python e Rust. Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
   <defs>    <radialGradient id="glow" cx="0.8" cy="0.5" r="0.45">
       <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
       <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
@@ -22,9 +22,9 @@
     .caption { font:400 28px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
     .terminal,.core { font:500 26px ui-monospace,Consolas,monospace; fill:#d4d4d8; }
     .mesh { stroke:#d4d4d8; stroke-opacity:.17; fill:none; }
-    .neuron { fill:#d4d4d8; opacity:.65; animation:activate 3.8s ease-in-out 1 both; }
-    .orbit { fill:none; stroke:#d4d4d8; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear 1 forwards; }
-    .packet { fill:none; stroke:#d4d4d8; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out 1 forwards; opacity:0; }
+    .neuron { fill:#d4d4d8; opacity:.65; animation:activate 3.8s ease-in-out infinite both; }
+    .orbit { fill:none; stroke:#d4d4d8; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear infinite; }
+    .packet { fill:none; stroke:#d4d4d8; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out infinite; opacity:0; }
     @keyframes orbit { to { stroke-dashoffset:-168; } }
     @keyframes transfer { 0% { stroke-dashoffset:332; opacity:0; } 15%,75% { opacity:.8; } 100% { stroke-dashoffset:0; opacity:0; } }
     @keyframes activate { 0%,100% { opacity:.65; } 45% { opacity:1; } }

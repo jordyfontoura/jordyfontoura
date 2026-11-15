@@ -51,7 +51,7 @@ def style(extra=""):
     .ring {{ fill: none; stroke: {COLOR["border"]}; stroke-width: 1; }}
     .edge {{ stroke: {COLOR["ring"]}; stroke-width: 1; stroke-opacity: 0.8; }}
     .node {{ fill: {COLOR["background"]}; stroke: {COLOR["subtle"]}; stroke-width: 1.5; }}
-    .signal {{ fill: none; stroke: {COLOR["accent"]}; stroke-width: 2; stroke-opacity: 0.8; stroke-dasharray: 12 8; animation: flow 4.8s linear 1; }}
+    .signal {{ fill: none; stroke: {COLOR["accent"]}; stroke-width: 2; stroke-opacity: 0.8; stroke-dasharray: 12 8; animation: flow 4.8s linear infinite; }}
     @keyframes flow {{ to {{ stroke-dashoffset: -160; }} }}
     @media (prefers-reduced-motion: reduce) {{ .signal {{ animation: none; }} }}
 {extra}
@@ -123,7 +123,7 @@ def banner_art(width, height, compact=False):
              '<text x="58" y="334" class="caption">Carreira em software desde 2018.</text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
+  <desc id="desc">{BANNER_ALT}. Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
   <defs>{card_defs(width, height, 0.8, width, include_flow=False)}
     <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="520" height="40"/></clipPath>
   </defs>
@@ -134,9 +134,9 @@ def banner_art(width, height, compact=False):
     .caption {{ font:400 28px {SANS}; fill:{COLOR["muted"]}; }}
     .terminal,.core {{ font:500 26px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
     .mesh {{ stroke:{COLOR["accent"]}; stroke-opacity:.17; fill:none; }}
-    .neuron {{ fill:{COLOR["accent"]}; opacity:.65; animation:activate 3.8s ease-in-out 1 both; }}
-    .orbit {{ fill:none; stroke:{COLOR["accent"]}; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear 1 forwards; }}
-    .packet {{ fill:none; stroke:{COLOR["accent"]}; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out 1 forwards; opacity:0; }}
+    .neuron {{ fill:{COLOR["accent"]}; opacity:.65; animation:activate 3.8s ease-in-out infinite both; }}
+    .orbit {{ fill:none; stroke:{COLOR["accent"]}; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear infinite; }}
+    .packet {{ fill:none; stroke:{COLOR["accent"]}; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out infinite; opacity:0; }}
     @keyframes orbit {{ to {{ stroke-dashoffset:-168; }} }}
     @keyframes transfer {{ 0% {{ stroke-dashoffset:332; opacity:0; }} 15%,75% {{ opacity:.8; }} 100% {{ stroke-dashoffset:0; opacity:0; }} }}
     @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; }} }}
@@ -272,6 +272,20 @@ def problems(name, svg):
     disabled = set(re.findall(r"\.([\w-]+)", reduced[1])) if reduced else set()
     document = xml.dom.minidom.parseString(svg)
     rules = re.findall(r"([^{}]+)\{([^{}]*)\}", svg)
+    required = ({'neuron','orbit','packet','reveal','caret'} if name.startswith('banner') else
+                {'signal'} if name.startswith('focus') else
+                {'motion-art'} if name.startswith(('project-','stack')) else set())
+    if '-still.svg' not in name:
+        active_classes = set()
+        for selectors, declarations in rules:
+            animation = re.search(r'(?:^|;)\s*animation:\s*([^;]+)', declarations)
+            if animation and animation[1].strip() != 'none':
+                active_classes.update(re.findall(r'\.([\w-]+)',selectors))
+        element_classes = set().union(*(set(e.getAttribute('class').split())
+                                       for e in document.getElementsByTagName('*')))
+        active_classes &= element_classes
+        if required-active_classes:
+            found.append(f'{name}: animação obrigatória ausente: '+', '.join(sorted(required-active_classes)))
     def seconds(value):
         return [float(number) / (1000 if unit == 'ms' else 1)
                 for number, unit in re.findall(r"(-?[\d.]+)(ms|s)\b", value)]
@@ -296,8 +310,11 @@ def problems(name, svg):
                 delay = re.search(r"animation-delay:\s*([^;]+)", element.getAttribute('style'))
                 if delay:
                     delays.extend(seconds(delay[1]))
-        if duration is None or duration < 0 or 'infinite' in value or not re.search(r"\s1(?:\s|$)", value) or duration + max(delays) >= 5:
-            found.append(f"{name}: animação deve executar uma vez e terminar antes de cinco segundos")
+        # Movimento contínuo aprovado pelo usuário: só ornamentos, com alternativa estática.
+        continuous = bool(classes) and classes <= {'signal','neuron','orbit','packet','motion-art'} and 'infinite' in value
+        if duration is None or duration <= 0 or (not continuous and
+            (not re.search(r"\s1(?:\s|$)", value) or 'infinite' in value or duration + max(delays) >= 5)):
+            found.append(f"{name}: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos")
     if len(svg.encode("utf-8")) > MAX_BYTES:
         found.append(f"{name}: maior que {MAX_BYTES} bytes")
     return found
@@ -347,6 +364,17 @@ def main():
     result = subprocess.run([sys.executable, '-I', str(ROOT/'scripts/build_usage.py'), *(['--check'] if args.check else [])])
     if result.returncode:
         return result.returncode
+    # O link persistente no topo oferece controle também sem suporte à media query.
+    static = re.sub(r'assets/((?:banner|focus|project-|stack)[\w-]*)(?<!-still)\.svg',
+                    lambda m:'assets/'+m[1]+'-still.svg', README.read_text(encoding='utf-8'))
+    static = static.replace('[Sem animação](README-static.md)', '[Com animação](README.md)')
+    static_path=ROOT/'README-static.md'
+    if args.check:
+        if not static_path.exists() or static_path.read_text(encoding='utf-8')!=static:
+            print('README-static.md desatualizado',file=sys.stderr)
+            return 1
+    else:
+        static_path.write_text(static,encoding='utf-8',newline='\n')
     return 0
 
 

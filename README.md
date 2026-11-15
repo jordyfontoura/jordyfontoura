@@ -7,7 +7,7 @@
   <img src="assets/banner.svg" alt="Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; carreira em software desde 2018; TypeScript, Python e Rust" width="880">
 </picture>
 
-[LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com) · [Projetos](#projetos-abertos)
+[LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com) · [Projetos](#projetos-abertos) · [Sem animação](README-static.md)
 
 Já coloquei uma aplicação com LLM em produção e dei suporte após o lançamento. Sou desenvolvedor full stack sênior, com experiência em liderança; quero continuar próximo do código e das decisões técnicas.
 
@@ -44,6 +44,10 @@ Em outros projetos privados, desenvolvi fluxos de processamento de documentos co
 
 <a href="https://github.com/jordyfontoura/skills">
 <picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-skills-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 585px), (prefers-reduced-motion: reduce) and (min-width: 768px) and (max-width: 905px)" srcset="assets/project-skills-compact-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/project-skills-medium-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-skills-still.svg">
   <source media="(max-width: 480px)" srcset="assets/project-skills-mobile.svg">
   <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-skills-compact.svg">
   <source media="(max-width: 1011px)" srcset="assets/project-skills-medium.svg">
@@ -53,6 +57,10 @@ Em outros projetos privados, desenvolvi fluxos de processamento de documentos co
 
 <a href="https://github.com/jordyfontoura/TryLess">
 <picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-tryless-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 585px), (prefers-reduced-motion: reduce) and (min-width: 768px) and (max-width: 905px)" srcset="assets/project-tryless-compact-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/project-tryless-medium-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-tryless-still.svg">
   <source media="(max-width: 480px)" srcset="assets/project-tryless-mobile.svg">
   <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-tryless-compact.svg">
   <source media="(max-width: 1011px)" srcset="assets/project-tryless-medium.svg">
@@ -62,6 +70,10 @@ Em outros projetos privados, desenvolvi fluxos de processamento de documentos co
 
 <a href="https://github.com/jordyfontoura/gitclean">
 <picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-gitclean-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 585px), (prefers-reduced-motion: reduce) and (min-width: 768px) and (max-width: 905px)" srcset="assets/project-gitclean-compact-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/project-gitclean-medium-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-gitclean-still.svg">
   <source media="(max-width: 480px)" srcset="assets/project-gitclean-mobile.svg">
   <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-gitclean-compact.svg">
   <source media="(max-width: 1011px)" srcset="assets/project-gitclean-medium.svg">
@@ -71,6 +83,10 @@ Em outros projetos privados, desenvolvi fluxos de processamento de documentos co
 
 <a href="https://github.com/jordyfontoura/np">
 <picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-np-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 585px), (prefers-reduced-motion: reduce) and (min-width: 768px) and (max-width: 905px)" srcset="assets/project-np-compact-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/project-np-medium-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-np-still.svg">
   <source media="(max-width: 480px)" srcset="assets/project-np-mobile.svg">
   <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-np-compact.svg">
   <source media="(max-width: 1011px)" srcset="assets/project-np-medium.svg">
@@ -80,6 +96,10 @@ Em outros projetos privados, desenvolvi fluxos de processamento de documentos co
 
 <a href="https://github.com/jordyfontoura/argus">
 <picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-argus-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 585px), (prefers-reduced-motion: reduce) and (min-width: 768px) and (max-width: 905px)" srcset="assets/project-argus-compact-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/project-argus-medium-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-argus-still.svg">
   <source media="(max-width: 480px)" srcset="assets/project-argus-mobile.svg">
   <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/project-argus-compact.svg">
   <source media="(max-width: 1011px)" srcset="assets/project-argus-medium.svg">
@@ -109,6 +129,10 @@ Uso Claude Code, Codex e modelos locais como agentes de programação. Alinho o 
 ## Tecnologias de trabalho
 
 <picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/stack-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 585px), (prefers-reduced-motion: reduce) and (min-width: 768px) and (max-width: 905px)" srcset="assets/stack-compact-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/stack-medium-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/stack-still.svg">
   <source media="(max-width: 480px)" srcset="assets/stack-mobile.svg">
   <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/stack-compact.svg">
   <source media="(max-width: 1011px)" srcset="assets/stack-medium.svg">
