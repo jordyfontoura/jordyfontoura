@@ -178,10 +178,10 @@ def panel(data, mobile=False, medium=False):
     stacked = mobile or medium
     width = 600 if medium else 360 if mobile else 900
     agent_y = 450 if stacked else 150
-    model_title_y = agent_y + len(agents)*44 + 26 if stacked else 266
-    model_y = model_title_y + 30 if stacked else 293
-    footer_y = model_y + len(models)*40 + 8 if stacked else 396
-    height = footer_y + 116 if stacked else 468
+    model_title_y = agent_y + len(agents)*44 + 26 if stacked else max(266, agent_y + (len(agents)-1)*32 + 42)
+    model_y = model_title_y + (30 if stacked else 27)
+    footer_y = model_y + len(models)*40 + 8 if stacked else max(396, model_y + (len(models)-1)*25 + 28)
+    height = footer_y + (116 if stacked else 72)
     fg, muted = COLOR['foreground'], COLOR['muted']
     parts = []
 
@@ -257,9 +257,9 @@ def panel(data, mobile=False, medium=False):
         text(32, footer_y+74, 'Histórico parcial · UTC-03:00', 14)
         text(32, footer_y+97, 'Último registro: '+data['latest_record_at'][:10], 14)
     else:
-        text(32, 421, 'Entrada + saída e cache · tokens não representam custo', 14)
-        text(32, 444, 'Histórico parcial · UTC-03:00', 14)
-        text(width-32, 444, 'Último registro: '+data['latest_record_at'][:10], 14, anchor='end')
+        text(32, footer_y+25, 'Entrada + saída e cache · tokens não representam custo', 14)
+        text(32, footer_y+48, 'Histórico parcial · UTC-03:00', 14)
+        text(width-32, footer_y+48, 'Último registro: '+data['latest_record_at'][:10], 14, anchor='end')
     body = ''.join(parts)
     result = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
 <title id="title">Uso registrado de agentes</title>

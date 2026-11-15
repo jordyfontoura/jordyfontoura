@@ -105,3 +105,21 @@ class UsageTests(unittest.TestCase):
 
 
 if __name__=='__main__': unittest.main()
+
+
+class PanelLayoutTests(unittest.TestCase):
+    def test_four_agents_leave_room_before_model_heading(self):
+        data = usage.collect(document([row()]), date(2026,11,1))
+        template = data['records'][0]
+        entries = [('Claude Code','Claude Opus 5.5'), ('Codex','GPT-6.1 Sol'),
+                   ('Local models','Local models'), ('Other agents','Other models')]
+        data['records'] = [dict(template, agent=agent, model=model)
+                           for agent, model in entries]
+        svg = usage.ET.fromstring(usage.panel(data))
+        texts = {}
+        for element in svg.iter('{http://www.w3.org/2000/svg}text'):
+            texts.setdefault(element.text, element)
+        last_agent_y = max(float(texts[usage.DISPLAY_NAMES.get(agent,agent)].attrib['y'])
+                           for agent, _ in entries)
+        model_heading_y = float(texts['MODELOS · TOKENS'].attrib['y'])
+        self.assertGreaterEqual(model_heading_y-last_agent_y, 40)
