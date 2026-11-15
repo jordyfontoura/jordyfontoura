@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="410" viewBox="0 0 1200 410" role="img" aria-labelledby="title desc">
+  <title id="title">Jordy Fontoura</title>
+  <desc id="desc">Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; desenvolvedor desde 2018; TypeScript, Python e Rust. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
+  <defs>    <radialGradient id="glow" cx="0.8" cy="0.5" r="0.45">
+      <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
+      <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="flowfade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1200" y2="0">
+      <stop offset="0" stop-color="#3f3f46" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#3f3f46" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#52525b" stop-opacity="0.9"/>
+    </linearGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#fafafa" fill-opacity="0.07"/>
+    </pattern>
+    <clipPath id="card">
+      <rect width="1200" height="410" rx="24"/>
+    </clipPath></defs>
+  <style>
+    .name { font:700 64px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#fafafa; letter-spacing:-2px; }
+    .role { font:500 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#e4e4e7; }
+    .body { font:400 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
+    .caption { font:400 28px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill:#a1a1aa; }
+    .terminal,.core { font:500 26px ui-monospace,Consolas,monospace; fill:#76e4bb; }
+    .mesh { stroke:#76e4bb; stroke-opacity:.17; fill:none; }
+    .neuron { fill:#76e4bb; opacity:.65; animation:none; }
+    .orbit { fill:none; stroke:#76e4bb; stroke-opacity:.6; stroke-dasharray:2 12; animation:none; }
+    .packet { fill:none; stroke:#76e4bb; stroke-width:2; stroke-dasharray:12 320; animation:none; opacity:0; }
+    @keyframes orbit { to { stroke-dashoffset:-168; } }
+    @keyframes transfer { 0% { stroke-dashoffset:332; opacity:0; } 15%,75% { opacity:.8; } 100% { stroke-dashoffset:0; opacity:0; } }
+    @keyframes activate { 0%,100% { opacity:.65; } 45% { opacity:1; } }
+    @media (prefers-reduced-motion:reduce) { .neuron,.orbit,.packet { animation:none; } }
+  </style>
+  <g clip-path="url(#card)">
+        <rect width="1200" height="410" fill="#09090b"/>
+    <rect width="1200" height="410" fill="url(#dots)"/>
+    <rect width="1200" height="410" fill="url(#glow)"/>
+    <path d="M0,52 H1200" stroke="#27272a"/>
+    <circle cx="24" cy="26" r="4" fill="#52525b"/><circle cx="40" cy="26" r="4" fill="#52525b"/><circle cx="56" cy="26" r="4" fill="#76e4bb"/>
+    <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
+    <path class="mesh" d="M991.4,208.0 L886.6,164.6"/><circle class="neuron" style="animation-delay:0.000s" cx="991.4" cy="208.0" r="3"/><path class="mesh" d="M973.4,251.4 L930.0,146.6"/><circle class="neuron" style="animation-delay:0.035s" cx="973.4" cy="251.4" r="3"/><path class="mesh" d="M930.0,269.4 L973.4,164.6"/><circle class="neuron" style="animation-delay:0.070s" cx="930.0" cy="269.4" r="3"/><path class="mesh" d="M886.6,251.4 L1058.0,208.0"/><circle class="neuron" style="animation-delay:0.105s" cx="886.6" cy="251.4" r="3"/><path class="mesh" d="M868.6,208.0 L1048.3,257.0"/><circle class="neuron" style="animation-delay:0.140s" cx="868.6" cy="208.0" r="3"/><path class="mesh" d="M886.6,164.6 L1020.5,298.5"/><circle class="neuron" style="animation-delay:0.175s" cx="886.6" cy="164.6" r="3"/><path class="mesh" d="M930.0,146.6 L979.0,326.3"/><circle class="neuron" style="animation-delay:0.210s" cx="930.0" cy="146.6" r="3"/><path class="mesh" d="M973.4,164.6 L930.0,336.0"/><circle class="neuron" style="animation-delay:0.245s" cx="973.4" cy="164.6" r="3"/><path class="mesh" d="M1058.0,208.0 L881.0,326.3"/><circle class="neuron" style="animation-delay:0.280s" cx="1058.0" cy="208.0" r="3"/><path class="mesh" d="M1048.3,257.0 L839.5,298.5"/><circle class="neuron" style="animation-delay:0.315s" cx="1048.3" cy="257.0" r="3"/><path class="mesh" d="M1020.5,298.5 L811.7,257.0"/><circle class="neuron" style="animation-delay:0.350s" cx="1020.5" cy="298.5" r="3"/><path class="mesh" d="M979.0,326.3 L802.0,208.0"/><circle class="neuron" style="animation-delay:0.385s" cx="979.0" cy="326.3" r="3"/><path class="mesh" d="M930.0,336.0 L811.7,159.0"/><circle class="neuron" style="animation-delay:0.420s" cx="930.0" cy="336.0" r="3"/><path class="mesh" d="M881.0,326.3 L839.5,117.5"/><circle class="neuron" style="animation-delay:0.455s" cx="881.0" cy="326.3" r="3"/><path class="mesh" d="M839.5,298.5 L881.0,89.7"/><circle class="neuron" style="animation-delay:0.490s" cx="839.5" cy="298.5" r="3"/><path class="mesh" d="M811.7,257.0 L930.0,80.0"/><circle class="neuron" style="animation-delay:0.525s" cx="811.7" cy="257.0" r="3"/><path class="mesh" d="M802.0,208.0 L979.0,89.7"/><circle class="neuron" style="animation-delay:0.560s" cx="802.0" cy="208.0" r="3"/><path class="mesh" d="M811.7,159.0 L1020.5,117.5"/><circle class="neuron" style="animation-delay:0.595s" cx="811.7" cy="159.0" r="3"/><path class="mesh" d="M839.5,117.5 L1048.3,159.0"/><circle class="neuron" style="animation-delay:0.630s" cx="839.5" cy="117.5" r="3"/><path class="mesh" d="M881.0,89.7 L991.4,208.0"/><circle class="neuron" style="animation-delay:0.665s" cx="881.0" cy="89.7" r="3"/><path class="mesh" d="M930.0,80.0 L973.4,251.4"/><circle class="neuron" style="animation-delay:0.700s" cx="930.0" cy="80.0" r="3"/><path class="mesh" d="M979.0,89.7 L930.0,269.4"/><circle class="neuron" style="animation-delay:0.735s" cx="979.0" cy="89.7" r="3"/><path class="mesh" d="M1020.5,117.5 L886.6,251.4"/><circle class="neuron" style="animation-delay:0.770s" cx="1020.5" cy="117.5" r="3"/><path class="mesh" d="M1048.3,159.0 L868.6,208.0"/><circle class="neuron" style="animation-delay:0.805s" cx="1048.3" cy="159.0" r="3"/><circle class="orbit" cx="930" cy="208" r="142"/><path class="packet" d="M788,208 H1072"/><circle cx="930" cy="208" r="28" fill="#102a24" stroke="#76e4bb"/><text x="930" y="214" text-anchor="middle" class="core">IA</text>
+    <text x="56" y="142" class="name">Jordy Fontoura<tspan fill="#76e4bb">.</tspan></text><text x="58" y="190" class="role">Engenharia de IA aplicada</text><text x="58" y="242" class="body">RAG · agentes · MCP</text><text x="58" y="281" class="body">TypeScript · Python · Rust</text><text x="58" y="334" class="caption">Desenvolvendo software desde 2018.</text>
+    <text x="40" y="386" class="terminal">&gt; contexto → ferramentas → produto</text>
+  </g>
+  <rect x="0.5" y="0.5" width="1199" height="409" rx="24" fill="none" stroke="#27272a"/>
+</svg>

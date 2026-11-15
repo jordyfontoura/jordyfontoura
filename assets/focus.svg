@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="180" viewBox="0 0 1200 180" role="img" aria-labelledby="title desc">
   <title id="title">O que construo</title>
-  <desc id="desc">O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes de conversa, drawn as connected nodes in the style of the profile banner.</desc>
+  <desc id="desc">O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes de conversa, em etapas conectadas no estilo do banner.</desc>
   <defs>
     <radialGradient id="glow" cx="0.5" cy="0.5" r="0.45">
       <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>

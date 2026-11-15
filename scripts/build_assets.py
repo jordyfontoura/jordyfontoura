@@ -100,19 +100,10 @@ def card_border(width, height):
             f'fill="none" stroke="{COLOR["border"]}"/>')
 
 
-def sup(text):
-    return f'<tspan dy="-8" font-size="0.7em">{text}</tspan><tspan dy="8">'
-
-
-def close(markup):
-    """Fecha os tspans abertos por sup()."""
-    return markup + "</tspan>" * markup.count('<tspan dy="8">')
-
-
 def banner_art(width, height, compact=False):
     """Terminal vetorial com um campo neural; texto nunca depende da animação."""
     import math
-    cx, cy = (440, 390) if compact else (930, 208)
+    cx, cy = (440, 450) if compact else (930, 208)
     radius = 105 if compact else 128
     parts = []
     points = []
@@ -128,13 +119,13 @@ def banner_art(width, height, compact=False):
     parts.append(f'<circle class="orbit" cx="{cx}" cy="{cy}" r="{radius+14}"/>')
     parts.append(f'<path class="packet" d="M{cx-radius-14},{cy} H{cx+radius+14}"/>')
     parts.append(f'<circle cx="{cx}" cy="{cy}" r="28" fill="#102a24" stroke="#76e4bb"/>')
-    parts.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="core">AI</text>')
+    parts.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="core">IA</text>')
     name_size = 46 if compact else 64
     lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="#76e4bb">.</tspan></text>'
              '<text x="40" y="156" class="role">Engenharia de IA aplicada</text>'
              '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
              '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
-             '<text x="40" y="288" class="caption">Desenvolvendo software desde 2018.</text>') if compact else (
+             '<text x="40" y="288" class="caption">Software desde 2018.</text>') if compact else (
              '<text x="56" y="142" class="name">Jordy Fontoura<tspan fill="#76e4bb">.</tspan></text>'
              '<text x="58" y="190" class="role">Engenharia de IA aplicada</text>'
              '<text x="58" y="242" class="body">RAG · agentes · MCP</text>'
@@ -147,16 +138,16 @@ def banner_art(width, height, compact=False):
   <style>
     .name {{ font:700 {name_size}px {SANS}; fill:#fafafa; letter-spacing:-2px; }}
     .role {{ font:500 30px {SANS}; fill:#e4e4e7; }}
-    .body {{ font:400 26px {SANS}; fill:#a1a1aa; }}
-    .caption {{ font:400 22px {SANS}; fill:#a1a1aa; }}
-    .terminal,.core {{ font:500 18px ui-monospace,Consolas,monospace; fill:#76e4bb; }}
+    .body {{ font:400 30px {SANS}; fill:#a1a1aa; }}
+    .caption {{ font:400 28px {SANS}; fill:#a1a1aa; }}
+    .terminal,.core {{ font:500 26px ui-monospace,Consolas,monospace; fill:#76e4bb; }}
     .mesh {{ stroke:#76e4bb; stroke-opacity:.17; fill:none; }}
-    .neuron {{ fill:#76e4bb; animation:activate 3.8s ease-in-out 1; }}
-    .orbit {{ fill:none; stroke:#76e4bb; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear 1; }}
-    .packet {{ fill:none; stroke:#76e4bb; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out 1; opacity:.7; }}
+    .neuron {{ fill:#76e4bb; opacity:.65; animation:activate 3.8s ease-in-out 1 both; }}
+    .orbit {{ fill:none; stroke:#76e4bb; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear 1 forwards; }}
+    .packet {{ fill:none; stroke:#76e4bb; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out 1 forwards; opacity:0; }}
     @keyframes orbit {{ to {{ stroke-dashoffset:-168; }} }}
-    @keyframes transfer {{ from {{ stroke-dashoffset:332; }} to {{ stroke-dashoffset:0; }} }}
-    @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; r:5; }} }}
+    @keyframes transfer {{ 0% {{ stroke-dashoffset:332; opacity:0; }} 15%,75% {{ opacity:.8; }} 100% {{ stroke-dashoffset:0; opacity:0; }} }}
+    @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; }} }}
     @media (prefers-reduced-motion:reduce) {{ .neuron,.orbit,.packet {{ animation:none; }} }}
   </style>
   <g clip-path="url(#card)">
@@ -206,7 +197,7 @@ def focus():
     body = "\n    ".join(parts)
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">O que construo</title>
-  <desc id="desc">{FOCUS_ALT}, drawn as connected nodes in the style of the profile banner.</desc>
+  <desc id="desc">{FOCUS_ALT}, em etapas conectadas no estilo do banner.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}
     <linearGradient id="flowfadeout" gradientUnits="userSpaceOnUse" x1="{width}" y1="0" x2="{width - 260}" y2="0">
@@ -226,21 +217,19 @@ def focus():
 """
 
 
-def banner_mobile(medium=False):
+def banner_mobile():
     # Mesmo layout vertical nos tamanhos menores: nenhum texto invade o campo neural.
-    return banner_art(600, 550, compact=True)
+    return banner_art(600, 630, compact=True)
 
 
 def focus_mobile(medium=False):
     """As quatro áreas em duas colunas, com conexões fora dos rótulos."""
     width, height = (760 if medium else 600), 420
     left, right = (200, 560) if medium else (160, 440)
-    bend = width - 26
     extra = f'''
     .mobile-stage {{ font: 700 32px {SANS}; fill: {COLOR['foreground']}; }}
     .mobile-detail {{ font: 400 25px {SANS}; fill: {COLOR['muted']}; }}'''
-    parts = [f'<path class="signal" d="M{left},68 H{right} M{left},268 H{right}"/>',
-             f'<path class="edge" fill="none" d="M{right+32},68 H{bend-20} Q{bend},68 {bend},88 V248 Q{bend},268 {bend-20},268 H{right+32}"/>']
+    parts = [f'<path class="signal" d="M{left},68 H{right} M{left},268 H{right}"/>']
     for (x,y), (stage,detail,formula) in zip([(left,68),(right,68),(left,268),(right,268)], STAGES):
         parts.extend([
             f'<text class="eq" x="{x}" y="{y-36}" font-size="20" text-anchor="middle">{formula}</text>',
@@ -252,7 +241,7 @@ def focus_mobile(medium=False):
         ])
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">O que construo</title>
-  <desc id="desc">{FOCUS_ALT}. {'Intermediate' if medium else 'Mobile'} layout in two rows and two columns.</desc>
+  <desc id="desc">{FOCUS_ALT}. Versão {'intermediária' if medium else 'de celular'}, em duas linhas na ordem de leitura.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}
   </defs>
@@ -276,6 +265,18 @@ def problems(name, svg):
             found.append(f"{name}: contém {pattern}")
     if re.search(r"https?://(?!www\.w3\.org/2000/svg\")", svg):
         found.append(f"{name}: referência externa")
+    animations = re.findall(r"animation:\s*(?!none)([^;}]+)", svg)
+    if animations:
+        if not re.search(r"@media\s*\(prefers-reduced-motion:\s*reduce\)", svg):
+            found.append(f"{name}: falta preferência por movimento reduzido")
+        max_delay = max([0.0] + [float(v) for v in re.findall(r"animation-delay:([\d.]+)s", svg)])
+        for animation in animations:
+            animation = animation.strip()
+            if animation == 'none':
+                continue
+            duration = re.search(r"([\d.]+)s", animation)
+            if not duration or 'infinite' in animation or not re.search(r"\s1(?:\s|$)", animation) or float(duration[1]) + (max_delay if animation.startswith('activate ') else 0) >= 5:
+                found.append(f"{name}: animação deve executar uma vez e terminar antes de cinco segundos")
     if len(svg.encode("utf-8")) > MAX_BYTES:
         found.append(f"{name}: maior que {MAX_BYTES} bytes")
     return found
@@ -287,15 +288,22 @@ def main():
     args = parser.parse_args()
     outputs = {"banner.svg": banner(), "focus.svg": focus(),
                "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
-               "banner-medium.svg": banner_mobile(True), "focus-medium.svg": focus_mobile(True)}
+               "banner-medium.svg": banner_mobile(), "focus-medium.svg": focus_mobile(True)}
+    # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
+    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg)
+                    for name, svg in list(outputs.items())})
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
     readme = README.read_text(encoding="utf-8")
     for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
         if f'src="assets/{name}" alt="{alt}"' not in readme:
             errors.append(f"README.md: alt de assets/{name} difere do texto do gerador")
         sources = '\n'.join(f'  <source media="(max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+".svg")}">'
-                            for limit, variant in ((480, 'mobile'), (1011, 'medium')))
-        expected = '<picture>\n'+sources+f'\n  <img src="assets/{name}" alt="{alt}" width="880">'
+                            for limit, variant in ((480, 'mobile'), (1279, 'medium')))
+        still_sources = '\n'.join(
+            f'  <source media="(prefers-reduced-motion: reduce) and (max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+"-still.svg")}">'
+            for limit, variant in ((480, 'mobile'), (1279, 'medium')))
+        still_sources += f'\n  <source media="(prefers-reduced-motion: reduce)" srcset="assets/{name.replace(".svg", "-still.svg")}">'
+        expected = '<picture>\n'+still_sources+'\n'+sources+f'\n  <img src="assets/{name}" alt="{alt}" width="880">'
         if expected not in readme:
             errors.append(f"README.md: fontes responsivas ou largura de assets/{name} incorretas")
     if args.check:

@@ -32,7 +32,7 @@ PUBLIC_MODELS = {
 SAFE_MODELS = set(PUBLIC_MODELS.values()) | {'Other models', 'Local models'}
 SAFE_AGENTS = set(AGENTS.values()) | {'Other agents'}
 CATEGORIES = ('uncached_input', 'cached_input', 'cache_creation', 'output')
-ALT = 'Recorded coding-agent usage by day, agent and model for the last closed calendar month. Input and output tokens, including cache; partial history. Local model names are hidden.'
+ALT = 'Uso registrado de agentes por dia, agente e modelo no último mês encerrado. Tokens de entrada e saída, com cache; histórico parcial. Nomes de modelos locais ocultos.'
 
 
 def month_window(reference):
@@ -184,15 +184,15 @@ def panel(data, mobile=False, medium=False):
         parts.append(f'<rect x="{x:.2f}" y="{y:.2f}" width="{w:.2f}" height="{h:.2f}" rx="{radius}" fill="{fill}"/>')
     def rule(y):
         parts.append(f'<path d="M24 {y}H{width-24}" stroke="{border}"/>')
-    month = date.fromisoformat(data['since']).strftime('%B %Y')
+    month = date.fromisoformat(data['since']).strftime('%m/%Y')
     if mobile:
-        text(24, 38, 'My agent activity', 25, fg, 600)
+        text(24, 38, 'Uso de agentes', 25, fg, 600)
         text(24, 88, compact(total), 40, fg, 650)
-        text(24, 116, 'recorded tokens · '+month, 18)
+        text(24, 116, 'tokens registrados · '+month, 18)
         text(24, 145, data['since'] + ' → < ' + data['until_exclusive'], 16)
     else:
-        text(24, 36, 'My agent activity', 18, fg, 600)
-        text(24, 58, 'recorded tokens · '+month, 14)
+        text(24, 36, 'Uso de agentes', 18, fg, 600)
+        text(24, 58, 'tokens registrados · '+month, 14)
         text(width-24, 40, compact(total), 30, fg, 650, end=True)
         text(width-24, 66, data['since']+' → < '+data['until_exclusive']+' · UTC-03:00', 14, end=True)
         rule(80)
@@ -212,8 +212,8 @@ def panel(data, mobile=False, medium=False):
             rect(24+i*span, bottom-2, span-gap, 2, border, 0)
         elif sum(day.values())/maximum*(bottom-chart_top) < 1:
             parts.append(f'<circle cx="{24+i*span+(span-gap)/2:.2f}" cy="{bottom}" r="1.5" fill="{fg}"/>')
-    text(24, bottom+26 if mobile else 258, 'Daily recorded volume', 16 if mobile else 14)
-    text(24+chart_width, bottom+26 if mobile else 258, 'oldest → latest', 14, end=True)
+    text(24, bottom+26 if mobile else 258, 'Volume diário', 16 if mobile else 14)
+    text(24+chart_width, bottom+26 if mobile else 258, 'início → fim', 14, end=True)
     if mobile:
         rule(bottom+45)
     def ranking(items, x, y, section_width, heading, agent=False):
@@ -226,21 +226,21 @@ def panel(data, mobile=False, medium=False):
             rect(x, bar_y, section_width, bar_height, '#18181b')
             rect(x, bar_y, section_width*count/total, bar_height, palette[name] if agent else muted)
     y = bottom+78 if mobile else 104
-    ranking(ordered, 24 if mobile else 456, y, width-48 if mobile else 156, 'By agent', True)
+    ranking(ordered, 24 if mobile else 456, y, width-48 if mobile else 156, 'Por agente', True)
     ranking(models, 24 if mobile else 644, y+len(ordered)*54+56 if mobile else y,
-            width-48 if mobile else 212, 'Top models · by tokens')
+            width-48 if mobile else 212, 'Modelos · tokens')
     rule(height-100 if mobile else 278)
     if mobile:
-        text(24, height-76, 'Input + output incl. cache · not cost', 14)
-        text(24, height-51, 'Partial history · UTC-03:00', 14)
-        text(24, height-26, 'Latest record: '+data['latest_record_at'][:10], 14)
+        text(24, height-76, 'Entrada + saída e cache · não é custo', 14)
+        text(24, height-51, 'Histórico parcial · UTC-03:00', 14)
+        text(24, height-26, 'Último registro: '+data['latest_record_at'][:10], 14)
     else:
-        text(24, 302, 'Input + output incl. cache · not cost · partial history', 14)
-        text(width-24, 302, 'Latest record: '+data['latest_record_at'][:10], 14, end=True)
+        text(24, 302, 'Entrada + saída e cache · não é custo · histórico parcial', 14)
+        text(width-24, 302, 'Último registro: '+data['latest_record_at'][:10], 14, end=True)
     body = ''.join(parts)
     result = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-<title id="title">My recorded coding-agent activity</title>
-<desc id="desc">{escape(ALT)} {total:,} tokens from {data['since']} (inclusive) to {data['until_exclusive']} (exclusive).{' Intermediate layout.' if medium else ''}</desc>
+<title id="title">Uso registrado de agentes</title>
+<desc id="desc">{escape(ALT)} {total:,} tokens de {data['since']} (inclusive) a {data['until_exclusive']} (exclusive).{' Versão intermediária.' if medium else ''}</desc>
 <rect x="0.5" y="0.5" width="{width-1}" height="{height-1}" rx="18" fill="{bg}" stroke="{border}"/>
 <g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif">{body}</g>
 </svg>
