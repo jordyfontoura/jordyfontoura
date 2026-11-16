@@ -11,6 +11,13 @@ EXTREMES={'mobile':(280,440),'compact':(408,545),'medium':(546,719),'desktop':(6
 
 
 class TypographyTests(unittest.TestCase):
+    def test_project_labels_are_readable_in_the_smallest_column(self):
+        for path in (ROOT/'assets').glob('project-*.svg'):
+            variant=path.stem.replace('-still','').rsplit('-',1)[-1]
+            variant=variant if variant in EXTREMES else 'desktop'
+            for row in measure(path.read_text(encoding='utf-8'),EXTREMES[variant][0]):
+                self.assertGreaterEqual(row['displayFontSize'],11,(path.name,row))
+
     def test_every_generated_svg_text_is_measurable(self):
         for path in (ROOT/'assets').glob('*.svg'):
             rows=measure(path.read_text(encoding='utf-8'),850)
