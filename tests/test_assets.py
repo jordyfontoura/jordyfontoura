@@ -10,9 +10,18 @@ spec.loader.exec_module(assets)
 
 
 class MotionTests(unittest.TestCase):
+    def opening(self):
+        return (assets.banner()
+                .replace('.companion-idle,.companion-antenna,', '.intro,.companion-idle,.companion-antenna,')
+                .replace('</style>', '.intro {animation:typing 3.2s steps(34,end) 1 both;}</style>')
+                .replace('</svg>', '<rect class="intro" width="1" height="1"/></svg>'))
+
+    def test_finite_opening_fixture_is_valid_before_mutation(self):
+        self.assertEqual(assets.problems('opening.svg', self.opening()), [])
+
     def test_animation_rules_without_their_elements_are_rejected(self):
-        svg=assets.focus().replace('class="signal"','class="disconnected"')
-        self.assertTrue(assets.problems('focus.svg',svg))
+        svg=assets.banner().replace('class="companion-idle"','class="disconnected"')
+        self.assertTrue(assets.problems('banner.svg',svg))
 
     def test_decorative_loops_keep_reduced_motion_and_static_alternative(self):
         self.assertEqual(assets.problems('banner.svg',assets.banner()),[])
@@ -23,8 +32,7 @@ class MotionTests(unittest.TestCase):
             self.assertIsNone(assets.re.search(r'animation:\s*(?!none\b)[^;]+;',svg),reference)
 
     def test_all_three_sizes_require_every_motion_component(self):
-        for family, variants in [('banner',[assets.banner,assets.banner_medium,assets.banner_compact,assets.banner_mobile]),
-                                 ('focus',[assets.focus,lambda:assets.focus_mobile(True),assets.focus_compact,assets.focus_mobile])]:
+        for family, variants in [('banner',[assets.banner,assets.banner_medium,assets.banner_compact,assets.banner_mobile])]:
             for index,generate in enumerate(variants):
                 svg=generate()
                 self.assertEqual(assets.problems(f'{family}-{index}.svg',svg),[])
@@ -33,33 +41,42 @@ class MotionTests(unittest.TestCase):
                 self.assertEqual(assets.problems(f'{family}-{index}-still.svg',frozen),[])
 
     def test_generated_assets_meet_motion_contract(self):
-        for svg in (assets.banner(), assets.banner_mobile(), assets.focus(), assets.focus_mobile()):
+        for svg in (assets.banner(), assets.banner_mobile(), assets.banner_medium(), assets.banner_compact()):
             with self.subTest(svg=svg[:80]):
                 self.assertEqual(assets.problems('generated.svg', svg), [])
 
     def test_infinite_opening_is_rejected(self):
-        svg = assets.banner().replace('typing 3.2s steps(34,end) 1 both','typing 3.2s steps(34,end) infinite both')
-        self.assertTrue(assets.problems('infinite.svg', svg))
+        svg = self.opening().replace('typing 3.2s steps(34,end) 1 both','typing 3.2s steps(34,end) infinite both')
+        self.assertEqual(assets.problems('infinite.svg', svg), ['infinite.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_five_seconds_is_rejected(self):
-        svg = assets.banner().replace('typing 3.2s','typing 5s')
-        self.assertTrue(assets.problems('long.svg', svg))
+        svg = self.opening().replace('typing 3.2s','typing 5s')
+        self.assertEqual(assets.problems('long.svg', svg), ['long.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_delayed_animation_must_finish_before_five_seconds(self):
-        svg = assets.banner().replace('typing 3.2s', 'typing 4s 2s')
-        self.assertTrue(assets.problems('delayed.svg', svg))
+        svg = self.opening().replace('typing 3.2s', 'typing 4s 2s')
+        self.assertEqual(assets.problems('delayed.svg', svg), ['delayed.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_missing_reduced_motion_is_rejected(self):
         svg = assets.banner().replace('prefers-reduced-motion', 'unknown-motion')
         self.assertTrue(assets.problems('no-reduce.svg', svg))
 
     def test_animation_rename_preserves_delay_validation(self):
-        svg = assets.banner().replace('typing', 'write').replace('3.2s', '4s 2s')
-        self.assertTrue(assets.problems('renamed.svg', svg))
+        svg = self.opening().replace('typing', 'write').replace('3.2s', '4s 2s')
+        self.assertEqual(assets.problems('renamed.svg', svg), ['renamed.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_every_animated_class_must_be_disabled(self):
-        svg = assets.banner().replace('.neuron,.orbit,.packet,.reveal,.caret { animation:none;', '.orbit,.packet,.reveal,.caret { animation:none;')
+        svg = assets.banner().replace('.companion-idle,.companion-antenna,.companion-cursor,.companion-shadow,.companion-aerial,.companion-command,.companion-confirmation,.companion-context,.companion-tools,.companion-product { animation:none;', '.companion-antenna,.companion-cursor,.companion-shadow,.companion-aerial,.companion-command,.companion-confirmation,.companion-context,.companion-tools,.companion-product { animation:none;')
         self.assertTrue(assets.problems('partial-reduce.svg', svg))
+
+    def test_antenna_and_terminal_stay_with_the_floating_companion(self):
+        for generate in [assets.banner, assets.banner_medium, assets.banner_compact, assets.banner_mobile]:
+            document = assets.xml.dom.minidom.parseString(generate())
+            body = next(e for e in document.getElementsByTagName('g')
+                        if e.getAttribute('class') == 'companion-idle')
+            children = {e.getAttribute('class') for e in body.getElementsByTagName('*')}
+            self.assertTrue({'companion-mast', 'companion-antenna', 'companion-prompt',
+                             'companion-cursor', 'companion-outline'} <= children)
 
     def test_medium_banner_stays_horizontal(self):
         svg = assets.banner_medium()
@@ -68,19 +85,19 @@ class MotionTests(unittest.TestCase):
         self.assertGreaterEqual(float(root.getAttribute('width')) / float(root.getAttribute('height')), 2)
 
     def test_shorthand_delay_counts_toward_total(self):
-        svg = assets.banner().replace('animation:typing 3.2s steps(34,end) 1 both;', 'animation:typing 3s linear 2500ms 1;')
-        self.assertTrue(assets.problems('shorthand-delay.svg', svg))
+        svg = self.opening().replace('animation:typing 3.2s steps(34,end) 1 both;', 'animation:typing 3s linear 2500ms 1;')
+        self.assertEqual(assets.problems('shorthand-delay.svg', svg), ['shorthand-delay.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_css_delay_counts_toward_total(self):
-        svg = assets.banner().replace('animation:typing 3.2s steps(34,end) 1 both;', 'animation:typing 4.8s linear 1; animation-delay:500ms;')
-        self.assertTrue(assets.problems('css-delay.svg', svg))
+        svg = self.opening().replace('animation:typing 3.2s steps(34,end) 1 both;', 'animation:typing 4.8s linear 1; animation-delay:500ms;')
+        self.assertEqual(assets.problems('css-delay.svg', svg), ['css-delay.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_medium_banner_text_is_readable_in_narrow_profile_column(self):
         svg=assets.banner_medium()
         document=assets.xml.dom.minidom.parseString(svg)
         width=float(document.documentElement.getAttribute('viewBox').split()[2])
         self.assertIn(assets.BANNER_ALT,svg)
-        for label in ['role','body','caption']:
+        for label in ['body']:
             font=assets.re.search(r'\.'+label+r'\s*\{\s*font:\d+\s+([\d.]+)px',svg)
             self.assertIsNotNone(font,label)
             self.assertGreaterEqual(float(font[1])*546/width,15,label)
@@ -89,7 +106,7 @@ class MotionTests(unittest.TestCase):
         svg=assets.banner()
         width=float(assets.xml.dom.minidom.parseString(svg).documentElement.getAttribute('viewBox').split()[2])
         # Coluna larga do perfil; o corpo do Markdown tem 16 px na prévia.
-        for label,maximum in [('body',20),('caption',20),('name',40)]:
+        for label,maximum in [('body',20),('name',40)]:
             font=assets.re.search(r'\.'+label+r'\s*\{\s*font:\d+\s+([\d.]+)px',svg)
             self.assertIsNotNone(font,label)
             self.assertLessEqual(float(font[1])*850/width,maximum,label)
@@ -102,18 +119,22 @@ class MotionTests(unittest.TestCase):
             self.assertIn('sem animação',description)
             self.assertNotIn('movimento contínuo',description)
 
-    def test_static_readme_offers_return_to_animated_version(self):
-        text=(assets.ROOT/'README-static.md').read_text(encoding='utf-8')
-        self.assertIn('[Com animação](',text)
-        self.assertNotIn('[Sem animação](',text)
+    def test_readmes_do_not_show_manual_motion_toggle(self):
+        for name in ['README.md', 'README-static.md']:
+            text=(assets.ROOT/name).read_text(encoding='utf-8')
+            self.assertNotIn('[Sem animação](',text)
+            self.assertNotIn('[Com animação](',text)
 
-    def test_typing_advances_one_complete_character_per_step(self):
-        svg = assets.banner()
-        document = assets.xml.dom.minidom.parseString(svg)
-        command = next(e for e in document.getElementsByTagName('text') if e.hasAttribute('textLength'))
-        content = ''.join(node.data for node in command.childNodes if node.nodeType == node.TEXT_NODE)
-        steps = assets.re.search(r'animation:typing[^;]*steps\((\d+),end\)', svg)
-        self.assertEqual(int(steps[1]), len(content))
-        mask = next(e for e in document.getElementsByTagName('rect') if e.getAttribute('class') == 'reveal')
-        self.assertEqual(float(mask.getAttribute('width')), float(command.getAttribute('textLength')))
-        self.assertEqual(command.getAttribute('lengthAdjust'), 'spacing')
+    def test_personal_banner_has_no_cv_copy_or_opening_mask(self):
+        for generate in [assets.banner, assets.banner_medium, assets.banner_compact, assets.banner_mobile]:
+            svg = generate()
+            for forbidden in ['Engenheiro de IA', 'desde 2018', 'laboratório', 'contexto →', 'command-mask']:
+                self.assertNotIn(forbidden, svg)
+            self.assertIn('RPG Maker', svg)
+
+    def test_static_companion_shows_prompt_and_hides_confirmation(self):
+        for suffix in ['', '-mobile', '-medium', '-compact']:
+            svg = (assets.ASSETS/f'banner{suffix}-still.svg').read_text(encoding='utf-8')
+            self.assertIn('.companion-confirmation { opacity:0; animation:none;', svg)
+            self.assertIn('.companion-command { animation:none;', svg)
+            self.assertIsNone(assets.re.search(r'animation:\s*(?!none\b)[^;]+;', svg))

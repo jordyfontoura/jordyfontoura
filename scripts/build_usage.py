@@ -184,118 +184,103 @@ def month_label(value):
 
 
 def alternative_text(data):
-    agents, _, _ = metrics(data)
+    agents, models, days = metrics(data)
     total = sum(agents.values())
     period = month_label(date.fromisoformat(data['since']))
     distribution = '; '.join(f"{DISPLAY_NAMES.get(name,name)} {count/total:.0%}"
                              for name,count in agents.most_common())
     formatted_total = f'{total:,}'.replace(',', '.')
     text = f"{ALT} em {period}: {formatted_total} tokens; {distribution}."
+    text += ' Modelos: '+ '; '.join(f'{DISPLAY_NAMES.get(name,name)} {count/total:.0%}' for name,count in models)+'.'
+    peak=max(range(len(days)),key=lambda i:sum(days[i].values()))
+    peak_day=date.fromisoformat(data['since'])+timedelta(days=peak)
+    text += f' Pico diário em {peak_day:%d/%m}: {compact(sum(days[peak].values()))} tokens.'
     text += ' Entrada, saída e cache; histórico parcial. Tokens não representam custo ou produtividade.'
     if 'Local models' in agents:
         text += ' Modelos locais agregados sem divulgar seus nomes.'
     return text
 
 
-def panel(data, mobile=False, medium=False):
-    """Volume diário e participação, com cores estáveis e escala explícita."""
+def panel(data, mobile=False, medium=False, compact_variant=False):
+    """Painel com quatro escalas: empilhado só nas colunas pequenas."""
     agents, models, days = metrics(data)
     total = sum(agents.values())
-    stacked = mobile or medium
-    width = 600 if medium else 360 if mobile else 900
-    agent_y = 450 if stacked else 150
-    model_title_y = agent_y + len(agents)*44 + 26 if stacked else max(266, agent_y + (len(agents)-1)*32 + 42)
-    model_y = model_title_y + (30 if stacked else 27)
-    footer_y = model_y + len(models)*40 + 8 if stacked else max(396, model_y + (len(models)-1)*25 + 28)
-    height = footer_y + (116 if stacked else 72)
-    fg, muted = COLOR['foreground'], COLOR['muted']
-    parts = []
-
-    def text(x, y, value, size=15, color=muted, weight=400, anchor='start'):
-        parts.append(f'<text x="{x}" y="{y}" font-size="{size}" fill="{color}" font-weight="{weight}" text-anchor="{anchor}">{escape(str(value))}</text>')
-
-    def rect(x, y, w, h, color, radius=2):
+    stacked = mobile or compact_variant
+    width = 400 if mobile else 500 if compact_variant else 700 if medium else 900
+    small = 16 if mobile else 14 if compact_variant else 15 if medium else 16
+    title_size = 21 if mobile else 22 if compact_variant else 23 if medium else 25
+    start, end = date.fromisoformat(data['since']), date.fromisoformat(data['until_exclusive'])-timedelta(days=1)
+    parts=[]
+    def text(x,y,value,size=None,color=None,weight=400,anchor='start'):
+        parts.append(f'<text x="{x}" y="{y}" font-size="{size or small}" fill="{color or COLOR["muted"]}" font-weight="{weight}" text-anchor="{anchor}">{escape(str(value))}</text>')
+    def rect(x,y,w,h,color,radius=2):
         parts.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{w:.1f}" height="{h:.1f}" rx="{radius}" fill="{color}"/>')
-
-    def rule(x1, y, x2, dashed=False):
-        dash = ' stroke-dasharray="3 5"' if dashed else ''
+    def rule(x1,y,x2,dashed=False):
+        dash=' stroke-dasharray="3 5"' if dashed else ''
         parts.append(f'<path d="M{x1},{y} H{x2}" stroke="{COLOR["ring"]}" stroke-width="1"{dash}/>')
-
-    start = date.fromisoformat(data['since'])
-    end = date.fromisoformat(data['until_exclusive']) - timedelta(days=1)
-    if stacked:
-        text(32, 40, 'Uso de agentes', 25, fg, 650)
-        text(32, 89, compact(total), 38, COLOR['accent'], 650)
-        text(32, 118, 'tokens registrados · '+month_label(start), 17)
-        text(32, 145, f'{start:%d/%m} a {end:%d/%m}', 16)
-    else:
-        text(32, 43, 'Uso de agentes', 24, fg, 650)
-        text(32, 70, f'{month_label(start)} · {start:%d/%m} a {end:%d/%m}', 16)
-        text(width-32, 43, compact(total), 32, COLOR['accent'], 650, 'end')
-        text(width-32, 70, 'tokens registrados', 16, anchor='end')
-        rule(32, 91, width-32)
-
-    x0, chart_width = (92, width-124) if stacked else (98, 442)
-    top, bottom = (184, 324) if stacked else (120, 285)
-    maximum = nice_max(max(sum(day.values()) for day in days))
-    for fraction in [0, .5, 1]:
-        y = bottom - (bottom-top)*fraction
-        rule(x0, y, x0+chart_width, True)
-        text(x0-12, y+5, compact(maximum*fraction).replace(',0 ', ' '), 13 if stacked else 14, anchor='end')
-    span = chart_width / len(days)
-    for i, day in enumerate(days):
-        cursor = bottom
-        for name, _ in reversed(agents.most_common()):
-            h = day[name] / maximum * (bottom-top)
+    text(24,38,'Uso de agentes',title_size,COLOR['foreground'],650)
+    text(width-28,38,compact(total),24 if compact_variant else 28,COLOR['accent'],650,'end')
+    text(24,66,f'{month_label(start)} · {start:%d/%m} a {end:%d/%m}')
+    text(width-28,66,'tokens',anchor='end')
+    rule(24,85,width-24)
+    x0=88
+    chart_width=width-x0-24 if stacked else 442 if not medium else 304
+    text(x0,116,'Volume diário · tokens',small+1,COLOR['lead'],500)
+    top,bottom=145,290
+    maximum=nice_max(max(sum(day.values()) for day in days))
+    for fraction in [0,.5,1]:
+        y=bottom-(bottom-top)*fraction
+        rule(x0,y,x0+chart_width,True)
+        text(x0-10,y+5,compact(maximum*fraction).replace(',0 ',' '),anchor='end')
+    span=chart_width/len(days)
+    for i,day in enumerate(days):
+        cursor=bottom
+        for name,_ in reversed(agents.most_common()):
+            h=day[name]/maximum*(bottom-top)
             if h:
-                cursor -= h
-                rect(x0+i*span+1, cursor, max(1,span-3), h, AGENT_COLORS[name], 1)
-        if not sum(day.values()):
-            rect(x0+i*span+1, bottom-2, max(1,span-3), 2, COLOR['ring'], 0)
-    for i in sorted({0, 7, 14, 21, len(days)-1}):
-        if i < len(days):
-            text(x0+(i+.5)*span, bottom+26, f'{(start+timedelta(days=i)).day:02}', 13 if stacked else 14, anchor='middle')
-    text(x0 if not stacked else 32, bottom+59, 'Volume diário · tokens', 17, COLOR['lead'], 500)
-    active = sum(bool(sum(day.values())) for day in days)
+                cursor-=h
+                rect(x0+i*span+1,cursor,max(1,span-3),h,AGENT_COLORS[name],1)
+        if not sum(day.values()):rect(x0+i*span+1,bottom-2,max(1,span-3),2,COLOR['ring'],0)
+    for i in sorted({0,7,14,21,len(days)-1}):
+        if i<len(days):text(x0+(i+.5)*span,bottom+24,f'{(start+timedelta(days=i)).day:02}',anchor='end' if i==len(days)-1 else 'middle')
+    active=sum(bool(sum(day.values())) for day in days)
+    text(x0,bottom+51,f'{active} dias com registros',small)
+    ranking_x=24 if stacked else 440 if medium else 590
+    ranking_end=width-28
+    agent_y=412 if stacked else 148
+    text(ranking_x,agent_y-30,'POR AGENTE',small,COLOR['muted'],600)
+    for i,(name,count) in enumerate(agents.most_common()):
+        y=agent_y+i*34
+        rect(ranking_x,y-10,8,8,AGENT_COLORS[name])
+        text(ranking_x+18,y,DISPLAY_NAMES.get(name,name),18 if mobile else 16,COLOR['foreground'])
+        text(ranking_end,y,f'{count/total:.0%}',18 if mobile else 16,COLOR['lead'],anchor='end')
+        w=ranking_end-ranking_x-18
+        rect(ranking_x+18,y+10,w,3,COLOR['border'],1)
+        rect(ranking_x+18,y+10,w*count/total,3,AGENT_COLORS[name],1)
+    model_title_y=agent_y+len(agents)*34+25
+    model_y=model_title_y+30
+    text(ranking_x,model_title_y,'POR MODELO',small,weight=600)
+    for i,(name,count) in enumerate(models):
+        y=model_y+i*32
+        text(ranking_x,y,DISPLAY_NAMES.get(name,name),18 if mobile else 16,COLOR['lead'])
+        text(ranking_end,y,f'{count/total:.0%}',18 if mobile else 16,anchor='end')
+    footer_y=max(model_y+(len(models)-1)*32+26,365)
+    rule(24,footer_y,width-24)
     if not stacked:
-        text(x0, bottom+84, f'{active} dias com registros no período', 15)
-
-    ranking_x = 32 if stacked else 594
-    ranking_end = width-32
-    text(ranking_x, agent_y-30, 'POR AGENTE', 17 if stacked else 14, muted, 600)
-    for i, (name, count) in enumerate(agents.most_common()):
-        y = agent_y + i*(44 if stacked else 32)
-        rect(ranking_x, y-11, 9, 9, AGENT_COLORS[name])
-        text(ranking_x+20, y, DISPLAY_NAMES.get(name,name), 18 if stacked else 17, fg)
-        text(ranking_end, y, f'{count/total:.0%}', 18 if stacked else 17, COLOR['lead'], anchor='end')
-        bar_width = ranking_end-ranking_x-20
-        rect(ranking_x+20, y+9, bar_width, 3, COLOR['border'], 1)
-        rect(ranking_x+20, y+9, bar_width*count/total, 3, AGENT_COLORS[name], 1)
-    text(ranking_x, model_title_y, 'POR MODELO', 17 if stacked else 14, muted, 600)
-    for i, (name, count) in enumerate(models):
-        y = model_y + i*(40 if stacked else 25)
-        text(ranking_x, y, DISPLAY_NAMES.get(name,name), 18 if stacked else 16, COLOR['lead'])
-        text(ranking_end, y, f'{count/total:.0%}', 18 if stacked else 16, muted, anchor='end')
-    rule(32, footer_y, width-32)
-    if stacked:
-        text(32, footer_y+28, 'Entrada + saída e cache', 15)
-        text(32, footer_y+51, 'Tokens não representam custo', 15)
-        text(32, footer_y+74, 'Histórico parcial · UTC-03:00', 14)
-        text(32, footer_y+97, 'Último registro: '+datetime.fromisoformat(data['latest_record_at']).strftime('%d/%m/%Y'), 14)
-    else:
-        text(32, footer_y+25, 'Entrada + saída e cache · tokens não representam custo', 14)
-        text(32, footer_y+48, 'Histórico parcial · UTC-03:00', 14)
-        text(width-32, footer_y+48, 'Último registro: '+datetime.fromisoformat(data['latest_record_at']).strftime('%d/%m/%Y'), 14, anchor='end')
-    body = ''.join(parts)
-    result = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-<title id="title">Uso de agentes</title>
-<desc id="desc">{escape(alternative_text(data))}</desc>
+        parts.append(f'<path d="M{ranking_x-24},105 V{footer_y-18}" stroke="{COLOR["border"]}"/>')
+    text(24,footer_y+28,'Entrada, saída e cache')
+    text(24,footer_y+52,'Tokens não medem custo ou produtividade')
+    text(24,footer_y+76,'Histórico parcial · UTC-03:00')
+    text(24,footer_y+100,'Último registro: '+datetime.fromisoformat(data['latest_record_at']).strftime('%d/%m/%Y'))
+    height=footer_y+122
+    body=''.join(parts)
+    result=f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
+<title id="title">Uso de agentes</title><desc id="desc">{escape(alternative_text(data))}</desc>
 <rect x="0.5" y="0.5" width="{width-1}" height="{height-1}" rx="24" fill="{COLOR['background']}" stroke="{COLOR['border']}"/>
-<g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif">{body}</g>
-</svg>
+<g font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif">{body}</g></svg>
 '''
     ET.fromstring(result)
-    if len(result.encode()) > 100_000 or re.search(r'<script|<foreignObject|@import|@font-face|url\((?!#)|href=', result):
+    if len(result.encode())>100_000 or re.search(r'<script|<foreignObject|@import|@font-face|url\((?!#)|href=',result):
         raise ValueError('SVG contém recurso não permitido.')
     return result
 
@@ -321,6 +306,7 @@ def main():
         if args.check:
             expected = ('<picture>\n'
                         '  <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">\n'
+                        '  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/agent-usage-compact.svg">\n'
                         '  <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">\n'
                         f'  <img src="assets/agent-usage.svg" alt="{alt}" width="880">')
             if expected not in readme:
@@ -332,6 +318,7 @@ def main():
         outputs = {readme_path: updated_readme, DATA: json.dumps(data, indent=2, ensure_ascii=False)+'\n',
                    ROOT/'assets/agent-usage.svg': panel(data),
                    ROOT/'assets/agent-usage-mobile.svg': panel(data, True),
+                   ROOT/'assets/agent-usage-compact.svg': panel(data, compact_variant=True),
                    ROOT/'assets/agent-usage-medium.svg': panel(data, medium=True)}
         for path, content in outputs.items():
             if args.check:

@@ -58,7 +58,7 @@ class UsageTests(unittest.TestCase):
 
     def test_private_fields_never_reach_public_outputs(self):
         result = usage.collect(document([row(model=1)]),date(2026,11,1))
-        public = json.dumps(result)+usage.panel(result)+usage.panel(result,True)+usage.panel(result,medium=True)
+        public = json.dumps(result)+usage.panel(result)+usage.panel(result,True)+usage.panel(result,medium=True)+usage.panel(result,compact_variant=True)
         for forbidden in ['private-local-7b','private-prompt','private-session-id','customer','123.45']:
             self.assertNotIn(forbidden,public)
         self.assertEqual(result['records'][0]['model'],'Other models')
@@ -108,6 +108,36 @@ if __name__=='__main__': unittest.main()
 
 
 class PanelLayoutTests(unittest.TestCase):
+    def test_main_total_stays_below_page_title_scale(self):
+        data=usage.collect(document([row()]),date(2026,11,1))
+        for options,column in [({'mobile':True},440),({'compact_variant':True},545),
+                               ({'medium':True},719),({},850)]:
+            svg=usage.ET.fromstring(usage.panel(data,**options))
+            total=usage.compact(sum(usage.metrics(data)[0].values()))
+            label=next(e for e in svg.iter('{http://www.w3.org/2000/svg}text') if e.text==total)
+            self.assertLessEqual(float(label.attrib['font-size'])*column/
+                                 float(svg.attrib['viewBox'].split()[2]),32)
+
+    def test_every_chart_variant_has_readable_labels_at_its_smallest_column(self):
+        data = usage.collect(document([row()]), date(2026,11,1))
+        for options, column in [({'mobile':True},280),({'compact_variant':True},408),
+                                ({'medium':True},546),({},652)]:
+            svg = usage.ET.fromstring(usage.panel(data, **options))
+            scale = column / float(svg.attrib['viewBox'].split()[2])
+            for label in svg.iter('{http://www.w3.org/2000/svg}text'):
+                self.assertGreaterEqual(float(label.attrib['font-size'])*scale,11,
+                                        (options,label.text))
+
+    def test_chart_titles_stay_below_section_headings_at_largest_columns(self):
+        data = usage.collect(document([row()]), date(2026,11,1))
+        for options, column in [({'mobile':True},440),({'compact_variant':True},545),
+                                ({'medium':True},719),({},850)]:
+            svg = usage.ET.fromstring(usage.panel(data, **options))
+            title = next(e for e in svg.iter('{http://www.w3.org/2000/svg}text')
+                         if e.text == 'Uso de agentes')
+            self.assertLessEqual(float(title.attrib['font-size'])*column/
+                                 float(svg.attrib['viewBox'].split()[2]),24)
+
     def test_four_agents_leave_room_before_model_heading(self):
         data = usage.collect(document([row()]), date(2026,11,1))
         template = data['records'][0]
