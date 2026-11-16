@@ -9,24 +9,23 @@ ROOT=Path(__file__).resolve().parents[1]
 measure=run_path(str(ROOT/'scripts/svg_typography.py'))['text_metrics']
 EXTREMES={'mobile':(280,440),'compact':(408,545),'medium':(546,719),'desktop':(652,850)}
 
-PROJECT_EXTREMES={**EXTREMES,'compact':(408,520),'medium':(546,651),'wide':(521,545)}
+PROJECT_EXTREMES={'mobile':(280,400),'desktop':(400,400)}
 
 
 class TypographyTests(unittest.TestCase):
     def test_intermediate_project_body_stays_near_markdown_scale(self):
         for key in ['skills','tryless','gitclean','np','argus']:
-            for suffix,width in [('-compact',520),('-wide',545),('-medium',651),('',719)]:
-                path=ROOT/f'assets/project-{key}{suffix}.svg'
-                for row in measure(path.read_text(encoding='utf-8'),width):
-                    if 'body' in row['classes']:
-                        self.assertLessEqual(row['displayFontSize'],19.2,(path.name,row))
+            path=ROOT/f'assets/project-{key}.svg'
+            for row in measure(path.read_text(encoding='utf-8'),400):
+                if 'body' in row['classes']:
+                    self.assertLessEqual(row['displayFontSize'],19.2,(path.name,row))
 
     def test_project_labels_are_readable_in_the_smallest_column(self):
         for path in (ROOT/'assets').glob('project-*.svg'):
-            variant=path.stem.replace('-still','').rsplit('-',1)[-1]
-            variant=variant if variant in PROJECT_EXTREMES else 'desktop'
-            for row in measure(path.read_text(encoding='utf-8'),PROJECT_EXTREMES[variant][0]):
-                self.assertGreaterEqual(row['displayFontSize'],11,(path.name,row))
+            mobile='-mobile' in path.stem
+            for row in measure(path.read_text(encoding='utf-8'),280 if mobile else 400):
+                self.assertGreaterEqual(row['displayFontSize'],13,(path.name,row))
+
 
     def test_every_generated_svg_text_is_measurable(self):
         for path in (ROOT/'assets').glob('*.svg'):
@@ -50,8 +49,8 @@ class TypographyTests(unittest.TestCase):
                     self.assertLessEqual(row['displayFontSize'],22.01 if variant=='mobile' else 20.1,(path.name,width,row))
 
     def test_component_titles_do_not_dominate_markdown_section_headings(self):
-        for family in ['focus','stack','project-skills','project-tryless','project-gitclean','project-np','project-argus']:
-            ranges=PROJECT_EXTREMES if family.startswith('project-') else EXTREMES
+        for family in ['project-skills','project-tryless','project-gitclean','project-np','project-argus']:
+            ranges=PROJECT_EXTREMES
             for variant,widths in ranges.items():
                 suffix='' if variant=='desktop' else '-'+variant
                 svg=(ROOT/f'assets/{family}{suffix}.svg').read_text(encoding='utf-8')
@@ -60,7 +59,7 @@ class TypographyTests(unittest.TestCase):
                         if {'stage','mobile-stage','name','mobile-name','stack-title','stack-mobile-title'}.intersection(row['classes']):
                             self.assertLessEqual(row['displayFontSize'],24.1,(family,variant,width,row))
 
-    def test_banner_name_and_cursor_keep_their_hierarchy(self):
+    def test_banner_name_keeps_its_hierarchy(self):
         for variant,widths in EXTREMES.items():
             suffix='' if variant=='desktop' else '-'+variant
             svg=(ROOT/f'assets/banner{suffix}.svg').read_text(encoding='utf-8')
@@ -68,6 +67,3 @@ class TypographyTests(unittest.TestCase):
                 name=next(r for r in measure(svg,width) if 'name' in r['classes'])
                 self.assertGreaterEqual(name['displayFontSize'],24,(variant,width))
                 self.assertLessEqual(name['displayFontSize'],40.1,(variant,width))
-            terminal=next(r for r in measure(svg,600) if 'terminal' in r['classes'])
-            caret=next(e for e in ET.fromstring(svg).iter() if e.attrib.get('class')=='caret')
-            self.assertLessEqual(float(caret.attrib['height']),terminal['fontSize']*1.15)

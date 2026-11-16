@@ -31,33 +31,7 @@ RADIUS = 24
 GRID = 24
 
 # Textos: a mesma frase vai para o SVG e para o alt do README.
-BANNER_ALT = ("Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; "
-              "carreira em software desde 2018; TypeScript, Python e Rust")
-FOCUS_ALT = ("O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), "
-             "ferramentas (tool calling, MCP) e agentes conversacionais")
-STAGES = [
-    # (rótulo, detalhe, fórmula decorativa)
-    ("Busca", "RAG · pgvector", "sim(q, d)"),
-    ("LLMs", "Vercel AI SDK", "p(y | x)"),
-    ("Ferramentas", "tool calling · MCP", "f(args)"),
-    ("Agentes", "conversacionais", "π(a | s)"),
-]
-
-
-def style(extra=""):
-    return f"""  <style>
-    .eq {{ font-family: {MATH}; font-style: italic; fill: {COLOR["subtle"]}; fill-opacity: 0.75; }}
-    .flow {{ fill: none; stroke: url(#flowfade); stroke-width: 1; }}
-    .ring {{ fill: none; stroke: {COLOR["border"]}; stroke-width: 1; }}
-    .edge {{ stroke: {COLOR["ring"]}; stroke-width: 1; stroke-opacity: 0.8; }}
-    .node {{ fill: {COLOR["background"]}; stroke: {COLOR["subtle"]}; stroke-width: 1.5; }}
-    .signal {{ fill: none; stroke: {COLOR["accent"]}; stroke-width: 2; stroke-opacity: 0.8; stroke-dasharray: 12 8; animation: flow 4.8s linear infinite; }}
-    @keyframes flow {{ to {{ stroke-dashoffset: -160; }} }}
-    @media (prefers-reduced-motion: reduce) {{ .signal {{ animation: none; }} }}
-{extra}
-  </style>"""
-
-
+BANNER_ALT = "Jordy Fontoura. Comecei no RPG Maker aos 10 anos."
 def card_defs(width, height, glow_cx, flow_x2, flow_dir="right", include_flow=True):
     """Fundo, pontos, brilho e gradiente das linhas, comuns aos cartões."""
     x1, x2 = (0, flow_x2) if flow_dir == "right" else (flow_x2, 0)
@@ -92,56 +66,41 @@ def card_border(width, height):
 
 
 def banner_art(width, height, variant='desktop'):
-    """Terminal vetorial com um companheiro de código; texto independe do movimento."""
-    compact = variant == 'mobile'
-    narrow = variant == 'compact'
-    name_size, role_size, body_size, caption_size, terminal_size = {
-        'desktop': (38,24,21,21,18),
-        'medium': (41,24,22.1,22.1,20),
-        'compact': (44,26,22.1,22.1,22),
-        'mobile': (52,30,30,28,26),
+    """Nome, uma lembrança pessoal e a C1; nenhuma informação depende do movimento."""
+    mobile = variant == 'mobile'
+    name_size, body_size, terminal_size = {
+        'desktop': (40, 21, 18), 'medium': (41, 22.1, 20),
+        'compact': (44, 22.1, 22), 'mobile': (52, 30, 26),
     }[variant]
-    command_width = 520 if compact else round(34*terminal_size*.6)
-    cx,cy,art_scale = (300,432,1.65) if compact else ((490,154,1.1) if narrow else (655,154,1.1) if variant=='medium' else (735,154,1.15))
-    illustration = COMPANION['artwork'](cx,cy,art_scale)
-    lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
-             '<text x="40" y="156" class="role">Engenheiro de IA</text>'
-             '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
-             '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
-             '<text x="40" y="288" class="caption">Carreira desde 2018.</text>') if compact else (
-             f'<text x="40" y="98" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
-             '<text x="40" y="132" class="role">Engenheiro de IA</text>'
-             '<text x="40" y="170" class="body">RAG · agentes · MCP</text>'
-             '<text x="40" y="198" class="body">TypeScript · Python · Rust</text>'
-             '<text x="40" y="234" class="caption">Carreira em software desde 2018.</text>')
+    cx, cy, scale = {
+        'desktop': (735, 146, 1.65), 'medium': (655, 146, 1.6),
+        'compact': (480, 146, 1.4), 'mobile': (300, 286, 1.55),
+    }[variant]
+    x, name_y = (40, 112) if mobile else (32, 112)
+    personal = ('<text x="40" y="166" class="body">Comecei no RPG Maker</text>'
+                '<text x="40" y="204" class="body">aos 10 anos.</text>') if mobile else (
+                '<text x="32" y="158" class="body">Comecei no RPG Maker</text>'
+                '<text x="32" y="188" class="body">aos 10 anos.</text>') if variant=='compact' else (
+                '<text x="32" y="158" class="body">Comecei no RPG Maker aos 10 anos.</text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. {COMPANION['DESCRIPTION']}</desc>
-  <defs>{card_defs(width, height, 0.8, width, include_flow=False)}
-    <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="{command_width}" height="40"/></clipPath>
-  </defs>
+  <desc id="desc">{BANNER_ALT} {COMPANION['DESCRIPTION']}</desc>
+  <defs>{card_defs(width, height, 0.8, width, include_flow=False)}</defs>
   <style>
-    .name {{ font:700 {name_size}px {SANS}; fill:{COLOR["foreground"]}; letter-spacing:{-2 if compact else -1}px; }}
-    .role {{ font:500 {role_size}px {SANS}; fill:{COLOR["lead"]}; }}
-    .body {{ font:400 {body_size}px {SANS}; fill:{COLOR["muted"]}; }}
-    .caption {{ font:400 {caption_size}px {SANS}; fill:{COLOR["muted"]}; }}
-    .terminal {{ font:500 {terminal_size}px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
+    .name {{ font:700 {name_size}px {SANS}; fill:{COLOR['foreground']}; letter-spacing:-1px; }}
+    .body {{ font:400 {body_size}px {SANS}; fill:{COLOR['lead']}; }}
+    .terminal {{ font:500 {terminal_size}px ui-monospace,Consolas,monospace; fill:{COLOR['muted']}; }}
 {COMPANION['stylesheet'](COLOR)}
-    .reveal {{ width:{command_width}px; animation:typing 3.2s steps(34,end) 1 both; }}
-    .caret {{ fill:{COLOR["accent"]}; opacity:0; animation:cursor 3.2s steps(34,end) 1 both; }}
-    @keyframes typing {{ from {{ width:0px; }} to {{ width:{command_width}px; }} }}
-    @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX({command_width}px); opacity:0; }} }}
-    @media (prefers-reduced-motion:reduce) {{ .companion-idle,.companion-antenna,.companion-cursor,.companion-shadow,.companion-aerial,.companion-command,.companion-confirmation,.companion-context,.companion-tools,.companion-product,.reveal,.caret {{ animation:none; }} }}
+    @media (prefers-reduced-motion:reduce) {{ .companion-idle,.companion-antenna,.companion-cursor,.companion-shadow,.companion-aerial,.companion-command,.companion-confirmation,.companion-context,.companion-tools,.companion-product {{ animation:none; }} }}
   </style>
   <g clip-path="url(#card)">
     {card_background(width,height)}
-    <path d="M0,52 H{width}" stroke="{COLOR["border"]}"/>
-    <circle cx="24" cy="26" r="4" fill="{COLOR["line"]}"/><circle cx="40" cy="26" r="4" fill="{COLOR["line"]}"/><circle cx="56" cy="26" r="4" fill="{COLOR["accent"]}"/>
-    <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
-    {illustration}
-    {lines}
-    <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="{command_width}" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
-    <rect class="caret" x="40" y="{height-24-round(terminal_size*.85)}" width="2" height="{terminal_size}"/>
+    <path d="M0,48 H{width}" stroke="{COLOR['border']}"/>
+    <circle cx="24" cy="24" r="3" fill="{COLOR['line']}"/><circle cx="38" cy="24" r="3" fill="{COLOR['line']}"/><circle cx="52" cy="24" r="3" fill="{COLOR['accent']}"/>
+    <text x="76" y="31" class="terminal">~/jordy</text>
+    {COMPANION['artwork'](cx,cy,scale)}
+    <text x="{x}" y="{name_y}" class="name">Jordy Fontoura.</text>
+    {personal}
   </g>
   {card_border(width,height)}
 </svg>
@@ -149,117 +108,19 @@ def banner_art(width, height, variant='desktop'):
 
 
 def banner():
-    return banner_art(900, 300)
-
-
-def focus():
-    """Cartão "O que construo": etapas ligadas pelo caminho em destaque entre as áreas."""
-    width, height = 900, 180
-    xs, cy = [135, 345, 555, 765], 72
-    extra = f"""
-    .stage {{ font: 700 24px {SANS}; fill: {COLOR["foreground"]}; letter-spacing: -0.5px; }}
-    .detail {{ font: 400 21px {SANS}; fill: {COLOR["muted"]}; }}"""
-    parts = []
-    # Linhas que entram pela borda esquerda e saem pela direita, como no banner.
-    for dy in (-10, 0, 10):
-        parts.append(f'<path class="flow" d="M-10,{cy + dy * 3} C80,{cy + dy * 3} 70,{cy + dy} {xs[0] - 26},{cy + dy}"/>')
-        parts.append(f'<path class="flow flow-out" d="M{xs[-1] + 26},{cy + dy} C{width - 70},{cy + dy} '
-                     f'{width - 80},{cy + dy * 3} {width + 10},{cy + dy * 3}"/>')
-    # Malha discreta entre etapas vizinhas, sob o caminho principal.
-    for a, b in zip(xs, xs[1:]):
-        for dy1 in (-12, 12):
-            for dy2 in (-12, 12):
-                parts.append(f'<line class="edge" x1="{a + 26}" y1="{cy + dy1}" x2="{b - 26}" y2="{cy + dy2}" stroke-opacity="0.45"/>')
-    parts.append(f'<path class="signal" d="M{xs[0]},{cy} H{xs[-1]}"/>')
-    for x, (stage, detail, formula) in zip(xs, STAGES):
-        parts.append(f'<text class="eq" x="{x}" y="34" font-size="15" text-anchor="middle">{formula}</text>')
-        parts.append(f'<circle class="ring" cx="{x}" cy="{cy}" r="26" stroke-dasharray="3 6"/>')
-        parts.append(f'<circle class="node" cx="{x}" cy="{cy}" r="18"/>')
-        parts.append(f'<circle cx="{x}" cy="{cy}" r="3" fill="{COLOR["foreground"]}"/>')
-        parts.append(f'<text class="stage" x="{x}" y="128" text-anchor="middle">{stage}</text>')
-        parts.append(f'<text class="detail" x="{x}" y="156" text-anchor="middle">{detail}</text>')
-    body = "\n    ".join(parts)
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">O que construo</title>
-  <desc id="desc">{FOCUS_ALT}, em etapas conectadas no estilo do banner.</desc>
-  <defs>
-{card_defs(width, height, 0.5, 260)}
-    <linearGradient id="flowfadeout" gradientUnits="userSpaceOnUse" x1="{width}" y1="0" x2="{width - 260}" y2="0">
-      <stop offset="0" stop-color="{COLOR["ring"]}" stop-opacity="0"/>
-      <stop offset="0.45" stop-color="{COLOR["ring"]}" stop-opacity="0.35"/>
-      <stop offset="1" stop-color="{COLOR["line"]}" stop-opacity="0.9"/>
-    </linearGradient>
-  </defs>
-{style(extra + '''
-    .flow-out { stroke: url(#flowfadeout); }''')}
-  <g clip-path="url(#card)">
-{card_background(width, height)}
-    {body}
-  </g>
-  {card_border(width, height)}
-</svg>
-"""
+    return banner_art(900, 264)
 
 
 def banner_medium():
-    """Versão horizontal para a coluna do perfil em tablets e notebooks."""
-    return banner_art(800,300,'medium')
+    return banner_art(800, 264, 'medium')
 
 
 def banner_compact():
-    return banner_art(600,310,'compact')
+    return banner_art(600, 264, 'compact')
 
 
 def banner_mobile():
-    # Mesmo layout vertical nos tamanhos menores: nenhum texto invade o campo neural.
-    return banner_art(600, 630, 'mobile')
-
-
-def focus_mobile(medium=False):
-    return focus_grid('medium' if medium else 'mobile')
-
-
-def focus_compact():
-    return focus_grid('compact')
-
-
-def focus_grid(variant):
-    """As quatro áreas em duas colunas, com conexões fora dos rótulos."""
-    mobile = variant == 'mobile'
-    width = 800 if variant=='medium' else 600
-    height = 420 if mobile else 320
-    left,right = (160,440) if mobile else (width/4,width*3/4)
-    top,bottom = (68,268) if mobile else (60,210)
-    title_size,detail_size = (32,30) if mobile else (26,22.1)
-    title_offset,detail_offset = (64,102) if mobile else (50,82)
-    ring_size = 32 if mobile else 24
-    extra = f'''
-    .mobile-stage {{ font: 700 {title_size}px {SANS}; fill: {COLOR['foreground']}; }}
-    .mobile-detail {{ font: 400 {detail_size}px {SANS}; fill: {COLOR['muted']}; }}'''
-    parts = [f'<path class="signal" d="M{left},{top} H{right} M{left},{bottom} H{right}"/>']
-    for (x,y), (stage,detail,formula) in zip([(left,top),(right,top),(left,bottom),(right,bottom)], STAGES):
-        parts.extend([
-            f'<text class="eq" x="{x}" y="{y-36}" font-size="{20 if mobile else 16}" text-anchor="middle">{formula}</text>',
-            f'<circle class="ring" cx="{x}" cy="{y}" r="{ring_size}" stroke-dasharray="3 6"/>',
-            f'<circle class="node" cx="{x}" cy="{y}" r="20"/>',
-            f'<circle cx="{x}" cy="{y}" r="3.5" fill="{COLOR["foreground"]}"/>',
-            f'<text class="mobile-stage" x="{x}" y="{y+title_offset}" text-anchor="middle">{stage}</text>',
-            f'<text class="mobile-detail" x="{x}" y="{y+detail_offset}" text-anchor="middle">{detail}</text>',
-        ])
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
-  <title id="title">O que construo</title>
-  <desc id="desc">{FOCUS_ALT}. Versão {'de celular' if mobile else 'intermediária'}, em duas linhas na ordem de leitura.</desc>
-  <defs>
-{card_defs(width, height, 0.5, 260)}
-  </defs>
-{style(extra)}
-  <g clip-path="url(#card)">
-{card_background(width, height)}
-    {''.join(parts)}
-  </g>
-  {card_border(width, height)}
-</svg>
-'''
+    return banner_art(600, 420, 'mobile')
 
 
 def problems(name, svg):
@@ -277,9 +138,8 @@ def problems(name, svg):
     disabled = set(re.findall(r"\.([\w-]+)", reduced[1])) if reduced else set()
     document = xml.dom.minidom.parseString(svg)
     rules = re.findall(r"([^{}]+)\{([^{}]*)\}", svg)
-    required = ({'companion-idle','companion-antenna','companion-cursor','companion-shadow','companion-aerial','companion-command','companion-confirmation','companion-context','companion-tools','companion-product','reveal','caret'} if name.startswith('banner') else
-                {'signal'} if name.startswith('focus') else
-                {'motion-art'} if name.startswith(('project-','stack')) else set())
+    required = ({'companion-idle','companion-antenna','companion-cursor','companion-shadow','companion-aerial','companion-command','companion-confirmation','companion-context','companion-tools','companion-product'} if name.startswith('banner') else
+                {'motion-art'} if name.startswith('project-') else set())
     if '-still.svg' not in name:
         active_classes = set()
         for selectors, declarations in rules:
@@ -329,9 +189,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    outputs = {"banner.svg": banner(), "focus.svg": focus(),
-               "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
-               "banner-medium.svg": banner_medium(), "banner-compact.svg": banner_compact(), "focus-medium.svg": focus_mobile(True), "focus-compact.svg": focus_compact()}
+    outputs = {"banner.svg": banner(), "banner-mobile.svg": banner_mobile(),
+               "banner-medium.svg": banner_medium(), "banner-compact.svg": banner_compact()}
     cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
     card_outputs = cards['outputs'](COLOR, SANS)
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.

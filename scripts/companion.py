@@ -1,9 +1,9 @@
-"""Companheiro C1: processa contexto, usa ferramentas e confirma a entrega."""
+"""Companheiro C1 com visor de terminal e gesto de confirmação."""
 
-DESCRIPTION = ('Companheiro de código com visor de terminal: três indicadores acompanham '
-               'contexto, ferramentas e produto; o visor confirma a conclusão e volta ao prompt. '
+DESCRIPTION = ('Companheiro de código com visor de terminal, antena e três luzes. '
+               'O visor alterna o prompt e um sinal de confirmação. '
                'Movimento contínuo discreto; respeita a preferência por movimento reduzido.')
-STATIC_DESCRIPTION = 'Companheiro de código com visor de terminal e três indicadores completos, sem animação.'
+STATIC_DESCRIPTION = 'Companheiro de código com visor de terminal e três luzes acesas, sem animação.'
 
 
 def artwork(cx, cy, scale):
@@ -34,11 +34,7 @@ def artwork(cx, cy, scale):
 
 
 def stylesheet(colors):
-    """No primeiro ciclo, a confirmação em 3,2 s coincide com o fim da digitação.
-
-    O ciclo de trabalho continua depois da abertura. O estado sem animação tem
-    prompt completo, três indicadores acesos e antena vertical.
-    """
+    """O personagem flutua e alterna o visor; o estado parado mostra o prompt."""
     return f'''
     .companion {{ fill:none; stroke-linecap:round; stroke-linejoin:round; }}
     .companion-outline {{ stroke:{colors['lead']}; stroke-width:1.8; }}
