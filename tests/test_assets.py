@@ -11,7 +11,13 @@ spec.loader.exec_module(assets)
 
 class MotionTests(unittest.TestCase):
     def opening(self):
-        return assets.banner().replace('</style>', '.intro {animation:typing 3.2s steps(34,end) 1 both;} @media (prefers-reduced-motion: reduce) {.intro {animation:none;}}</style>').replace('</svg>', '<rect class="intro" width="1" height="1"/></svg>')
+        return (assets.banner()
+                .replace('.companion-idle,.companion-antenna,', '.intro,.companion-idle,.companion-antenna,')
+                .replace('</style>', '.intro {animation:typing 3.2s steps(34,end) 1 both;}</style>')
+                .replace('</svg>', '<rect class="intro" width="1" height="1"/></svg>'))
+
+    def test_finite_opening_fixture_is_valid_before_mutation(self):
+        self.assertEqual(assets.problems('opening.svg', self.opening()), [])
 
     def test_animation_rules_without_their_elements_are_rejected(self):
         svg=assets.banner().replace('class="companion-idle"','class="disconnected"')
@@ -41,15 +47,15 @@ class MotionTests(unittest.TestCase):
 
     def test_infinite_opening_is_rejected(self):
         svg = self.opening().replace('typing 3.2s steps(34,end) 1 both','typing 3.2s steps(34,end) infinite both')
-        self.assertTrue(assets.problems('infinite.svg', svg))
+        self.assertEqual(assets.problems('infinite.svg', svg), ['infinite.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_five_seconds_is_rejected(self):
         svg = self.opening().replace('typing 3.2s','typing 5s')
-        self.assertTrue(assets.problems('long.svg', svg))
+        self.assertEqual(assets.problems('long.svg', svg), ['long.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_delayed_animation_must_finish_before_five_seconds(self):
         svg = self.opening().replace('typing 3.2s', 'typing 4s 2s')
-        self.assertTrue(assets.problems('delayed.svg', svg))
+        self.assertEqual(assets.problems('delayed.svg', svg), ['delayed.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_missing_reduced_motion_is_rejected(self):
         svg = assets.banner().replace('prefers-reduced-motion', 'unknown-motion')
@@ -57,7 +63,7 @@ class MotionTests(unittest.TestCase):
 
     def test_animation_rename_preserves_delay_validation(self):
         svg = self.opening().replace('typing', 'write').replace('3.2s', '4s 2s')
-        self.assertTrue(assets.problems('renamed.svg', svg))
+        self.assertEqual(assets.problems('renamed.svg', svg), ['renamed.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_every_animated_class_must_be_disabled(self):
         svg = assets.banner().replace('.companion-idle,.companion-antenna,.companion-cursor,.companion-shadow,.companion-aerial,.companion-command,.companion-confirmation,.companion-context,.companion-tools,.companion-product { animation:none;', '.companion-antenna,.companion-cursor,.companion-shadow,.companion-aerial,.companion-command,.companion-confirmation,.companion-context,.companion-tools,.companion-product { animation:none;')
@@ -80,11 +86,11 @@ class MotionTests(unittest.TestCase):
 
     def test_shorthand_delay_counts_toward_total(self):
         svg = self.opening().replace('animation:typing 3.2s steps(34,end) 1 both;', 'animation:typing 3s linear 2500ms 1;')
-        self.assertTrue(assets.problems('shorthand-delay.svg', svg))
+        self.assertEqual(assets.problems('shorthand-delay.svg', svg), ['shorthand-delay.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_css_delay_counts_toward_total(self):
         svg = self.opening().replace('animation:typing 3.2s steps(34,end) 1 both;', 'animation:typing 4.8s linear 1; animation-delay:500ms;')
-        self.assertTrue(assets.problems('css-delay.svg', svg))
+        self.assertEqual(assets.problems('css-delay.svg', svg), ['css-delay.svg: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos'])
 
     def test_medium_banner_text_is_readable_in_narrow_profile_column(self):
         svg=assets.banner_medium()

@@ -34,7 +34,7 @@ class TypographyTests(unittest.TestCase):
             self.assertTrue(all(math.isfinite(r['displayFontSize']) and r['displayFontSize']>0 for r in rows),path.name)
 
     def test_primary_body_text_at_both_extremes_of_every_variant(self):
-        primary={'body','mobile-body','detail','mobile-detail','stack-body','stack-mobile-body'}
+        primary={'body'}
         for path in (ROOT/'assets').glob('*.svg'):
             if '-still' in path.stem or path.stem.startswith('agent-usage'):
                 continue
@@ -56,7 +56,7 @@ class TypographyTests(unittest.TestCase):
                 svg=(ROOT/f'assets/{family}{suffix}.svg').read_text(encoding='utf-8')
                 for width in widths:
                     for row in measure(svg,width):
-                        if {'stage','mobile-stage','name','mobile-name','stack-title','stack-mobile-title'}.intersection(row['classes']):
+                        if {'name'}.intersection(row['classes']):
                             self.assertLessEqual(row['displayFontSize'],24.1,(family,variant,width,row))
 
     def test_banner_name_keeps_its_hierarchy(self):

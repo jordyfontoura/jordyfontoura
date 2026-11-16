@@ -176,7 +176,7 @@ def problems(name, svg):
                 if delay:
                     delays.extend(seconds(delay[1]))
         # Movimento contínuo aprovado pelo usuário: só ornamentos, com alternativa estática.
-        continuous = bool(classes) and classes <= {'signal','companion-idle','companion-antenna','companion-cursor','companion-shadow','companion-aerial','companion-command','companion-confirmation','companion-context','companion-tools','companion-product','motion-art'} and 'infinite' in value
+        continuous = bool(classes) and classes <= {'companion-idle','companion-antenna','companion-cursor','companion-shadow','companion-aerial','companion-command','companion-confirmation','companion-context','companion-tools','companion-product','motion-art'} and 'infinite' in value
         if duration is None or duration <= 0 or (not continuous and
             (not re.search(r"\s1(?:\s|$)", value) or 'infinite' in value or duration + max(delays) >= 5)):
             found.append(f"{name}: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos")
@@ -223,7 +223,7 @@ def main():
     if result.returncode:
         return result.returncode
     # O link persistente no topo oferece controle também sem suporte à media query.
-    static = re.sub(r'assets/((?:banner|focus|project-|stack)[\w-]*)(?<!-still)\.svg',
+    static = re.sub(r'assets/((?:banner|project-)[\w-]*)(?<!-still)\.svg',
                     lambda m:'assets/'+m[1]+'-still.svg', README.read_text(encoding='utf-8'))
     static = static.replace('[Sem animação](README-static.md)', '[Com animação](README.md)')
     static_path=ROOT/'README-static.md'
