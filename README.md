@@ -48,8 +48,7 @@
 
 [TryLess no npm](https://www.npmjs.com/package/tryless) · [gitclean no crates.io](https://crates.io/crates/gitclean) · [np no crates.io](https://crates.io/crates/np-cli)
 
-<details>
-<summary>Quanto uso agentes de programação</summary>
+## Uso de agentes
 
 <picture>
   <source media="(max-width: 480px)" srcset="assets/agent-usage-mobile.svg">
@@ -57,5 +56,3 @@
   <source media="(max-width: 1011px)" srcset="assets/agent-usage-medium.svg">
   <img src="assets/agent-usage.svg" alt="Uso de agentes de programação em out/2026: 19.010.018.919 tokens; Codex 60%; Claude Code 40%. Modelos: GPT-6.1 Sol 36%; GPT-6 Luna 23%; Claude Sonnet 5.5 21%; Demais modelos 20%. Pico diário em 19/10: 1,6 bi tokens. Entrada, saída e cache; histórico parcial. Tokens não representam custo ou produtividade." width="880">
 </picture>
-
-</details>
