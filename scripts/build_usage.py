@@ -219,7 +219,7 @@ def panel(data, mobile=False, medium=False, compact_variant=False):
         dash=' stroke-dasharray="3 5"' if dashed else ''
         parts.append(f'<path d="M{x1},{y} H{x2}" stroke="{COLOR["ring"]}" stroke-width="1"{dash}/>')
     text(24,38,'Uso de agentes',title_size,COLOR['foreground'],650)
-    text(width-28,38,compact(total),28,COLOR['accent'],650,'end')
+    text(width-28,38,compact(total),24 if compact_variant else 28,COLOR['accent'],650,'end')
     text(24,66,f'{month_label(start)} · {start:%d/%m} a {end:%d/%m}')
     text(width-28,66,'tokens',anchor='end')
     rule(24,85,width-24)
@@ -247,13 +247,13 @@ def panel(data, mobile=False, medium=False, compact_variant=False):
     text(x0,bottom+51,f'{active} dias com registros',small)
     ranking_x=24 if stacked else 440 if medium else 590
     ranking_end=width-28
-    agent_y=390 if stacked else 148
+    agent_y=412 if stacked else 148
     text(ranking_x,agent_y-30,'POR AGENTE',small,COLOR['muted'],600)
     for i,(name,count) in enumerate(agents.most_common()):
         y=agent_y+i*34
         rect(ranking_x,y-10,8,8,AGENT_COLORS[name])
-        text(ranking_x+18,y,DISPLAY_NAMES.get(name,name),18 if stacked else 16,COLOR['foreground'])
-        text(ranking_end,y,f'{count/total:.0%}',18 if stacked else 16,COLOR['lead'],anchor='end')
+        text(ranking_x+18,y,DISPLAY_NAMES.get(name,name),18 if mobile else 16,COLOR['foreground'])
+        text(ranking_end,y,f'{count/total:.0%}',18 if mobile else 16,COLOR['lead'],anchor='end')
         w=ranking_end-ranking_x-18
         rect(ranking_x+18,y+10,w,3,COLOR['border'],1)
         rect(ranking_x+18,y+10,w*count/total,3,AGENT_COLORS[name],1)
@@ -262,8 +262,8 @@ def panel(data, mobile=False, medium=False, compact_variant=False):
     text(ranking_x,model_title_y,'POR MODELO',small,weight=600)
     for i,(name,count) in enumerate(models):
         y=model_y+i*32
-        text(ranking_x,y,DISPLAY_NAMES.get(name,name),18 if stacked else 16,COLOR['lead'])
-        text(ranking_end,y,f'{count/total:.0%}',18 if stacked else 16,anchor='end')
+        text(ranking_x,y,DISPLAY_NAMES.get(name,name),18 if mobile else 16,COLOR['lead'])
+        text(ranking_end,y,f'{count/total:.0%}',18 if mobile else 16,anchor='end')
     footer_y=max(model_y+(len(models)-1)*32+26,365)
     rule(24,footer_y,width-24)
     if not stacked:

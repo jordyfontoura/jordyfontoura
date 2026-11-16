@@ -108,6 +108,16 @@ if __name__=='__main__': unittest.main()
 
 
 class PanelLayoutTests(unittest.TestCase):
+    def test_main_total_stays_below_page_title_scale(self):
+        data=usage.collect(document([row()]),date(2026,11,1))
+        for options,column in [({'mobile':True},440),({'compact_variant':True},545),
+                               ({'medium':True},719),({},850)]:
+            svg=usage.ET.fromstring(usage.panel(data,**options))
+            total=usage.compact(sum(usage.metrics(data)[0].values()))
+            label=next(e for e in svg.iter('{http://www.w3.org/2000/svg}text') if e.text==total)
+            self.assertLessEqual(float(label.attrib['font-size'])*column/
+                                 float(svg.attrib['viewBox'].split()[2]),32)
+
     def test_every_chart_variant_has_readable_labels_at_its_smallest_column(self):
         data = usage.collect(document([row()]), date(2026,11,1))
         for options, column in [({'mobile':True},280),({'compact_variant':True},408),

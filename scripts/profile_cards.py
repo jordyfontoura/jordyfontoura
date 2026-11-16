@@ -71,8 +71,13 @@ def wrapped_detail(detail, width):
 
 def project_card(project, index, variant, colors, font):
     mobile = variant == 'mobile'
-    compact = variant == 'compact'
-    width,height = {'mobile':(600,260),'compact':(600,210),'medium':(800,174),'':(900,150)}[variant]
+    compact = variant in ('compact','wide')
+    width = 600 if mobile or compact else 800 if variant=='medium' else 900
+    lines = wrapped_detail(project['detail'],32 if mobile else 46 if compact else 44 if variant=='medium' else 54)
+    first_line = 144 if mobile else 122 if compact else 94
+    leading = 36 if mobile else 28
+    meta_y = first_line+(len(lines)-1)*leading+(42 if mobile else 34)
+    height = meta_y+26
     name_class = 'mobile-name' if mobile else 'name'
     meta_class = 'mobile-meta' if mobile else 'meta'
     body = ''
@@ -80,18 +85,18 @@ def project_card(project, index, variant, colors, font):
     arrow_x = 380 if mobile or compact else width-200
     body += f'<text class="{"mobile-arrow" if mobile else "name"}" x="{arrow_x}" y="52">↗</text>'
     if mobile or compact:
-        body += f'<text class="{meta_class}" x="32" y="{height-24}">{escape(project["meta"])}</text>'
-        for i,line in enumerate(wrapped_detail(project['detail'],32 if mobile else 46)):
-            body += f'<text class="{"mobile-body" if mobile else "body"}" x="32" y="{(144 if mobile else 122)+i*(36 if mobile else 27)}">{escape(line)}</text>'
+        body += f'<text class="{meta_class}" x="32" y="{meta_y}">{escape(project["meta"])}</text>'
+        for i,line in enumerate(lines):
+            body += f'<text class="{"mobile-body" if mobile else "body"}" x="32" y="{first_line+i*leading}">{escape(line)}</text>'
         body += '<g transform="translate(426 24) scale(.85)">'+miniature(project['key'])+'</g>'
     else:
-        for i,line in enumerate(wrapped_detail(project['detail'],44 if variant=='medium' else 54)):
-            body += f'<text class="body" x="32" y="{84+i*27}">{escape(line)}</text>'
-        body += f'<text class="meta" x="32" y="{height-24}">{escape(project["meta"])}</text>'
+        for i,line in enumerate(lines):
+            body += f'<text class="body" x="32" y="{first_line+i*leading}">{escape(line)}</text>'
+        body += f'<text class="meta" x="32" y="{meta_y}">{escape(project["meta"])}</text>'
         body += f'<g transform="translate({width-168} 24) scale(.85)">'+miniature(project['key'])+'</g>'
     # A ação pertence ao link do README; a descrição isolada só descreve a imagem.
     svg = shell(width,height,project['name'],alt(project).removesuffix(' Abrir repositório.'),body,colors,font)
-    return svg.replace('400 22px',f'400 {21 if variant=="" else 22.1}px').replace('400 19px','400 18px').replace('400 26px','400 24px')
+    return svg.replace('400 22px',f'400 {21 if variant in ("","wide") else 22.1}px').replace('400 19px','400 18px').replace('400 26px','400 24px')
 
 
 def stack_symbol(index):
@@ -139,16 +144,31 @@ def stack_card(variant, colors, font):
     return svg
 
 
-def picture(name,description):
-    # A coluna encolhe quando o GitHub exibe a barra lateral a partir de 768 px.
-    reduced=''
-    for condition,variant in [('(max-width: 480px)','-mobile'),('(max-width: 585px), (min-width: 768px) and (max-width: 905px)','-compact'),('(max-width: 1011px)','-medium'),('', '')]:
-        media=', '.join('(prefers-reduced-motion: reduce)'+(' and '+part if part else '') for part in condition.split(', '))
-        reduced+=f'  <source media="{media}" srcset="assets/{name}{variant}-still.svg">\n'
-    return (f'<picture>\n'+reduced+f'  <source media="(max-width: 480px)" srcset="assets/{name}-mobile.svg">\n'
-            f'  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/{name}-compact.svg">\n'
-            f'  <source media="(max-width: 1011px)" srcset="assets/{name}-medium.svg">\n'
-            f'  <img src="assets/{name}.svg" alt="{escape(description,quote=True)}" width="880">\n</picture>')
+def picture(name, description):
+    # A coluna encolhe com a barra lateral; os projetos limitam sua escala no topo.
+    variants=[]
+    if name.startswith('project-'):
+        variants.extend([
+            ('(min-width: 561px) and (max-width: 585px), (min-width: 881px) and (max-width: 905px)','-wide'),
+            ('(min-width: 700px) and (max-width: 767px)',''),
+        ])
+    variants.extend([
+        ('(max-width: 480px)','-mobile'),
+        ('(max-width: 585px), (min-width: 768px) and (max-width: 905px)','-compact'),
+        ('(max-width: 1011px)','-medium'),
+        ('',''),
+    ])
+    sources=[]
+    for reduced in [True,False]:
+        for condition,variant in variants:
+            if not reduced and not condition:
+                continue
+            media=condition
+            if reduced:
+                media=', '.join('(prefers-reduced-motion: reduce)'+(' and '+part if part else '') for part in condition.split(', '))
+            suffix=variant+('-still' if reduced else '')
+            sources.append(f'  <source media="{media}" srcset="assets/{name}{suffix}.svg">')
+    return '<picture>\n'+'\n'.join(sources)+f'\n  <img src="assets/{name}.svg" alt="{escape(description,quote=True)}" width="880">\n</picture>'
 
 
 def project_block(project):
@@ -159,7 +179,7 @@ def outputs(colors,font):
     import re
     result={}
     for i,project in enumerate(PROJECTS,1):
-        for variant in ['','mobile','compact','medium']:
+        for variant in ['','mobile','compact','wide','medium']:
             suffix='-'+variant if variant else ''
             result['project-'+project['key']+suffix+'.svg']=project_card(project,i,variant,colors,font)
     for variant in ['','mobile','compact','medium']:
