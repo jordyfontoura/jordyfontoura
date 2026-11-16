@@ -219,9 +219,9 @@ def panel(data, mobile=False, medium=False, compact_variant=False):
         dash=' stroke-dasharray="3 5"' if dashed else ''
         parts.append(f'<path d="M{x1},{y} H{x2}" stroke="{COLOR["ring"]}" stroke-width="1"{dash}/>')
     text(24,38,'Uso de agentes',title_size,COLOR['foreground'],650)
-    text(width-24,38,compact(total),28,COLOR['accent'],650,'end')
+    text(width-28,38,compact(total),28,COLOR['accent'],650,'end')
     text(24,66,f'{month_label(start)} · {start:%d/%m} a {end:%d/%m}')
-    text(width-26,66,'tokens',anchor='end')
+    text(width-28,66,'tokens',anchor='end')
     rule(24,85,width-24)
     x0=88
     chart_width=width-x0-24 if stacked else 442 if not medium else 304
@@ -246,7 +246,7 @@ def panel(data, mobile=False, medium=False, compact_variant=False):
     active=sum(bool(sum(day.values())) for day in days)
     text(x0,bottom+51,f'{active} dias com registros',small)
     ranking_x=24 if stacked else 440 if medium else 590
-    ranking_end=width-24
+    ranking_end=width-28
     agent_y=390 if stacked else 148
     text(ranking_x,agent_y-30,'POR AGENTE',small,COLOR['muted'],600)
     for i,(name,count) in enumerate(agents.most_common()):
