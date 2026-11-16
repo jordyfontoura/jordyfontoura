@@ -75,10 +75,28 @@ class MotionTests(unittest.TestCase):
         svg = assets.banner().replace('animation:typing 3.2s steps(34,end) 1 both;', 'animation:typing 4.8s linear 1; animation-delay:500ms;')
         self.assertTrue(assets.problems('css-delay.svg', svg))
 
-    def test_banner_scale_matches_across_medium_desktop(self):
-        self.assertIn(assets.BANNER_ALT, assets.banner_medium())
-        self.assertIn('400 34px',assets.banner_medium())
-        self.assertGreaterEqual(34*408/900,15)
+    def test_medium_banner_text_is_readable_in_narrow_profile_column(self):
+        svg=assets.banner_medium()
+        document=assets.xml.dom.minidom.parseString(svg)
+        width=float(document.documentElement.getAttribute('viewBox').split()[2])
+        self.assertIn(assets.BANNER_ALT,svg)
+        for label in ['role','body','caption']:
+            font=assets.re.search(r'\.'+label+r'\s*\{\s*font:\d+\s+([\d.]+)px',svg)
+            self.assertIsNotNone(font,label)
+            self.assertGreaterEqual(float(font[1])*408/width,15,label)
+
+    def test_static_banner_descriptions_do_not_claim_motion(self):
+        for variant in ['','-mobile','-medium']:
+            svg=(assets.ASSETS/f'banner{variant}-still.svg').read_text(encoding='utf-8')
+            document=assets.xml.dom.minidom.parseString(svg)
+            description=document.getElementsByTagName('desc')[0].firstChild.data
+            self.assertIn('sem animação',description)
+            self.assertNotIn('movimento contínuo',description)
+
+    def test_static_readme_offers_return_to_animated_version(self):
+        text=(assets.ROOT/'README-static.md').read_text(encoding='utf-8')
+        self.assertIn('[Com animação](',text)
+        self.assertNotIn('[Sem animação](',text)
 
     def test_typing_advances_one_complete_character_per_step(self):
         svg = assets.banner()
