@@ -51,7 +51,7 @@ def style(extra=""):
     .ring {{ fill: none; stroke: {COLOR["border"]}; stroke-width: 1; }}
     .edge {{ stroke: {COLOR["ring"]}; stroke-width: 1; stroke-opacity: 0.8; }}
     .node {{ fill: {COLOR["background"]}; stroke: {COLOR["subtle"]}; stroke-width: 1.5; }}
-    .signal {{ fill: none; stroke: {COLOR["accent"]}; stroke-width: 2; stroke-opacity: 0.8; stroke-dasharray: 12 8; animation: flow 4.8s linear 1; }}
+    .signal {{ fill: none; stroke: {COLOR["accent"]}; stroke-width: 2; stroke-opacity: 0.8; stroke-dasharray: 12 8; animation: flow 4.8s linear infinite; }}
     @keyframes flow {{ to {{ stroke-dashoffset: -160; }} }}
     @media (prefers-reduced-motion: reduce) {{ .signal {{ animation: none; }} }}
 {extra}
@@ -91,10 +91,19 @@ def card_border(width, height):
             f'fill="none" stroke="{COLOR["border"]}"/>')
 
 
-def banner_art(width, height, compact=False):
+def banner_art(width, height, variant='desktop'):
     """Terminal vetorial com um campo neural; texto nunca depende da animação."""
-    cx, cy = (440, 450) if compact else (735, 208)
-    radius = 105 if compact else 94
+    compact = variant == 'mobile'
+    narrow = variant == 'compact'
+    name_size, role_size, body_size, caption_size, terminal_size = {
+        'desktop': (38,24,21,21,18),
+        'medium': (41,24,22.1,22.1,20),
+        'compact': (44,26,22.1,22.1,22),
+        'mobile': (52,30,30,28,26),
+    }[variant]
+    command_width = 520 if compact else round(34*terminal_size*.6)
+    cx, cy = (440,450) if compact else (width-110 if narrow else width-145 if variant=='medium' else 735,154)
+    radius = 105 if compact else 68 if narrow else 76
     parts = []
     points = []
     for ring, count in ((0.48, 8), (1, 16)):
@@ -108,42 +117,41 @@ def banner_art(width, height, compact=False):
         parts.append(f'<circle class="neuron" style="animation-delay:{i*.035:.3f}s" cx="{x:.1f}" cy="{y:.1f}" r="3"/>')
     parts.append(f'<circle class="orbit" cx="{cx}" cy="{cy}" r="{radius+14}"/>')
     parts.append(f'<path class="packet" d="M{cx-radius-14},{cy} H{cx+radius+14}"/>')
-    parts.append(f'<circle cx="{cx}" cy="{cy}" r="28" fill="{COLOR["accent_background"]}" stroke="{COLOR["accent"]}"/>')
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="{28 if compact else 24}" fill="{COLOR["accent_background"]}" stroke="{COLOR["accent"]}"/>')
     parts.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="core">IA</text>')
-    name_size = 46 if compact else 64
     lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
              '<text x="40" y="156" class="role">Engenheiro de IA</text>'
              '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
              '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
              '<text x="40" y="288" class="caption">Carreira desde 2018.</text>') if compact else (
-             f'<text x="56" y="142" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
-             '<text x="58" y="190" class="role">Engenheiro de IA</text>'
-             '<text x="58" y="242" class="body">RAG · agentes · MCP</text>'
-             '<text x="58" y="281" class="body">TypeScript · Python · Rust</text>'
-             '<text x="58" y="334" class="caption">Carreira em software desde 2018.</text>')
+             f'<text x="40" y="98" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
+             '<text x="40" y="132" class="role">Engenheiro de IA</text>'
+             '<text x="40" y="170" class="body">RAG · agentes · MCP</text>'
+             '<text x="40" y="198" class="body">TypeScript · Python · Rust</text>'
+             '<text x="40" y="234" class="caption">Carreira em software desde 2018.</text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Rede neural animada em um terminal; movimento termina em menos de cinco segundos.</desc>
+  <desc id="desc">{BANNER_ALT}. Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
   <defs>{card_defs(width, height, 0.8, width, include_flow=False)}
-    <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="520" height="40"/></clipPath>
+    <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="{command_width}" height="40"/></clipPath>
   </defs>
   <style>
-    .name {{ font:700 {name_size}px {SANS}; fill:{COLOR["foreground"]}; letter-spacing:-2px; }}
-    .role {{ font:500 30px {SANS}; fill:{COLOR["lead"]}; }}
-    .body {{ font:400 30px {SANS}; fill:{COLOR["muted"]}; }}
-    .caption {{ font:400 28px {SANS}; fill:{COLOR["muted"]}; }}
-    .terminal,.core {{ font:500 26px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
+    .name {{ font:700 {name_size}px {SANS}; fill:{COLOR["foreground"]}; letter-spacing:{-2 if compact else -1}px; }}
+    .role {{ font:500 {role_size}px {SANS}; fill:{COLOR["lead"]}; }}
+    .body {{ font:400 {body_size}px {SANS}; fill:{COLOR["muted"]}; }}
+    .caption {{ font:400 {caption_size}px {SANS}; fill:{COLOR["muted"]}; }}
+    .terminal,.core {{ font:500 {terminal_size}px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
     .mesh {{ stroke:{COLOR["accent"]}; stroke-opacity:.17; fill:none; }}
-    .neuron {{ fill:{COLOR["accent"]}; opacity:.65; animation:activate 3.8s ease-in-out 1 both; }}
-    .orbit {{ fill:none; stroke:{COLOR["accent"]}; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear 1 forwards; }}
-    .packet {{ fill:none; stroke:{COLOR["accent"]}; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out 1 forwards; opacity:0; }}
+    .neuron {{ fill:{COLOR["accent"]}; opacity:.65; animation:activate 3.8s ease-in-out infinite both; }}
+    .orbit {{ fill:none; stroke:{COLOR["accent"]}; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear infinite; }}
+    .packet {{ fill:none; stroke:{COLOR["accent"]}; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out infinite; opacity:0; }}
     @keyframes orbit {{ to {{ stroke-dashoffset:-168; }} }}
     @keyframes transfer {{ 0% {{ stroke-dashoffset:332; opacity:0; }} 15%,75% {{ opacity:.8; }} 100% {{ stroke-dashoffset:0; opacity:0; }} }}
     @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; }} }}
-    .reveal {{ width:520px; animation:typing 3.2s steps(34,end) 1 both; }}
+    .reveal {{ width:{command_width}px; animation:typing 3.2s steps(34,end) 1 both; }}
     .caret {{ fill:{COLOR["accent"]}; opacity:0; animation:cursor 3.2s steps(34,end) 1 both; }}
-    @keyframes typing {{ from {{ width:0px; }} to {{ width:520px; }} }}
-    @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX(520px); opacity:0; }} }}
+    @keyframes typing {{ from {{ width:0px; }} to {{ width:{command_width}px; }} }}
+    @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX({command_width}px); opacity:0; }} }}
     @media (prefers-reduced-motion:reduce) {{ .neuron,.orbit,.packet,.reveal,.caret {{ animation:none; }} }}
   </style>
   <g clip-path="url(#card)">
@@ -153,8 +161,8 @@ def banner_art(width, height, compact=False):
     <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
     {''.join(parts)}
     {lines}
-    <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="520" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
-    <rect class="caret" x="40" y="{height-46}" width="2" height="27"/>
+    <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="{command_width}" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
+    <rect class="caret" x="40" y="{height-24-round(terminal_size*.85)}" width="2" height="{terminal_size}"/>
   </g>
   {card_border(width,height)}
 </svg>
@@ -162,7 +170,7 @@ def banner_art(width, height, compact=False):
 
 
 def banner():
-    return banner_art(900, 410)
+    return banner_art(900, 300)
 
 
 def focus():
@@ -171,7 +179,7 @@ def focus():
     xs, cy = [135, 345, 555, 765], 72
     extra = f"""
     .stage {{ font: 700 24px {SANS}; fill: {COLOR["foreground"]}; letter-spacing: -0.5px; }}
-    .detail {{ font: 400 22px {SANS}; fill: {COLOR["muted"]}; }}"""
+    .detail {{ font: 400 21px {SANS}; fill: {COLOR["muted"]}; }}"""
     parts = []
     # Linhas que entram pela borda esquerda e saem pela direita, como no banner.
     for dy in (-10, 0, 10):
@@ -216,34 +224,52 @@ def focus():
 
 def banner_medium():
     """Versão horizontal para a coluna do perfil em tablets e notebooks."""
-    return banner()
+    return banner_art(800,300,'medium')
+
+
+def banner_compact():
+    return banner_art(600,310,'compact')
 
 
 def banner_mobile():
     # Mesmo layout vertical nos tamanhos menores: nenhum texto invade o campo neural.
-    return banner_art(600, 630, compact=True)
+    return banner_art(600, 630, 'mobile')
 
 
 def focus_mobile(medium=False):
+    return focus_grid('medium' if medium else 'mobile')
+
+
+def focus_compact():
+    return focus_grid('compact')
+
+
+def focus_grid(variant):
     """As quatro áreas em duas colunas, com conexões fora dos rótulos."""
-    width, height = (760 if medium else 600), 420
-    left, right = (200, 560) if medium else (160, 440)
+    mobile = variant == 'mobile'
+    width = 800 if variant=='medium' else 600
+    height = 420 if mobile else 320
+    left,right = (160,440) if mobile else (width/4,width*3/4)
+    top,bottom = (68,268) if mobile else (60,210)
+    title_size,detail_size = (32,30) if mobile else (26,22.1)
+    title_offset,detail_offset = (64,102) if mobile else (50,82)
+    ring_size = 32 if mobile else 24
     extra = f'''
-    .mobile-stage {{ font: 700 32px {SANS}; fill: {COLOR['foreground']}; }}
-    .mobile-detail {{ font: 400 25px {SANS}; fill: {COLOR['muted']}; }}'''
-    parts = [f'<path class="signal" d="M{left},68 H{right} M{left},268 H{right}"/>']
-    for (x,y), (stage,detail,formula) in zip([(left,68),(right,68),(left,268),(right,268)], STAGES):
+    .mobile-stage {{ font: 700 {title_size}px {SANS}; fill: {COLOR['foreground']}; }}
+    .mobile-detail {{ font: 400 {detail_size}px {SANS}; fill: {COLOR['muted']}; }}'''
+    parts = [f'<path class="signal" d="M{left},{top} H{right} M{left},{bottom} H{right}"/>']
+    for (x,y), (stage,detail,formula) in zip([(left,top),(right,top),(left,bottom),(right,bottom)], STAGES):
         parts.extend([
-            f'<text class="eq" x="{x}" y="{y-36}" font-size="20" text-anchor="middle">{formula}</text>',
-            f'<circle class="ring" cx="{x}" cy="{y}" r="32" stroke-dasharray="3 6"/>',
+            f'<text class="eq" x="{x}" y="{y-36}" font-size="{20 if mobile else 16}" text-anchor="middle">{formula}</text>',
+            f'<circle class="ring" cx="{x}" cy="{y}" r="{ring_size}" stroke-dasharray="3 6"/>',
             f'<circle class="node" cx="{x}" cy="{y}" r="20"/>',
             f'<circle cx="{x}" cy="{y}" r="3.5" fill="{COLOR["foreground"]}"/>',
-            f'<text class="mobile-stage" x="{x}" y="{y+64}" text-anchor="middle">{stage}</text>',
-            f'<text class="mobile-detail" x="{x}" y="{y+102}" text-anchor="middle">{detail}</text>',
+            f'<text class="mobile-stage" x="{x}" y="{y+title_offset}" text-anchor="middle">{stage}</text>',
+            f'<text class="mobile-detail" x="{x}" y="{y+detail_offset}" text-anchor="middle">{detail}</text>',
         ])
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">O que construo</title>
-  <desc id="desc">{FOCUS_ALT}. Versão {'intermediária' if medium else 'de celular'}, em duas linhas na ordem de leitura.</desc>
+  <desc id="desc">{FOCUS_ALT}. Versão {'de celular' if mobile else 'intermediária'}, em duas linhas na ordem de leitura.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}
   </defs>
@@ -272,6 +298,20 @@ def problems(name, svg):
     disabled = set(re.findall(r"\.([\w-]+)", reduced[1])) if reduced else set()
     document = xml.dom.minidom.parseString(svg)
     rules = re.findall(r"([^{}]+)\{([^{}]*)\}", svg)
+    required = ({'neuron','orbit','packet','reveal','caret'} if name.startswith('banner') else
+                {'signal'} if name.startswith('focus') else
+                {'motion-art'} if name.startswith(('project-','stack')) else set())
+    if '-still.svg' not in name:
+        active_classes = set()
+        for selectors, declarations in rules:
+            animation = re.search(r'(?:^|;)\s*animation:\s*([^;]+)', declarations)
+            if animation and animation[1].strip() != 'none':
+                active_classes.update(re.findall(r'\.([\w-]+)',selectors))
+        element_classes = set().union(*(set(e.getAttribute('class').split())
+                                       for e in document.getElementsByTagName('*')))
+        active_classes &= element_classes
+        if required-active_classes:
+            found.append(f'{name}: animação obrigatória ausente: '+', '.join(sorted(required-active_classes)))
     def seconds(value):
         return [float(number) / (1000 if unit == 'ms' else 1)
                 for number, unit in re.findall(r"(-?[\d.]+)(ms|s)\b", value)]
@@ -296,8 +336,11 @@ def problems(name, svg):
                 delay = re.search(r"animation-delay:\s*([^;]+)", element.getAttribute('style'))
                 if delay:
                     delays.extend(seconds(delay[1]))
-        if duration is None or duration < 0 or 'infinite' in value or not re.search(r"\s1(?:\s|$)", value) or duration + max(delays) >= 5:
-            found.append(f"{name}: animação deve executar uma vez e terminar antes de cinco segundos")
+        # Movimento contínuo aprovado pelo usuário: só ornamentos, com alternativa estática.
+        continuous = bool(classes) and classes <= {'signal','neuron','orbit','packet','motion-art'} and 'infinite' in value
+        if duration is None or duration <= 0 or (not continuous and
+            (not re.search(r"\s1(?:\s|$)", value) or 'infinite' in value or duration + max(delays) >= 5)):
+            found.append(f"{name}: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos")
     if len(svg.encode("utf-8")) > MAX_BYTES:
         found.append(f"{name}: maior que {MAX_BYTES} bytes")
     return found
@@ -309,11 +352,11 @@ def main():
     args = parser.parse_args()
     outputs = {"banner.svg": banner(), "focus.svg": focus(),
                "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
-               "banner-medium.svg": banner_medium(), "focus-medium.svg": focus_mobile(True)}
+               "banner-medium.svg": banner_medium(), "banner-compact.svg": banner_compact(), "focus-medium.svg": focus_mobile(True), "focus-compact.svg": focus_compact()}
     cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
     card_outputs = cards['outputs'](COLOR, SANS)
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
-    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg)
+    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg).replace('Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.', 'Rede neural estática, sem animação.')
                     for name, svg in list(outputs.items())})
     outputs.update(card_outputs)
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
@@ -322,13 +365,7 @@ def main():
     for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
         if f'src="assets/{name}" alt="{alt}"' not in readme:
             errors.append(f"README.md: alt de assets/{name} difere do texto do gerador")
-        sources = '\n'.join(f'  <source media="(max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+".svg")}">'
-                            for limit, variant in ((480, 'mobile'), (1011, 'medium')))
-        still_sources = '\n'.join(
-            f'  <source media="(prefers-reduced-motion: reduce) and (max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+"-still.svg")}">'
-            for limit, variant in ((480, 'mobile'), (1011, 'medium')))
-        still_sources += f'\n  <source media="(prefers-reduced-motion: reduce)" srcset="assets/{name.replace(".svg", "-still.svg")}">'
-        expected = '<picture>\n'+still_sources+'\n'+sources+f'\n  <img src="assets/{name}" alt="{alt}" width="880">'
+        expected=cards['picture'](name.removesuffix('.svg'),alt)
         if expected not in readme:
             errors.append(f"README.md: fontes responsivas ou largura de assets/{name} incorretas")
     if args.check:
@@ -347,6 +384,17 @@ def main():
     result = subprocess.run([sys.executable, '-I', str(ROOT/'scripts/build_usage.py'), *(['--check'] if args.check else [])])
     if result.returncode:
         return result.returncode
+    # O link persistente no topo oferece controle também sem suporte à media query.
+    static = re.sub(r'assets/((?:banner|focus|project-|stack)[\w-]*)(?<!-still)\.svg',
+                    lambda m:'assets/'+m[1]+'-still.svg', README.read_text(encoding='utf-8'))
+    static = static.replace('[Sem animação](https://github.com/jordyfontoura/jordyfontoura/blob/nightly/README-static.md)', '[Com animação](https://github.com/jordyfontoura/jordyfontoura/blob/nightly/README.md)')
+    static_path=ROOT/'README-static.md'
+    if args.check:
+        if not static_path.exists() or static_path.read_text(encoding='utf-8')!=static:
+            print('README-static.md desatualizado',file=sys.stderr)
+            return 1
+    else:
+        static_path.write_text(static,encoding='utf-8',newline='\n')
     return 0
 
 
