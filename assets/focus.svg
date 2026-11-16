@@ -35,7 +35,7 @@
     @media (prefers-reduced-motion: reduce) { .signal { animation: none; } }
 
     .stage { font: 700 24px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; letter-spacing: -0.5px; }
-    .detail { font: 400 22px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+    .detail { font: 400 21px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
     .flow-out { stroke: url(#flowfadeout); }
   </style>
   <g clip-path="url(#card)">

@@ -1,8 +1,10 @@
 <picture>
   <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/banner-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 585px), (prefers-reduced-motion: reduce) and (min-width: 768px) and (max-width: 905px)" srcset="assets/banner-compact-still.svg">
   <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/banner-medium-still.svg">
   <source media="(prefers-reduced-motion: reduce)" srcset="assets/banner-still.svg">
   <source media="(max-width: 480px)" srcset="assets/banner-mobile.svg">
+  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/banner-compact.svg">
   <source media="(max-width: 1011px)" srcset="assets/banner-medium.svg">
   <img src="assets/banner.svg" alt="Jordy Fontoura: engenheiro de IA, com RAG, agentes e MCP; carreira em software desde 2018; TypeScript, Python e Rust" width="880">
 </picture>

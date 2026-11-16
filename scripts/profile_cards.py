@@ -134,7 +134,7 @@ def stack_card(variant, colors, font):
         svg = svg.replace('width="900"','width="800"',1).replace('height="380"','height="338"',1)
         svg = svg.replace('400 24px','400 24.75px').replace('600 27px','600 29.25px')
     else:
-        svg = svg.replace('400 24px','400 22px').replace('600 27px','600 25px') if not mobile else svg
+        svg = svg.replace('400 24px','400 21px').replace('600 27px','600 25px') if not mobile else svg
     return svg
 
 

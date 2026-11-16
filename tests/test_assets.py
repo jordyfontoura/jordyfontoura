@@ -23,7 +23,7 @@ class MotionTests(unittest.TestCase):
             self.assertIsNone(assets.re.search(r'animation:\s*(?!none\b)[^;]+;',svg),reference)
 
     def test_all_three_sizes_require_every_motion_component(self):
-        for family, variants in [('banner',[assets.banner,assets.banner_medium,assets.banner_mobile]),
+        for family, variants in [('banner',[assets.banner,assets.banner_medium,assets.banner_compact,assets.banner_mobile]),
                                  ('focus',[assets.focus,lambda:assets.focus_mobile(True),assets.focus_mobile])]:
             for index,generate in enumerate(variants):
                 svg=generate()
@@ -83,10 +83,19 @@ class MotionTests(unittest.TestCase):
         for label in ['role','body','caption']:
             font=assets.re.search(r'\.'+label+r'\s*\{\s*font:\d+\s+([\d.]+)px',svg)
             self.assertIsNotNone(font,label)
-            self.assertGreaterEqual(float(font[1])*408/width,15,label)
+            self.assertGreaterEqual(float(font[1])*546/width,15,label)
+
+    def test_desktop_banner_type_is_proportional_to_markdown(self):
+        svg=assets.banner()
+        width=float(assets.xml.dom.minidom.parseString(svg).documentElement.getAttribute('viewBox').split()[2])
+        # Coluna larga do perfil; o corpo do Markdown tem 16 px na prévia.
+        for label,maximum in [('body',20),('caption',20),('name',40)]:
+            font=assets.re.search(r'\.'+label+r'\s*\{\s*font:\d+\s+([\d.]+)px',svg)
+            self.assertIsNotNone(font,label)
+            self.assertLessEqual(float(font[1])*850/width,maximum,label)
 
     def test_static_banner_descriptions_do_not_claim_motion(self):
-        for variant in ['','-mobile','-medium']:
+        for variant in ['','-mobile','-medium','-compact']:
             svg=(assets.ASSETS/f'banner{variant}-still.svg').read_text(encoding='utf-8')
             document=assets.xml.dom.minidom.parseString(svg)
             description=document.getElementsByTagName('desc')[0].firstChild.data

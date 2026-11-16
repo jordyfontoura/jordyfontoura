@@ -91,10 +91,19 @@ def card_border(width, height):
             f'fill="none" stroke="{COLOR["border"]}"/>')
 
 
-def banner_art(width, height, compact=False):
+def banner_art(width, height, variant='desktop'):
     """Terminal vetorial com um campo neural; texto nunca depende da animação."""
-    cx, cy = (440, 450) if compact else (735, 208)
-    radius = 105 if compact else 94
+    compact = variant == 'mobile'
+    narrow = variant == 'compact'
+    name_size, role_size, body_size, caption_size, terminal_size = {
+        'desktop': (38,24,21,21,18),
+        'medium': (38,24,22.1,22.1,20),
+        'compact': (38,26,22.1,22.1,22),
+        'mobile': (46,30,30,28,26),
+    }[variant]
+    command_width = 520 if compact else round(34*terminal_size*.6)
+    cx, cy = (440,450) if compact else (width-110 if narrow else width-145 if variant=='medium' else 735,154)
+    radius = 105 if compact else 68 if narrow else 76
     parts = []
     points = []
     for ring, count in ((0.48, 8), (1, 16)):
@@ -108,31 +117,30 @@ def banner_art(width, height, compact=False):
         parts.append(f'<circle class="neuron" style="animation-delay:{i*.035:.3f}s" cx="{x:.1f}" cy="{y:.1f}" r="3"/>')
     parts.append(f'<circle class="orbit" cx="{cx}" cy="{cy}" r="{radius+14}"/>')
     parts.append(f'<path class="packet" d="M{cx-radius-14},{cy} H{cx+radius+14}"/>')
-    parts.append(f'<circle cx="{cx}" cy="{cy}" r="28" fill="{COLOR["accent_background"]}" stroke="{COLOR["accent"]}"/>')
+    parts.append(f'<circle cx="{cx}" cy="{cy}" r="{28 if compact else 24}" fill="{COLOR["accent_background"]}" stroke="{COLOR["accent"]}"/>')
     parts.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="core">IA</text>')
-    name_size = 46 if compact else 64
     lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
              '<text x="40" y="156" class="role">Engenheiro de IA</text>'
              '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
              '<text x="40" y="238" class="body">TypeScript · Python · Rust</text>'
              '<text x="40" y="288" class="caption">Carreira desde 2018.</text>') if compact else (
-             f'<text x="56" y="142" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
-             '<text x="58" y="190" class="role">Engenheiro de IA</text>'
-             '<text x="58" y="242" class="body">RAG · agentes · MCP</text>'
-             '<text x="58" y="281" class="body">TypeScript · Python · Rust</text>'
-             '<text x="58" y="334" class="caption">Carreira em software desde 2018.</text>')
+             f'<text x="40" y="98" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
+             '<text x="40" y="132" class="role">Engenheiro de IA</text>'
+             '<text x="40" y="170" class="body">RAG · agentes · MCP</text>'
+             '<text x="40" y="198" class="body">TypeScript · Python · Rust</text>'
+             '<text x="40" y="234" class="caption">Carreira em software desde 2018.</text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
   <desc id="desc">{BANNER_ALT}. Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
   <defs>{card_defs(width, height, 0.8, width, include_flow=False)}
-    <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="520" height="40"/></clipPath>
+    <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="{command_width}" height="40"/></clipPath>
   </defs>
   <style>
-    .name {{ font:700 {name_size}px {SANS}; fill:{COLOR["foreground"]}; letter-spacing:-2px; }}
-    .role {{ font:500 30px {SANS}; fill:{COLOR["lead"]}; }}
-    .body {{ font:400 30px {SANS}; fill:{COLOR["muted"]}; }}
-    .caption {{ font:400 28px {SANS}; fill:{COLOR["muted"]}; }}
-    .terminal,.core {{ font:500 26px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
+    .name {{ font:700 {name_size}px {SANS}; fill:{COLOR["foreground"]}; letter-spacing:{-2 if compact else -1}px; }}
+    .role {{ font:500 {role_size}px {SANS}; fill:{COLOR["lead"]}; }}
+    .body {{ font:400 {body_size}px {SANS}; fill:{COLOR["muted"]}; }}
+    .caption {{ font:400 {caption_size}px {SANS}; fill:{COLOR["muted"]}; }}
+    .terminal,.core {{ font:500 {terminal_size}px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
     .mesh {{ stroke:{COLOR["accent"]}; stroke-opacity:.17; fill:none; }}
     .neuron {{ fill:{COLOR["accent"]}; opacity:.65; animation:activate 3.8s ease-in-out infinite both; }}
     .orbit {{ fill:none; stroke:{COLOR["accent"]}; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear infinite; }}
@@ -140,10 +148,10 @@ def banner_art(width, height, compact=False):
     @keyframes orbit {{ to {{ stroke-dashoffset:-168; }} }}
     @keyframes transfer {{ 0% {{ stroke-dashoffset:332; opacity:0; }} 15%,75% {{ opacity:.8; }} 100% {{ stroke-dashoffset:0; opacity:0; }} }}
     @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; }} }}
-    .reveal {{ width:520px; animation:typing 3.2s steps(34,end) 1 both; }}
+    .reveal {{ width:{command_width}px; animation:typing 3.2s steps(34,end) 1 both; }}
     .caret {{ fill:{COLOR["accent"]}; opacity:0; animation:cursor 3.2s steps(34,end) 1 both; }}
-    @keyframes typing {{ from {{ width:0px; }} to {{ width:520px; }} }}
-    @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX(520px); opacity:0; }} }}
+    @keyframes typing {{ from {{ width:0px; }} to {{ width:{command_width}px; }} }}
+    @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX({command_width}px); opacity:0; }} }}
     @media (prefers-reduced-motion:reduce) {{ .neuron,.orbit,.packet,.reveal,.caret {{ animation:none; }} }}
   </style>
   <g clip-path="url(#card)">
@@ -153,7 +161,7 @@ def banner_art(width, height, compact=False):
     <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
     {''.join(parts)}
     {lines}
-    <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="520" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
+    <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="{command_width}" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
     <rect class="caret" x="40" y="{height-46}" width="2" height="27"/>
   </g>
   {card_border(width,height)}
@@ -162,7 +170,7 @@ def banner_art(width, height, compact=False):
 
 
 def banner():
-    return banner_art(900, 410)
+    return banner_art(900, 300)
 
 
 def focus():
@@ -171,7 +179,7 @@ def focus():
     xs, cy = [135, 345, 555, 765], 72
     extra = f"""
     .stage {{ font: 700 24px {SANS}; fill: {COLOR["foreground"]}; letter-spacing: -0.5px; }}
-    .detail {{ font: 400 22px {SANS}; fill: {COLOR["muted"]}; }}"""
+    .detail {{ font: 400 21px {SANS}; fill: {COLOR["muted"]}; }}"""
     parts = []
     # Linhas que entram pela borda esquerda e saem pela direita, como no banner.
     for dy in (-10, 0, 10):
@@ -216,14 +224,16 @@ def focus():
 
 def banner_medium():
     """Versão horizontal para a coluna do perfil em tablets e notebooks."""
-    # Mais espaço para letras na coluna estreita do perfil, sem um banner vertical.
-    svg=banner_art(900,450).replace('y="334"','y="374"')
-    return svg.replace('500 30px','500 36px').replace('400 30px','400 34px').replace('400 28px','400 34px')
+    return banner_art(800,300,'medium')
+
+
+def banner_compact():
+    return banner_art(600,310,'compact')
 
 
 def banner_mobile():
     # Mesmo layout vertical nos tamanhos menores: nenhum texto invade o campo neural.
-    return banner_art(600, 630, compact=True)
+    return banner_art(600, 630, 'mobile')
 
 
 def focus_mobile(medium=False):
@@ -328,7 +338,7 @@ def main():
     args = parser.parse_args()
     outputs = {"banner.svg": banner(), "focus.svg": focus(),
                "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
-               "banner-medium.svg": banner_medium(), "focus-medium.svg": focus_mobile(True)}
+               "banner-medium.svg": banner_medium(), "banner-compact.svg": banner_compact(), "focus-medium.svg": focus_mobile(True)}
     cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
     card_outputs = cards['outputs'](COLOR, SANS)
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
@@ -348,6 +358,8 @@ def main():
             for limit, variant in ((480, 'mobile'), (1011, 'medium')))
         still_sources += f'\n  <source media="(prefers-reduced-motion: reduce)" srcset="assets/{name.replace(".svg", "-still.svg")}">'
         expected = '<picture>\n'+still_sources+'\n'+sources+f'\n  <img src="assets/{name}" alt="{alt}" width="880">'
+        if name=='banner.svg':
+            expected=cards['picture']('banner',alt)
         if expected not in readme:
             errors.append(f"README.md: fontes responsivas ou largura de assets/{name} incorretas")
     if args.check:
