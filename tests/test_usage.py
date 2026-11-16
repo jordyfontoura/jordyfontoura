@@ -108,6 +108,26 @@ if __name__=='__main__': unittest.main()
 
 
 class PanelLayoutTests(unittest.TestCase):
+    def test_every_chart_variant_has_readable_labels_at_its_smallest_column(self):
+        data = usage.collect(document([row()]), date(2026,11,1))
+        for options, column in [({'mobile':True},280),({'compact_variant':True},408),
+                                ({'medium':True},546),({},652)]:
+            svg = usage.ET.fromstring(usage.panel(data, **options))
+            scale = column / float(svg.attrib['viewBox'].split()[2])
+            for label in svg.iter('{http://www.w3.org/2000/svg}text'):
+                self.assertGreaterEqual(float(label.attrib['font-size'])*scale,11,
+                                        (options,label.text))
+
+    def test_chart_titles_stay_below_section_headings_at_largest_columns(self):
+        data = usage.collect(document([row()]), date(2026,11,1))
+        for options, column in [({'mobile':True},440),({'compact_variant':True},545),
+                                ({'medium':True},719),({},850)]:
+            svg = usage.ET.fromstring(usage.panel(data, **options))
+            title = next(e for e in svg.iter('{http://www.w3.org/2000/svg}text')
+                         if e.text == 'Uso de agentes')
+            self.assertLessEqual(float(title.attrib['font-size'])*column/
+                                 float(svg.attrib['viewBox'].split()[2]),24)
+
     def test_four_agents_leave_room_before_model_heading(self):
         data = usage.collect(document([row()]), date(2026,11,1))
         template = data['records'][0]

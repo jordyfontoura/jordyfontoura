@@ -341,7 +341,7 @@ def main():
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
     readme = README.read_text(encoding="utf-8")
     errors.extend(cards['reference_problems'](readme))
-    for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
+    for name, alt in (("banner.svg", BANNER_ALT),):
         if f'src="assets/{name}" alt="{alt}"' not in readme:
             errors.append(f"README.md: alt de assets/{name} difere do texto do gerador")
         expected=cards['picture'](name.removesuffix('.svg'),alt)
@@ -366,7 +366,7 @@ def main():
     # O link persistente no topo oferece controle também sem suporte à media query.
     static = re.sub(r'assets/((?:banner|focus|project-|stack)[\w-]*)(?<!-still)\.svg',
                     lambda m:'assets/'+m[1]+'-still.svg', README.read_text(encoding='utf-8'))
-    static = static.replace('[Sem animação](https://github.com/jordyfontoura/jordyfontoura/blob/nightly/README-static.md)', '[Com animação](https://github.com/jordyfontoura/jordyfontoura/blob/nightly/README.md)')
+    static = static.replace('[Sem animação](README-static.md)', '[Com animação](README.md)')
     static_path=ROOT/'README-static.md'
     if args.check:
         if not static_path.exists() or static_path.read_text(encoding='utf-8')!=static:

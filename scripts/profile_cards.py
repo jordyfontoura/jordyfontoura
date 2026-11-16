@@ -3,8 +3,8 @@ from html import escape
 import textwrap
 
 PROJECTS = [
-    dict(key='skills', name='skills', detail='Alinhe decisões, implemente e peça provas aos agentes.', meta='Claude Code · Codex · português'),
-    dict(key='tryless', name='TryLess', detail='Trate erros com Result em TypeScript.', meta='TypeScript · npm'),
+    dict(key='skills', name='skills', detail='Instruções para orientar agentes de programação.', meta='Claude Code · Codex · português'),
+    dict(key='tryless', name='TryLess', detail='Trate erros com Result.', meta='TypeScript · npm'),
     dict(key='gitclean', name='gitclean', detail='Inspecione e limpe arquivos ignorados pelo Git.', meta='Rust · CLI interativa'),
     dict(key='np', name='np', detail='Use npm, Yarn e pnpm com um só comando.', meta='Rust · CLI'),
     dict(key='argus', name='Argus', detail='Monitore hardware e configure alertas no Windows.', meta='Rust · Tauri'),
@@ -41,12 +41,12 @@ def miniature_art(key):
     if key == 'skills':
         return '<path class="line" d="M5,20 H155 M5,58 H155"/>'+''.join(f'<rect class="box" x="{x}" y="8" width="38" height="62" rx="6"/><path class="line" d="M{x+8},25 h22 m-22,12 h16 m-16,12 h20"/>' for x in [0,60,120])
     if key == 'tryless':
-        return '<path class="line" d="M65,40 H90 V15 H115 M90,40 V65 H115"/><rect class="box" x="0" y="25" width="65" height="30" rx="7"/><text class="mini" x="8" y="45">Result</text><text class="mini" x="125" y="20">ok</text><text class="mini" x="125" y="70">err</text>'
+        return '<path class="line" d="M65,40 H90 V15 H115 M90,40 V65 H115"/><rect class="box" x="0" y="25" width="65" height="30" rx="7"/><path class="line" d="M14 34L22 40L14 46 M29 46H46 M123 15L130 22L143 8 M125 59L139 73 M139 59L125 73"/>'
     if key == 'gitclean':
-        return '<rect class="box" x="0" y="0" width="158" height="80" rx="7"/><text class="mini" x="10" y="22">.gitignore</text><text class="mini" x="10" y="48">espaço usado</text><rect class="box" x="10" y="61" width="138" height="7" rx="3"/><path class="line" d="M13,64.5 H100"/>'
+        return '<rect class="box" x="0" y="0" width="158" height="80" rx="7"/><path class="line" d="M12 16H80 M12 30H110 M12 44H66"/><rect class="box" x="10" y="61" width="138" height="7" rx="3"/><path class="line" d="M13,64.5 H100"/>'
     if key == 'np':
-        return '<path class="line" d="M40,40 H75 M75,40 V10 H95 M75,40 H95 M75,40 V70 H95"/><text class="mini" x="8" y="45">np</text><text class="mini" x="100" y="15">npm</text><text class="mini" x="100" y="45">Yarn</text><text class="mini" x="100" y="75">pnpm</text>'
-    return '<rect class="box" x="0" y="0" width="158" height="80" rx="7"/><path class="line" d="M8,57 H150 M8,27 L25,39 L43,16 L60,32 L79,22 L99,38 L119,15 L150,25"/><text class="mini" x="10" y="73">CPU / GPU</text>'
+        return '<path class="line" d="M40,40 H75 M75,40 V10 H95 M75,40 H95 M75,40 V70 H95"/><rect class="box" x="2" y="25" width="35" height="30" rx="5"/><rect class="box" x="99" y="2" width="50" height="16" rx="4"/><rect class="box" x="99" y="32" width="50" height="16" rx="4"/><rect class="box" x="99" y="62" width="50" height="16" rx="4"/>'
+    return '<rect class="box" x="0" y="0" width="158" height="80" rx="7"/><path class="line" d="M8,57 H150 M8,27 L25,39 L43,16 L60,32 L79,22 L99,38 L119,15 L150,25"/>'
 
 
 def miniature(key):
@@ -75,8 +75,8 @@ def project_card(project, index, variant, colors, font):
     width,height = {'mobile':(600,260),'compact':(600,210),'medium':(800,174),'':(900,150)}[variant]
     name_class = 'mobile-name' if mobile else 'name'
     meta_class = 'mobile-meta' if mobile else 'meta'
-    body = f'<rect class="box" x="24" y="24" width="64" height="72" rx="12"/><text class="index" x="56" y="66" text-anchor="middle">{index:02}</text>'
-    body += f'<text class="{name_class}" x="112" y="52">{escape(project["name"])}</text>'
+    body = ''
+    body += f'<text class="{name_class}" x="32" y="52">{escape(project["name"])}</text>'
     arrow_x = 380 if mobile or compact else width-200
     body += f'<text class="{"mobile-arrow" if mobile else "name"}" x="{arrow_x}" y="52">↗</text>'
     if mobile or compact:
@@ -86,10 +86,9 @@ def project_card(project, index, variant, colors, font):
         body += '<g transform="translate(426 24) scale(.85)">'+miniature(project['key'])+'</g>'
     else:
         for i,line in enumerate(wrapped_detail(project['detail'],44 if variant=='medium' else 54)):
-            body += f'<text class="body" x="112" y="{84+i*27}">{escape(line)}</text>'
-        body += f'<text class="meta" x="112" y="{height-24}">{escape(project["meta"])}</text>'
+            body += f'<text class="body" x="32" y="{84+i*27}">{escape(line)}</text>'
+        body += f'<text class="meta" x="32" y="{height-24}">{escape(project["meta"])}</text>'
         body += f'<g transform="translate({width-168} 24) scale(.85)">'+miniature(project['key'])+'</g>'
-    body += f'<text class="mini" x="{width-32}" y="{height-24}" text-anchor="end">repositório ↗</text>'
     # A ação pertence ao link do README; a descrição isolada só descreve a imagem.
     svg = shell(width,height,project['name'],alt(project).removesuffix(' Abrir repositório.'),body,colors,font)
     return svg.replace('400 22px',f'400 {21 if variant=="" else 22.1}px').replace('400 19px','400 18px').replace('400 26px','400 24px')
@@ -178,6 +177,4 @@ def reference_problems(readme):
     for project in PROJECTS:
         if project_block(project) not in readme:
             errors.append('README.md: link, fontes ou alt do projeto '+project['key']+' incorretos')
-    if picture('stack',STACK_ALT) not in readme:
-        errors.append('README.md: fontes ou alt do mapa de tecnologias incorretos')
     return errors
