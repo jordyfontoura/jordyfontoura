@@ -119,10 +119,11 @@ class MotionTests(unittest.TestCase):
             self.assertIn('sem animação',description)
             self.assertNotIn('movimento contínuo',description)
 
-    def test_static_readme_offers_return_to_animated_version(self):
-        text=(assets.ROOT/'README-static.md').read_text(encoding='utf-8')
-        self.assertIn('[Com animação](',text)
-        self.assertNotIn('[Sem animação](',text)
+    def test_readmes_do_not_show_manual_motion_toggle(self):
+        for name in ['README.md', 'README-static.md']:
+            text=(assets.ROOT/name).read_text(encoding='utf-8')
+            self.assertNotIn('[Sem animação](',text)
+            self.assertNotIn('[Com animação](',text)
 
     def test_personal_banner_has_no_cv_copy_or_opening_mask(self):
         for generate in [assets.banner, assets.banner_medium, assets.banner_compact, assets.banner_mobile]:

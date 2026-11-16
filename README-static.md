@@ -9,7 +9,7 @@
   <img src="assets/banner-still.svg" alt="Jordy Fontoura. Comecei no RPG Maker aos 10 anos." width="880">
 </picture>
 
-[GitHub](https://github.com/jordyfontoura) · [LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com) · [Com animação](README.md)
+[GitHub](https://github.com/jordyfontoura) · [LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com)
 
 ## Projetos
 

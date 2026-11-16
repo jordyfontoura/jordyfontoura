@@ -222,10 +222,9 @@ def main():
     result = subprocess.run([sys.executable, '-I', str(ROOT/'scripts/build_usage.py'), *(['--check'] if args.check else [])])
     if result.returncode:
         return result.returncode
-    # O link persistente no topo oferece controle também sem suporte à media query.
+    # A versão estática preserva o conteúdo com todos os ornamentos parados.
     static = re.sub(r'assets/((?:banner|project-)[\w-]*)(?<!-still)\.svg',
                     lambda m:'assets/'+m[1]+'-still.svg', README.read_text(encoding='utf-8'))
-    static = static.replace('[Sem animação](README-static.md)', '[Com animação](README.md)')
     static_path=ROOT/'README-static.md'
     if args.check:
         if not static_path.exists() or static_path.read_text(encoding='utf-8')!=static:
