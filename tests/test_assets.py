@@ -58,8 +58,17 @@ class MotionTests(unittest.TestCase):
         self.assertTrue(assets.problems('renamed.svg', svg))
 
     def test_every_animated_class_must_be_disabled(self):
-        svg = assets.banner().replace('.neuron,.orbit,.packet,.reveal,.caret { animation:none;', '.orbit,.packet,.reveal,.caret { animation:none;')
+        svg = assets.banner().replace('.companion-idle,.companion-antenna,.companion-cursor,.companion-shadow,.reveal,.caret { animation:none;', '.companion-antenna,.companion-cursor,.companion-shadow,.reveal,.caret { animation:none;')
         self.assertTrue(assets.problems('partial-reduce.svg', svg))
+
+    def test_antenna_and_terminal_stay_with_the_floating_companion(self):
+        for generate in [assets.banner, assets.banner_medium, assets.banner_compact, assets.banner_mobile]:
+            document = assets.xml.dom.minidom.parseString(generate())
+            body = next(e for e in document.getElementsByTagName('g')
+                        if e.getAttribute('class') == 'companion-idle')
+            children = {e.getAttribute('class') for e in body.getElementsByTagName('*')}
+            self.assertTrue({'companion-mast', 'companion-antenna', 'companion-prompt',
+                             'companion-cursor', 'companion-outline'} <= children)
 
     def test_medium_banner_stays_horizontal(self):
         svg = assets.banner_medium()

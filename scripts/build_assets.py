@@ -9,7 +9,6 @@ nada aqui pode depender de fontes, scripts ou recursos externos.
 """
 
 import argparse
-import math
 import re
 import subprocess
 import sys
@@ -24,6 +23,7 @@ MAX_BYTES = 100_000
 
 # Executar o arquivo local permite manter os CLIs isolados com python -I.
 COLOR = run_path(str(Path(__file__).with_name('theme.py')))['COLOR']
+COMPANION = run_path(str(Path(__file__).with_name('companion.py')))
 
 SANS = 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
 MATH = '"Cambria Math", "STIX Two Math", "Latin Modern Math", "Times New Roman", Times, serif'
@@ -92,7 +92,7 @@ def card_border(width, height):
 
 
 def banner_art(width, height, variant='desktop'):
-    """Terminal vetorial com um campo neural; texto nunca depende da animação."""
+    """Terminal vetorial com um companheiro de código; texto independe do movimento."""
     compact = variant == 'mobile'
     narrow = variant == 'compact'
     name_size, role_size, body_size, caption_size, terminal_size = {
@@ -102,23 +102,8 @@ def banner_art(width, height, variant='desktop'):
         'mobile': (52,30,30,28,26),
     }[variant]
     command_width = 520 if compact else round(34*terminal_size*.6)
-    cx, cy = (440,450) if compact else (width-110 if narrow else width-145 if variant=='medium' else 735,154)
-    radius = 105 if compact else 68 if narrow else 76
-    parts = []
-    points = []
-    for ring, count in ((0.48, 8), (1, 16)):
-        for i in range(count):
-            angle = i * math.tau / count
-            points.append((cx + math.cos(angle)*radius*ring,
-                           cy + math.sin(angle)*radius*ring))
-    for i, (x, y) in enumerate(points):
-        nx, ny = points[(i+5) % len(points)]
-        parts.append(f'<path class="mesh" d="M{x:.1f},{y:.1f} L{nx:.1f},{ny:.1f}"/>')
-        parts.append(f'<circle class="neuron" style="animation-delay:{i*.035:.3f}s" cx="{x:.1f}" cy="{y:.1f}" r="3"/>')
-    parts.append(f'<circle class="orbit" cx="{cx}" cy="{cy}" r="{radius+14}"/>')
-    parts.append(f'<path class="packet" d="M{cx-radius-14},{cy} H{cx+radius+14}"/>')
-    parts.append(f'<circle cx="{cx}" cy="{cy}" r="{28 if compact else 24}" fill="{COLOR["accent_background"]}" stroke="{COLOR["accent"]}"/>')
-    parts.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="core">IA</text>')
+    cx,cy,art_scale = (300,454,1.65) if compact else ((490,154,.9) if narrow else (655,154,1) if variant=='medium' else (735,154,1.15))
+    illustration = COMPANION['artwork'](cx,cy,art_scale)
     lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
              '<text x="40" y="156" class="role">Engenheiro de IA</text>'
              '<text x="40" y="200" class="body">RAG · agentes · MCP</text>'
@@ -131,7 +116,7 @@ def banner_art(width, height, variant='desktop'):
              '<text x="40" y="234" class="caption">Carreira em software desde 2018.</text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
+  <desc id="desc">{BANNER_ALT}. Companheiro de código com visor de terminal e movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
   <defs>{card_defs(width, height, 0.8, width, include_flow=False)}
     <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="{command_width}" height="40"/></clipPath>
   </defs>
@@ -140,26 +125,20 @@ def banner_art(width, height, variant='desktop'):
     .role {{ font:500 {role_size}px {SANS}; fill:{COLOR["lead"]}; }}
     .body {{ font:400 {body_size}px {SANS}; fill:{COLOR["muted"]}; }}
     .caption {{ font:400 {caption_size}px {SANS}; fill:{COLOR["muted"]}; }}
-    .terminal,.core {{ font:500 {terminal_size}px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
-    .mesh {{ stroke:{COLOR["accent"]}; stroke-opacity:.17; fill:none; }}
-    .neuron {{ fill:{COLOR["accent"]}; opacity:.65; animation:activate 3.8s ease-in-out infinite both; }}
-    .orbit {{ fill:none; stroke:{COLOR["accent"]}; stroke-opacity:.6; stroke-dasharray:2 12; animation:orbit 4.8s linear infinite; }}
-    .packet {{ fill:none; stroke:{COLOR["accent"]}; stroke-width:2; stroke-dasharray:12 320; animation:transfer 4.8s ease-out infinite; opacity:0; }}
-    @keyframes orbit {{ to {{ stroke-dashoffset:-168; }} }}
-    @keyframes transfer {{ 0% {{ stroke-dashoffset:332; opacity:0; }} 15%,75% {{ opacity:.8; }} 100% {{ stroke-dashoffset:0; opacity:0; }} }}
-    @keyframes activate {{ 0%,100% {{ opacity:.65; }} 45% {{ opacity:1; }} }}
+    .terminal {{ font:500 {terminal_size}px ui-monospace,Consolas,monospace; fill:{COLOR["accent"]}; }}
+{COMPANION['stylesheet'](COLOR)}
     .reveal {{ width:{command_width}px; animation:typing 3.2s steps(34,end) 1 both; }}
     .caret {{ fill:{COLOR["accent"]}; opacity:0; animation:cursor 3.2s steps(34,end) 1 both; }}
     @keyframes typing {{ from {{ width:0px; }} to {{ width:{command_width}px; }} }}
     @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX({command_width}px); opacity:0; }} }}
-    @media (prefers-reduced-motion:reduce) {{ .neuron,.orbit,.packet,.reveal,.caret {{ animation:none; }} }}
+    @media (prefers-reduced-motion:reduce) {{ .companion-idle,.companion-antenna,.companion-cursor,.companion-shadow,.reveal,.caret {{ animation:none; }} }}
   </style>
   <g clip-path="url(#card)">
     {card_background(width,height)}
     <path d="M0,52 H{width}" stroke="{COLOR["border"]}"/>
     <circle cx="24" cy="26" r="4" fill="{COLOR["line"]}"/><circle cx="40" cy="26" r="4" fill="{COLOR["line"]}"/><circle cx="56" cy="26" r="4" fill="{COLOR["accent"]}"/>
     <text x="80" y="32" class="terminal">jordy / laboratório de IA</text>
-    {''.join(parts)}
+    {illustration}
     {lines}
     <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="{command_width}" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
     <rect class="caret" x="40" y="{height-24-round(terminal_size*.85)}" width="2" height="{terminal_size}"/>
@@ -174,7 +153,7 @@ def banner():
 
 
 def focus():
-    """Cartão "O que construo": etapas ligadas pelo caminho em destaque da rede do banner."""
+    """Cartão "O que construo": etapas ligadas pelo caminho em destaque entre as áreas."""
     width, height = 900, 180
     xs, cy = [135, 345, 555, 765], 72
     extra = f"""
@@ -298,7 +277,7 @@ def problems(name, svg):
     disabled = set(re.findall(r"\.([\w-]+)", reduced[1])) if reduced else set()
     document = xml.dom.minidom.parseString(svg)
     rules = re.findall(r"([^{}]+)\{([^{}]*)\}", svg)
-    required = ({'neuron','orbit','packet','reveal','caret'} if name.startswith('banner') else
+    required = ({'companion-idle','companion-antenna','companion-cursor','companion-shadow','reveal','caret'} if name.startswith('banner') else
                 {'signal'} if name.startswith('focus') else
                 {'motion-art'} if name.startswith(('project-','stack')) else set())
     if '-still.svg' not in name:
@@ -337,7 +316,7 @@ def problems(name, svg):
                 if delay:
                     delays.extend(seconds(delay[1]))
         # Movimento contínuo aprovado pelo usuário: só ornamentos, com alternativa estática.
-        continuous = bool(classes) and classes <= {'signal','neuron','orbit','packet','motion-art'} and 'infinite' in value
+        continuous = bool(classes) and classes <= {'signal','companion-idle','companion-antenna','companion-cursor','companion-shadow','motion-art'} and 'infinite' in value
         if duration is None or duration <= 0 or (not continuous and
             (not re.search(r"\s1(?:\s|$)", value) or 'infinite' in value or duration + max(delays) >= 5)):
             found.append(f"{name}: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos")
@@ -356,7 +335,7 @@ def main():
     cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
     card_outputs = cards['outputs'](COLOR, SANS)
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
-    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg).replace('Rede neural com movimento contínuo discreto; respeita a preferência por movimento reduzido.', 'Rede neural estática, sem animação.')
+    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg).replace('Companheiro de código com visor de terminal e movimento contínuo discreto; respeita a preferência por movimento reduzido.', 'Companheiro de código estático, sem animação.')
                     for name, svg in list(outputs.items())})
     outputs.update(card_outputs)
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
