@@ -33,9 +33,11 @@ Na primeira passagem pela empresa, desenvolvi microsserviços e trabalhei com ar
 
 <picture>
   <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/focus-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 585px), (prefers-reduced-motion: reduce) and (min-width: 768px) and (max-width: 905px)" srcset="assets/focus-compact-still.svg">
   <source media="(prefers-reduced-motion: reduce) and (max-width: 1011px)" srcset="assets/focus-medium-still.svg">
   <source media="(prefers-reduced-motion: reduce)" srcset="assets/focus-still.svg">
   <source media="(max-width: 480px)" srcset="assets/focus-mobile-still.svg">
+  <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/focus-compact-still.svg">
   <source media="(max-width: 1011px)" srcset="assets/focus-medium-still.svg">
   <img src="assets/focus-still.svg" alt="O que construo: busca (RAG, pgvector), LLMs (Vercel AI SDK), ferramentas (tool calling, MCP) e agentes conversacionais" width="880">
 </picture>

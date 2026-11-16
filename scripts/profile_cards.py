@@ -29,7 +29,7 @@ def shell(width, height, title, description, body, colors, font):
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
 <title id="title">{escape(title)}</title><desc id="desc">{escape(description)}</desc>
 <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="{colors['foreground']}" opacity=".04"/></pattern></defs>
-<style>.name {{font:700 32px {font};fill:{colors['foreground']};letter-spacing:-.5px}} .body {{font:400 22px {font};fill:{colors['lead']}}} .meta {{font:400 19px {font};fill:{colors['muted']}}} .mini {{font:500 14px ui-monospace,Consolas,monospace;fill:{colors['accent']}}} .line {{fill:none;stroke:{colors['muted']};stroke-width:1.5}} .box {{fill:{colors['card']};stroke:{colors['ring']}}} .index {{font:500 20px ui-monospace,Consolas,monospace;fill:{colors['muted']}}} .mobile-name {{font:700 38px {font};fill:{colors['foreground']}}} .mobile-body {{font:400 30px {font};fill:{colors['lead']}}} .mobile-meta {{font:400 26px {font};fill:{colors['muted']}}} .stack-title {{font:600 27px {font};fill:{colors['foreground']}}} .stack-body {{font:400 24px {font};fill:{colors['lead']}}} .stack-mobile-title {{font:600 32px {font};fill:{colors['foreground']}}} .stack-mobile-body {{font:400 28px {font};fill:{colors['lead']}}} </style>
+<style>.name {{font:700 25px {font};fill:{colors['foreground']};letter-spacing:-.5px}} .body {{font:400 22px {font};fill:{colors['lead']}}} .meta {{font:400 19px {font};fill:{colors['muted']}}} .mini {{font:500 14px ui-monospace,Consolas,monospace;fill:{colors['accent']}}} .line {{fill:none;stroke:{colors['muted']};stroke-width:1.5}} .box {{fill:{colors['card']};stroke:{colors['ring']}}} .index {{font:500 20px ui-monospace,Consolas,monospace;fill:{colors['muted']}}} .mobile-arrow {{font:700 38px {font};fill:{colors['foreground']}}} .mobile-name {{font:700 32px {font};fill:{colors['foreground']}}} .mobile-body {{font:400 30px {font};fill:{colors['lead']}}} .mobile-meta {{font:400 26px {font};fill:{colors['muted']}}} .stack-title {{font:600 27px {font};fill:{colors['foreground']}}} .stack-body {{font:400 24px {font};fill:{colors['lead']}}} .stack-mobile-title {{font:600 32px {font};fill:{colors['foreground']}}} .stack-mobile-body {{font:400 28px {font};fill:{colors['lead']}}} </style>
 <rect x=".5" y=".5" width="{width-1}" height="{height-1}" rx="24" fill="{colors['background']}" stroke="{colors['border']}"/>
 <rect x="1" y="1" width="{width-2}" height="{height-2}" rx="24" fill="url(#dots)"/>
 {body}
@@ -78,7 +78,7 @@ def project_card(project, index, variant, colors, font):
     body = f'<rect class="box" x="24" y="24" width="64" height="72" rx="12"/><text class="index" x="56" y="66" text-anchor="middle">{index:02}</text>'
     body += f'<text class="{name_class}" x="112" y="52">{escape(project["name"])}</text>'
     arrow_x = 380 if mobile or compact else width-200
-    body += f'<text class="{"mobile-name" if mobile else "name"}" x="{arrow_x}" y="52">↗</text>'
+    body += f'<text class="{"mobile-arrow" if mobile else "name"}" x="{arrow_x}" y="52">↗</text>'
     if mobile or compact:
         body += f'<text class="{meta_class}" x="32" y="{height-24}">{escape(project["meta"])}</text>'
         for i,line in enumerate(wrapped_detail(project['detail'],32 if mobile else 46)):
@@ -92,7 +92,7 @@ def project_card(project, index, variant, colors, font):
     body += f'<text class="mini" x="{width-32}" y="{height-24}" text-anchor="end">repositório ↗</text>'
     # A ação pertence ao link do README; a descrição isolada só descreve a imagem.
     svg = shell(width,height,project['name'],alt(project).removesuffix(' Abrir repositório.'),body,colors,font)
-    return svg.replace('700 32px','700 25px').replace('400 22px',f'400 {21 if variant=="" else 22.1}px').replace('400 19px','400 18px').replace('400 26px','400 24px')
+    return svg.replace('400 22px',f'400 {21 if variant=="" else 22.1}px').replace('400 19px','400 18px').replace('400 26px','400 24px')
 
 
 def stack_symbol(index):
@@ -114,8 +114,8 @@ def stack_card(variant, colors, font):
         for index,(title,lines) in enumerate(STACK):
             body += f'<g transform="translate(32 {cursor-26}) scale(1.3)">{stack_symbol(index)}</g><text class="stack-mobile-title" x="72" y="{cursor}">{escape(title)}</text>'
             for i,line in enumerate(lines):
-                body += f'<text class="stack-mobile-body" x="32" y="{cursor+42+i*34}">{escape(line)}</text>'
-            cursor += 42+(len(lines)-1)*34+64
+                body += f'<text class="stack-mobile-body" x="32" y="{cursor+42+i*38}">{escape(line)}</text>'
+            cursor += 42+(len(lines)-1)*38+64
         width,height=600,cursor-24
     else:
         width,height=900,380
@@ -124,7 +124,7 @@ def stack_card(variant, colors, font):
             y=44 if i<2 else 194
             body += f'<g transform="translate({x} {y-22})">{stack_symbol(i)}</g><text class="stack-title" x="{x+38}" y="{y}">{escape(title)}</text>'
             for j,line in enumerate(lines):
-                body += f'<text class="stack-body" x="{x}" y="{y+36+j*28}">{escape(line)}</text>'
+                body += f'<text class="stack-body" x="{x}" y="{y+36+j*(32 if variant=="medium" else 28)}">{escape(line)}</text>'
         body += f'<path d="M32,294 H868" stroke="{colors["border"]}"/><g transform="translate(32 320)">{stack_symbol(4)}</g><text class="stack-title" x="70" y="342">Rust</text><text class="stack-body" x="150" y="342">CLIs e desktop · projetos pessoais e abertos</text>'
     svg = shell(width,height,'Tecnologias de trabalho',STACK_ALT,body,colors,font)
     if variant=='compact':
@@ -135,6 +135,8 @@ def stack_card(variant, colors, font):
         svg = svg.replace('400 24px','400 24.75px').replace('600 27px','600 29.25px')
     else:
         svg = svg.replace('400 24px','400 21px').replace('600 27px','600 25px') if not mobile else svg
+    if variant=='mobile':
+        svg=svg.replace('400 28px','400 30px')
     return svg
 
 

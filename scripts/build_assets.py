@@ -97,9 +97,9 @@ def banner_art(width, height, variant='desktop'):
     narrow = variant == 'compact'
     name_size, role_size, body_size, caption_size, terminal_size = {
         'desktop': (38,24,21,21,18),
-        'medium': (38,24,22.1,22.1,20),
-        'compact': (38,26,22.1,22.1,22),
-        'mobile': (46,30,30,28,26),
+        'medium': (41,24,22.1,22.1,20),
+        'compact': (44,26,22.1,22.1,22),
+        'mobile': (52,30,30,28,26),
     }[variant]
     command_width = 520 if compact else round(34*terminal_size*.6)
     cx, cy = (440,450) if compact else (width-110 if narrow else width-145 if variant=='medium' else 735,154)
@@ -162,7 +162,7 @@ def banner_art(width, height, variant='desktop'):
     {''.join(parts)}
     {lines}
     <text x="40" y="{height-24}" class="terminal" clip-path="url(#command-mask)" textLength="{command_width}" lengthAdjust="spacing">&gt; contexto → ferramentas → produto</text>
-    <rect class="caret" x="40" y="{height-46}" width="2" height="27"/>
+    <rect class="caret" x="40" y="{height-24-round(terminal_size*.85)}" width="2" height="{terminal_size}"/>
   </g>
   {card_border(width,height)}
 </svg>
@@ -237,25 +237,39 @@ def banner_mobile():
 
 
 def focus_mobile(medium=False):
+    return focus_grid('medium' if medium else 'mobile')
+
+
+def focus_compact():
+    return focus_grid('compact')
+
+
+def focus_grid(variant):
     """As quatro áreas em duas colunas, com conexões fora dos rótulos."""
-    width, height = (760 if medium else 600), 420
-    left, right = (200, 560) if medium else (160, 440)
+    mobile = variant == 'mobile'
+    width = 800 if variant=='medium' else 600
+    height = 420 if mobile else 320
+    left,right = (160,440) if mobile else (width/4,width*3/4)
+    top,bottom = (68,268) if mobile else (60,210)
+    title_size,detail_size = (32,30) if mobile else (26,22.1)
+    title_offset,detail_offset = (64,102) if mobile else (50,82)
+    ring_size = 32 if mobile else 24
     extra = f'''
-    .mobile-stage {{ font: 700 32px {SANS}; fill: {COLOR['foreground']}; }}
-    .mobile-detail {{ font: 400 25px {SANS}; fill: {COLOR['muted']}; }}'''
-    parts = [f'<path class="signal" d="M{left},68 H{right} M{left},268 H{right}"/>']
-    for (x,y), (stage,detail,formula) in zip([(left,68),(right,68),(left,268),(right,268)], STAGES):
+    .mobile-stage {{ font: 700 {title_size}px {SANS}; fill: {COLOR['foreground']}; }}
+    .mobile-detail {{ font: 400 {detail_size}px {SANS}; fill: {COLOR['muted']}; }}'''
+    parts = [f'<path class="signal" d="M{left},{top} H{right} M{left},{bottom} H{right}"/>']
+    for (x,y), (stage,detail,formula) in zip([(left,top),(right,top),(left,bottom),(right,bottom)], STAGES):
         parts.extend([
-            f'<text class="eq" x="{x}" y="{y-36}" font-size="20" text-anchor="middle">{formula}</text>',
-            f'<circle class="ring" cx="{x}" cy="{y}" r="32" stroke-dasharray="3 6"/>',
+            f'<text class="eq" x="{x}" y="{y-36}" font-size="{20 if mobile else 16}" text-anchor="middle">{formula}</text>',
+            f'<circle class="ring" cx="{x}" cy="{y}" r="{ring_size}" stroke-dasharray="3 6"/>',
             f'<circle class="node" cx="{x}" cy="{y}" r="20"/>',
             f'<circle cx="{x}" cy="{y}" r="3.5" fill="{COLOR["foreground"]}"/>',
-            f'<text class="mobile-stage" x="{x}" y="{y+64}" text-anchor="middle">{stage}</text>',
-            f'<text class="mobile-detail" x="{x}" y="{y+102}" text-anchor="middle">{detail}</text>',
+            f'<text class="mobile-stage" x="{x}" y="{y+title_offset}" text-anchor="middle">{stage}</text>',
+            f'<text class="mobile-detail" x="{x}" y="{y+detail_offset}" text-anchor="middle">{detail}</text>',
         ])
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">O que construo</title>
-  <desc id="desc">{FOCUS_ALT}. Versão {'intermediária' if medium else 'de celular'}, em duas linhas na ordem de leitura.</desc>
+  <desc id="desc">{FOCUS_ALT}. Versão {'de celular' if mobile else 'intermediária'}, em duas linhas na ordem de leitura.</desc>
   <defs>
 {card_defs(width, height, 0.5, 260)}
   </defs>
@@ -338,7 +352,7 @@ def main():
     args = parser.parse_args()
     outputs = {"banner.svg": banner(), "focus.svg": focus(),
                "banner-mobile.svg": banner_mobile(), "focus-mobile.svg": focus_mobile(),
-               "banner-medium.svg": banner_medium(), "banner-compact.svg": banner_compact(), "focus-medium.svg": focus_mobile(True)}
+               "banner-medium.svg": banner_medium(), "banner-compact.svg": banner_compact(), "focus-medium.svg": focus_mobile(True), "focus-compact.svg": focus_compact()}
     cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
     card_outputs = cards['outputs'](COLOR, SANS)
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
@@ -351,15 +365,7 @@ def main():
     for name, alt in (("banner.svg", BANNER_ALT), ("focus.svg", FOCUS_ALT)):
         if f'src="assets/{name}" alt="{alt}"' not in readme:
             errors.append(f"README.md: alt de assets/{name} difere do texto do gerador")
-        sources = '\n'.join(f'  <source media="(max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+".svg")}">'
-                            for limit, variant in ((480, 'mobile'), (1011, 'medium')))
-        still_sources = '\n'.join(
-            f'  <source media="(prefers-reduced-motion: reduce) and (max-width: {limit}px)" srcset="assets/{name.replace(".svg", "-"+variant+"-still.svg")}">'
-            for limit, variant in ((480, 'mobile'), (1011, 'medium')))
-        still_sources += f'\n  <source media="(prefers-reduced-motion: reduce)" srcset="assets/{name.replace(".svg", "-still.svg")}">'
-        expected = '<picture>\n'+still_sources+'\n'+sources+f'\n  <img src="assets/{name}" alt="{alt}" width="880">'
-        if name=='banner.svg':
-            expected=cards['picture']('banner',alt)
+        expected=cards['picture'](name.removesuffix('.svg'),alt)
         if expected not in readme:
             errors.append(f"README.md: fontes responsivas ou largura de assets/{name} incorretas")
     if args.check:

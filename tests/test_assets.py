@@ -24,7 +24,7 @@ class MotionTests(unittest.TestCase):
 
     def test_all_three_sizes_require_every_motion_component(self):
         for family, variants in [('banner',[assets.banner,assets.banner_medium,assets.banner_compact,assets.banner_mobile]),
-                                 ('focus',[assets.focus,lambda:assets.focus_mobile(True),assets.focus_mobile])]:
+                                 ('focus',[assets.focus,lambda:assets.focus_mobile(True),assets.focus_compact,assets.focus_mobile])]:
             for index,generate in enumerate(variants):
                 svg=generate()
                 self.assertEqual(assets.problems(f'{family}-{index}.svg',svg),[])

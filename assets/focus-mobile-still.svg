@@ -30,7 +30,7 @@
     @media (prefers-reduced-motion: reduce) { .signal { animation:none; } }
 
     .mobile-stage { font: 700 32px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #fafafa; }
-    .mobile-detail { font: 400 25px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
+    .mobile-detail { font: 400 30px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; fill: #a1a1aa; }
   </style>
   <g clip-path="url(#card)">
     <rect width="600" height="420" fill="#09090b"/>
