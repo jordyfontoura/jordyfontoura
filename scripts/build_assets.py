@@ -102,7 +102,7 @@ def banner_art(width, height, variant='desktop'):
         'mobile': (52,30,30,28,26),
     }[variant]
     command_width = 520 if compact else round(34*terminal_size*.6)
-    cx,cy,art_scale = (300,454,1.65) if compact else ((490,154,.9) if narrow else (655,154,1) if variant=='medium' else (735,154,1.15))
+    cx,cy,art_scale = (300,432,1.65) if compact else ((490,154,1.1) if narrow else (655,154,1.1) if variant=='medium' else (735,154,1.15))
     illustration = COMPANION['artwork'](cx,cy,art_scale)
     lines = (f'<text x="40" y="112" class="name">Jordy Fontoura<tspan fill="{COLOR["accent"]}">.</tspan></text>'
              '<text x="40" y="156" class="role">Engenheiro de IA</text>'
@@ -116,7 +116,7 @@ def banner_art(width, height, variant='desktop'):
              '<text x="40" y="234" class="caption">Carreira em software desde 2018.</text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">{BANNER_ALT}. Companheiro de código com visor de terminal e movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
+  <desc id="desc">{BANNER_ALT}. {COMPANION['DESCRIPTION']}</desc>
   <defs>{card_defs(width, height, 0.8, width, include_flow=False)}
     <clipPath id="command-mask"><rect class="reveal" x="40" y="{height-50}" width="{command_width}" height="40"/></clipPath>
   </defs>
@@ -131,7 +131,7 @@ def banner_art(width, height, variant='desktop'):
     .caret {{ fill:{COLOR["accent"]}; opacity:0; animation:cursor 3.2s steps(34,end) 1 both; }}
     @keyframes typing {{ from {{ width:0px; }} to {{ width:{command_width}px; }} }}
     @keyframes cursor {{ 0% {{ transform:translateX(0px); opacity:1; }} 99% {{ opacity:1; }} 100% {{ transform:translateX({command_width}px); opacity:0; }} }}
-    @media (prefers-reduced-motion:reduce) {{ .companion-idle,.companion-antenna,.companion-cursor,.companion-shadow,.reveal,.caret {{ animation:none; }} }}
+    @media (prefers-reduced-motion:reduce) {{ .companion-idle,.companion-antenna,.companion-cursor,.companion-shadow,.companion-aerial,.companion-command,.companion-confirmation,.companion-context,.companion-tools,.companion-product,.reveal,.caret {{ animation:none; }} }}
   </style>
   <g clip-path="url(#card)">
     {card_background(width,height)}
@@ -277,7 +277,7 @@ def problems(name, svg):
     disabled = set(re.findall(r"\.([\w-]+)", reduced[1])) if reduced else set()
     document = xml.dom.minidom.parseString(svg)
     rules = re.findall(r"([^{}]+)\{([^{}]*)\}", svg)
-    required = ({'companion-idle','companion-antenna','companion-cursor','companion-shadow','reveal','caret'} if name.startswith('banner') else
+    required = ({'companion-idle','companion-antenna','companion-cursor','companion-shadow','companion-aerial','companion-command','companion-confirmation','companion-context','companion-tools','companion-product','reveal','caret'} if name.startswith('banner') else
                 {'signal'} if name.startswith('focus') else
                 {'motion-art'} if name.startswith(('project-','stack')) else set())
     if '-still.svg' not in name:
@@ -316,7 +316,7 @@ def problems(name, svg):
                 if delay:
                     delays.extend(seconds(delay[1]))
         # Movimento contínuo aprovado pelo usuário: só ornamentos, com alternativa estática.
-        continuous = bool(classes) and classes <= {'signal','companion-idle','companion-antenna','companion-cursor','companion-shadow','motion-art'} and 'infinite' in value
+        continuous = bool(classes) and classes <= {'signal','companion-idle','companion-antenna','companion-cursor','companion-shadow','companion-aerial','companion-command','companion-confirmation','companion-context','companion-tools','companion-product','motion-art'} and 'infinite' in value
         if duration is None or duration <= 0 or (not continuous and
             (not re.search(r"\s1(?:\s|$)", value) or 'infinite' in value or duration + max(delays) >= 5)):
             found.append(f"{name}: apenas ornamentos podem repetir; abertura deve terminar antes de cinco segundos")
@@ -335,7 +335,7 @@ def main():
     cards = run_path(str(Path(__file__).with_name('profile_cards.py')))
     card_outputs = cards['outputs'](COLOR, SANS)
     # A seleção pelo picture também cobre navegadores que não propagam a preferência ao SVG.
-    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg).replace('Companheiro de código com visor de terminal e movimento contínuo discreto; respeita a preferência por movimento reduzido.', 'Companheiro de código estático, sem animação.')
+    outputs.update({name.replace('.svg', '-still.svg'): re.sub(r'animation:[^;]+;', 'animation:none;', svg).replace(COMPANION['DESCRIPTION'], COMPANION['STATIC_DESCRIPTION'])
                     for name, svg in list(outputs.items())})
     outputs.update(card_outputs)
     errors = [p for name, svg in outputs.items() for p in problems(name, svg)]
