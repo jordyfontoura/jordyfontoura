@@ -130,7 +130,11 @@ class MotionTests(unittest.TestCase):
             svg = generate()
             for forbidden in ['Engenheiro de IA', 'desde 2018', 'laboratório', 'contexto →', 'command-mask']:
                 self.assertNotIn(forbidden, svg)
-            self.assertIn('RPG Maker', svg)
+            document = assets.xml.dom.minidom.parseString(svg)
+            body = ' '.join(node.firstChild.data for node in document.getElementsByTagName('text')
+                            if node.getAttribute('class') == 'body')
+            self.assertEqual('Construindo software desde 2010.', body)
+            self.assertNotIn('RPG Maker', svg)
 
     def test_static_companion_shows_prompt_and_hides_confirmation(self):
         for suffix in ['', '-mobile', '-medium', '-compact']:
