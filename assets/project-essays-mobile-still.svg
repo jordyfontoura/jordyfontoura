@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="228" viewBox="0 0 400 228" role="img" aria-labelledby="title desc">
+<title id="title">Redações</title>
+<desc id="desc">Redações: oCR e IA para correção de redações. TypeScript, OCR, LLM. Código privado. Ler relato.</desc>
+<style>
+    .name {font:700 24px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;fill:#fafafa}
+    .body {font:400 20px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;fill:#e4e4e7}
+    .meta {font:400 19px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;fill:#a1a1aa}
+    .action {font:400 19px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;fill:#a1a1aa}
+    .line {fill:none;stroke:#a1a1aa;stroke-width:1.5}
+    .box {fill:#18181b;stroke:#3f3f46}
+    .motion-art {fill:none;stroke:#fafafa;stroke-width:3;stroke-linecap:round;stroke-opacity:0;stroke-dasharray:24 72;animation:none;}
+    @keyframes art-flow {from {stroke-dashoffset:0;stroke-opacity:1;} to {stroke-dashoffset:-96;stroke-opacity:1;}}
+    @media (prefers-reduced-motion: reduce) {.motion-art {animation:none;}}
+    </style>
+<rect x="4.5" y="4.5" width="391" height="219" rx="18" fill="#09090b" stroke="#27272a"/>
+<text class="name" x="24" y="44">Redações</text>
+<text class="meta" x="202" y="42">↗</text>
+<g transform="translate(250 22) scale(.8)"><path class="box" d="M12 0H85L105 20V80H12Z"/><path class="line" d="M85 0V20H105 M25 32H80 M25 45H70 M25 58H60 M118 49L132 63L155 32"/><path class="motion-art" style="animation-delay:-1.3s" pathLength="96" d="M25,32 H80 M118,49 L132,63 L155,32"/></g>
+<text class="action" x="24" y="80">Código privado · Relato</text>
+<text class="body" x="24" y="128">OCR e IA para</text><text class="body" x="24" y="156">correção de redações.</text>
+<text class="meta" x="24" y="204">TypeScript · OCR · LLM</text>
+</svg>

@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1]
 measure=run_path(str(ROOT/'scripts/svg_typography.py'))['text_metrics']
+PROJECT_KEYS=[p['key'] for p in run_path(str(ROOT/'scripts/profile_cards.py'))['PROJECTS']]
 EXTREMES={'mobile':(280,440),'compact':(408,545),'medium':(546,719),'desktop':(652,850)}
 
 PROJECT_EXTREMES={'mobile':(280,400),'desktop':(400,400)}
@@ -14,7 +15,7 @@ PROJECT_EXTREMES={'mobile':(280,400),'desktop':(400,400)}
 
 class TypographyTests(unittest.TestCase):
     def test_intermediate_project_body_stays_near_markdown_scale(self):
-        for key in ['skills','tryless','gitclean','np','argus']:
+        for key in dict.fromkeys(PROJECT_KEYS+['np','argus']):
             path=ROOT/f'assets/project-{key}.svg'
             for row in measure(path.read_text(encoding='utf-8'),400):
                 if 'body' in row['classes']:
@@ -49,7 +50,8 @@ class TypographyTests(unittest.TestCase):
                     self.assertLessEqual(row['displayFontSize'],22.01 if variant=='mobile' else 20.1,(path.name,width,row))
 
     def test_component_titles_do_not_dominate_markdown_section_headings(self):
-        for family in ['project-skills','project-tryless','project-gitclean','project-np','project-argus']:
+        for key in dict.fromkeys(PROJECT_KEYS+['np','argus']):
+            family = 'project-'+key
             ranges=PROJECT_EXTREMES
             for variant,widths in ranges.items():
                 suffix='' if variant=='desktop' else '-'+variant
