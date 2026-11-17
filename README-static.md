@@ -6,7 +6,7 @@
   <source media="(max-width: 480px)" srcset="assets/banner-mobile-still.svg">
   <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/banner-compact-still.svg">
   <source media="(max-width: 1011px)" srcset="assets/banner-medium-still.svg">
-  <img src="assets/banner-still.svg" alt="Jordy Fontoura. Comecei no RPG Maker aos 10 anos." width="880">
+  <img src="assets/banner-still.svg" alt="Jordy Fontoura. Construindo software desde 2010." width="880">
 </picture>
 
 [GitHub](https://github.com/jordyfontoura) · [LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com)
