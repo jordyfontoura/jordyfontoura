@@ -1,24 +1,33 @@
 """Ladrilhos de projetos: largura intrínseca para quebra de linha sem CSS próprio."""
 from html import escape
+from pathlib import Path
 import re
 import textwrap
 
 PROJECTS = [
-    dict(key='skills', name='skills', detail='Instruções para agentes de programação.', meta='Claude Code · Codex'),
-    dict(key='tryless', name='TryLess', detail='Trate erros com Result.', meta='TypeScript · npm'),
+    dict(key='agents', name='Agentes de IA', detail='RAG, ferramentas e contexto para atendimento.', meta='TypeScript · pgvector', url='projetos/agentes.md', private=True),
+    dict(key='essays', name='Redações', detail='OCR e IA para correção de redações.', meta='TypeScript · OCR · LLM', url='projetos/redacoes.md', private=True),
+    dict(key='chomatter', name='Chomatter', detail='Linguagem narrativa com saltos e chamadas.', meta='Rust · TypeScript', url='projetos/chomatter.md', private=True),
     dict(key='gitclean', name='gitclean', detail='Limpe arquivos ignorados pelo Git.', meta='Rust · CLI interativa'),
-    dict(key='np', name='np', detail='npm, Yarn e pnpm com um só comando.', meta='Rust · CLI'),
-    dict(key='argus', name='Argus', detail='Monitore hardware no Windows.', meta='Rust · Tauri'),
+    dict(key='tryless', name='TryLess', detail='Trate erros com Result.', meta='TypeScript · npm'),
+    dict(key='skills', name='skills', detail='Instruções para agentes de programação.', meta='Claude Code · Codex'),
 ]
-URLS = {p['key']: 'https://github.com/jordyfontoura/'+('TryLess' if p['key']=='tryless' else p['key']) for p in PROJECTS}
+URLS = {p['key']: p.get('url', 'https://github.com/jordyfontoura/'+('TryLess' if p['key']=='tryless' else p['key'])) for p in PROJECTS}
 
 
 def alt(project):
     detail = project['detail'][0].lower()+project['detail'][1:]
-    return project['name']+': '+detail+' '+project['meta'].replace(' · ', ', ')+'. Abrir repositório.'
+    destination = 'Código privado. Ler relato.' if project.get('private') else 'Abrir repositório.'
+    return project['name']+': '+detail+' '+project['meta'].replace(' · ', ', ')+'. '+destination
 
 
 def miniature_art(key):
+    if key == 'agents':
+        return '<rect class="box" x="0" y="20" width="50" height="40" rx="7"/><path class="line" d="M10 32H38 M10 43H30 M50 40H90 M90 40V12H110 M90 40V68H110"/><rect class="box" x="110" y="0" width="48" height="24" rx="5"/><rect class="box" x="110" y="56" width="48" height="24" rx="5"/>'
+    if key == 'essays':
+        return '<path class="box" d="M12 0H85L105 20V80H12Z"/><path class="line" d="M85 0V20H105 M25 32H80 M25 45H70 M25 58H60 M118 49L132 63L155 32"/>'
+    if key == 'chomatter':
+        return '<rect class="box" x="0" y="26" width="42" height="28" rx="5"/><rect class="box" x="112" y="0" width="46" height="25" rx="5"/><rect class="box" x="112" y="55" width="46" height="25" rx="5"/><path class="line" d="M42 40H75V12H112 M75 40V67H112 M135 55V40H92 M98 34L92 40L98 46"/>'
     if key == 'skills':
         return '<path class="line" d="M5,20 H155 M5,58 H155"/>'+''.join(f'<rect class="box" x="{x}" y="8" width="38" height="62" rx="6"/><path class="line" d="M{x+8},25 h22 m-22,12 h16 m-16,12 h20"/>' for x in [0,60,120])
     if key == 'tryless':
@@ -32,6 +41,9 @@ def miniature_art(key):
 
 def miniature(key):
     routes = {
+        'agents':'M50,40 H90 V12 H110',
+        'essays':'M25,32 H80 M118,49 L132,63 L155,32',
+        'chomatter':'M42,40 H75 V12 H112',
         'skills':'M0,70 V8 H38 V70 H60 V8 H98 V70 H120 V8 H158 V70',
         'tryless':'M65,40 H90 V15 H115',
         'gitclean':'M13,64.5 H145',
@@ -62,6 +74,7 @@ def project_card(project, mobile, colors, font):
     .name {{font:700 24px {font};fill:{colors['foreground']}}}
     .body {{font:400 {body_size}px {font};fill:{colors['lead']}}}
     .meta {{font:400 {meta_size}px {font};fill:{colors['muted']}}}
+    .action {{font:400 {meta_size}px {font};fill:{colors['muted']}}}
     .line {{fill:none;stroke:{colors['muted']};stroke-width:1.5}}
     .box {{fill:{colors['card']};stroke:{colors['ring']}}}
     .motion-art {{fill:none;stroke:{colors['foreground']};stroke-width:3;stroke-linecap:round;stroke-opacity:0;stroke-dasharray:24 72;animation:art-flow 8s linear infinite;}}
@@ -70,12 +83,13 @@ def project_card(project, mobile, colors, font):
     '''
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="400" height="{height}" viewBox="0 0 400 {height}" role="img" aria-labelledby="title desc">
 <title id="title">{escape(project['name'])}</title>
-<desc id="desc">{escape(alt(project).removesuffix(' Abrir repositório.'))}</desc>
+<desc id="desc">{escape(alt(project))}</desc>
 <style>{css}</style>
 <rect x="4.5" y="4.5" width="391" height="{height-9}" rx="18" fill="{colors['background']}" stroke="{colors['border']}"/>
 <text class="name" x="24" y="44">{escape(project['name'])}</text>
 <text class="meta" x="202" y="42">↗</text>
 <g transform="translate(250 22) scale(.8)">{miniature(project['key'])}</g>
+<text class="action" x="24" y="80">{'Código privado · Relato' if project.get('private') else 'Ver repositório'}</text>
 {description}
 <text class="meta" x="24" y="{height-24}">{escape(project['meta'])}</text>
 </svg>
@@ -125,4 +139,9 @@ def outputs(colors, font):
 
 
 def reference_problems(readme):
-    return ['README.md: link, fontes ou alt do projeto '+project['key']+' incorretos' for project in PROJECTS if project_block(project) not in readme]
+    found = ['README.md: link, fontes ou alt do projeto '+project['key']+' incorretos' for project in PROJECTS if project_block(project) not in readme]
+    root = Path(__file__).resolve().parents[1]
+    for project in PROJECTS:
+        if project.get('private') and not (root / URLS[project['key']]).is_file():
+            found.append('README.md: relato do projeto '+project['key']+' ausente')
+    return found

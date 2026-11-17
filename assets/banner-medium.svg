@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="264" viewBox="0 0 800 264" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
-  <desc id="desc">Jordy Fontoura. Comecei no RPG Maker aos 10 anos. Companheiro de código com visor de terminal, antena e três luzes. O visor alterna o prompt e um sinal de confirmação. Movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
+  <desc id="desc">Jordy Fontoura. Construindo software desde 2010. Companheiro de código com visor de terminal, antena e três luzes. O visor alterna o prompt e um sinal de confirmação. Movimento contínuo discreto; respeita a preferência por movimento reduzido.</desc>
   <defs>    <radialGradient id="glow" cx="0.8" cy="0.5" r="0.45">
       <stop offset="0" stop-color="#fafafa" stop-opacity="0.06"/>
       <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
@@ -78,7 +78,7 @@
       </g>
     </g>
     <text x="32" y="112" class="name">Jordy Fontoura.</text>
-    <text x="32" y="158" class="body">Comecei no RPG Maker aos 10 anos.</text>
+    <text x="32" y="158" class="body">Construindo software desde 2010.</text>
   </g>
   <rect x="0.5" y="0.5" width="799" height="263" rx="24" fill="none" stroke="#27272a"/>
 </svg>

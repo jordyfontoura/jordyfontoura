@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="206" viewBox="0 0 400 206" role="img" aria-labelledby="title desc">
+<title id="title">Chomatter</title>
+<desc id="desc">Chomatter: linguagem narrativa com saltos e chamadas. Rust, TypeScript. Código privado. Ler relato.</desc>
+<style>
+    .name {font:700 24px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;fill:#fafafa}
+    .body {font:400 17.5px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;fill:#e4e4e7}
+    .meta {font:400 14.5px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;fill:#a1a1aa}
+    .action {font:400 14.5px ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;fill:#a1a1aa}
+    .line {fill:none;stroke:#a1a1aa;stroke-width:1.5}
+    .box {fill:#18181b;stroke:#3f3f46}
+    .motion-art {fill:none;stroke:#fafafa;stroke-width:3;stroke-linecap:round;stroke-opacity:0;stroke-dasharray:24 72;animation:none;}
+    @keyframes art-flow {from {stroke-dashoffset:0;stroke-opacity:1;} to {stroke-dashoffset:-96;stroke-opacity:1;}}
+    @media (prefers-reduced-motion: reduce) {.motion-art {animation:none;}}
+    </style>
+<rect x="4.5" y="4.5" width="391" height="197" rx="18" fill="#09090b" stroke="#27272a"/>
+<text class="name" x="24" y="44">Chomatter</text>
+<text class="meta" x="202" y="42">↗</text>
+<g transform="translate(250 22) scale(.8)"><rect class="box" x="0" y="26" width="42" height="28" rx="5"/><rect class="box" x="112" y="0" width="46" height="25" rx="5"/><rect class="box" x="112" y="55" width="46" height="25" rx="5"/><path class="line" d="M42 40H75V12H112 M75 40V67H112 M135 55V40H92 M98 34L92 40L98 46"/><path class="motion-art" style="animation-delay:-2.6s" pathLength="96" d="M42,40 H75 V12 H112"/></g>
+<text class="action" x="24" y="80">Código privado · Relato</text>
+<text class="body" x="24" y="128">Linguagem narrativa</text><text class="body" x="24" y="152">com saltos e chamadas.</text>
+<text class="meta" x="24" y="182">Rust · TypeScript</text>
+</svg>

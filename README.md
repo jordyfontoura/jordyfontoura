@@ -6,7 +6,7 @@
   <source media="(max-width: 480px)" srcset="assets/banner-mobile.svg">
   <source media="(max-width: 585px), (min-width: 768px) and (max-width: 905px)" srcset="assets/banner-compact.svg">
   <source media="(max-width: 1011px)" srcset="assets/banner-medium.svg">
-  <img src="assets/banner.svg" alt="Jordy Fontoura. Comecei no RPG Maker aos 10 anos." width="880">
+  <img src="assets/banner.svg" alt="Jordy Fontoura. Construindo software desde 2010." width="880">
 </picture>
 
 [GitHub](https://github.com/jordyfontoura) · [LinkedIn](https://www.linkedin.com/in/jordy-fontoura/) · [E-mail](mailto:jordyfontoura@outlook.com)
@@ -14,17 +14,23 @@
 ## Projetos
 
 <p align="center">
-<a href="https://github.com/jordyfontoura/skills"><picture>
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-skills-mobile-still.svg">
-  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-skills-still.svg">
-  <source media="(max-width: 480px)" srcset="assets/project-skills-mobile.svg">
-  <img src="assets/project-skills.svg" alt="skills: instruções para agentes de programação. Claude Code, Codex. Abrir repositório." width="400">
+<a href="projetos/agentes.md"><picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-agents-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-agents-still.svg">
+  <source media="(max-width: 480px)" srcset="assets/project-agents-mobile.svg">
+  <img src="assets/project-agents.svg" alt="Agentes de IA: rAG, ferramentas e contexto para atendimento. TypeScript, pgvector. Código privado. Ler relato." width="400">
 </picture></a>
-<a href="https://github.com/jordyfontoura/TryLess"><picture>
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-tryless-mobile-still.svg">
-  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-tryless-still.svg">
-  <source media="(max-width: 480px)" srcset="assets/project-tryless-mobile.svg">
-  <img src="assets/project-tryless.svg" alt="TryLess: trate erros com Result. TypeScript, npm. Abrir repositório." width="400">
+<a href="projetos/redacoes.md"><picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-essays-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-essays-still.svg">
+  <source media="(max-width: 480px)" srcset="assets/project-essays-mobile.svg">
+  <img src="assets/project-essays.svg" alt="Redações: oCR e IA para correção de redações. TypeScript, OCR, LLM. Código privado. Ler relato." width="400">
+</picture></a>
+<a href="projetos/chomatter.md"><picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-chomatter-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-chomatter-still.svg">
+  <source media="(max-width: 480px)" srcset="assets/project-chomatter-mobile.svg">
+  <img src="assets/project-chomatter.svg" alt="Chomatter: linguagem narrativa com saltos e chamadas. Rust, TypeScript. Código privado. Ler relato." width="400">
 </picture></a>
 <a href="https://github.com/jordyfontoura/gitclean"><picture>
   <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-gitclean-mobile-still.svg">
@@ -32,21 +38,29 @@
   <source media="(max-width: 480px)" srcset="assets/project-gitclean-mobile.svg">
   <img src="assets/project-gitclean.svg" alt="gitclean: limpe arquivos ignorados pelo Git. Rust, CLI interativa. Abrir repositório." width="400">
 </picture></a>
-<a href="https://github.com/jordyfontoura/np"><picture>
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-np-mobile-still.svg">
-  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-np-still.svg">
-  <source media="(max-width: 480px)" srcset="assets/project-np-mobile.svg">
-  <img src="assets/project-np.svg" alt="np: npm, Yarn e pnpm com um só comando. Rust, CLI. Abrir repositório." width="400">
+<a href="https://github.com/jordyfontoura/TryLess"><picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-tryless-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-tryless-still.svg">
+  <source media="(max-width: 480px)" srcset="assets/project-tryless-mobile.svg">
+  <img src="assets/project-tryless.svg" alt="TryLess: trate erros com Result. TypeScript, npm. Abrir repositório." width="400">
 </picture></a>
-<a href="https://github.com/jordyfontoura/argus"><picture>
-  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-argus-mobile-still.svg">
-  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-argus-still.svg">
-  <source media="(max-width: 480px)" srcset="assets/project-argus-mobile.svg">
-  <img src="assets/project-argus.svg" alt="Argus: monitore hardware no Windows. Rust, Tauri. Abrir repositório." width="400">
+<a href="https://github.com/jordyfontoura/skills"><picture>
+  <source media="(prefers-reduced-motion: reduce) and (max-width: 480px)" srcset="assets/project-skills-mobile-still.svg">
+  <source media="(prefers-reduced-motion: reduce)" srcset="assets/project-skills-still.svg">
+  <source media="(max-width: 480px)" srcset="assets/project-skills-mobile.svg">
+  <img src="assets/project-skills.svg" alt="skills: instruções para agentes de programação. Claude Code, Codex. Abrir repositório." width="400">
 </picture></a>
 </p>
 
-[TryLess no npm](https://www.npmjs.com/package/tryless) · [gitclean no crates.io](https://crates.io/crates/gitclean) · [np no crates.io](https://crates.io/crates/np-cli)
+Projetos com código privado abrem um relato sobre o trabalho.
+
+[TryLess no npm](https://www.npmjs.com/package/tryless) · [gitclean no crates.io](https://crates.io/crates/gitclean)
+
+### Outros projetos
+
+[np](https://github.com/jordyfontoura/np) — npm, Yarn e pnpm com um só comando. [Pacote no crates.io](https://crates.io/crates/np-cli).
+
+[Argus](https://github.com/jordyfontoura/argus) — monitor de hardware para Windows, em Rust e Tauri.
 
 ## Uso de agentes
 

@@ -31,7 +31,7 @@ RADIUS = 24
 GRID = 24
 
 # Textos: a mesma frase vai para o SVG e para o alt do README.
-BANNER_ALT = "Jordy Fontoura. Comecei no RPG Maker aos 10 anos."
+BANNER_ALT = "Jordy Fontoura. Construindo software desde 2010."
 def card_defs(width, height, glow_cx, flow_x2, flow_dir="right", include_flow=True):
     """Fundo, pontos, brilho e gradiente das linhas, comuns aos cartões."""
     x1, x2 = (0, flow_x2) if flow_dir == "right" else (flow_x2, 0)
@@ -66,7 +66,7 @@ def card_border(width, height):
 
 
 def banner_art(width, height, variant='desktop'):
-    """Nome, uma lembrança pessoal e a C1; nenhuma informação depende do movimento."""
+    """Nome, início da trajetória e a C1; nenhuma informação depende do movimento."""
     mobile = variant == 'mobile'
     name_size, body_size, terminal_size = {
         'desktop': (40, 21, 18), 'medium': (41, 22.1, 20),
@@ -77,11 +77,11 @@ def banner_art(width, height, variant='desktop'):
         'compact': (480, 146, 1.4), 'mobile': (300, 286, 1.55),
     }[variant]
     x, name_y = (40, 112) if mobile else (32, 112)
-    personal = ('<text x="40" y="166" class="body">Comecei no RPG Maker</text>'
-                '<text x="40" y="204" class="body">aos 10 anos.</text>') if mobile else (
-                '<text x="32" y="158" class="body">Comecei no RPG Maker</text>'
-                '<text x="32" y="188" class="body">aos 10 anos.</text>') if variant=='compact' else (
-                '<text x="32" y="158" class="body">Comecei no RPG Maker aos 10 anos.</text>')
+    personal = ('<text x="40" y="166" class="body">Construindo software</text>'
+                '<text x="40" y="204" class="body">desde 2010.</text>') if mobile else (
+                '<text x="32" y="158" class="body">Construindo software</text>'
+                '<text x="32" y="188" class="body">desde 2010.</text>') if variant=='compact' else (
+                '<text x="32" y="158" class="body">Construindo software desde 2010.</text>')
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">Jordy Fontoura</title>
   <desc id="desc">{BANNER_ALT} {COMPANION['DESCRIPTION']}</desc>
